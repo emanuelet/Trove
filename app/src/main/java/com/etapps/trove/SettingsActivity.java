@@ -24,7 +24,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import com.etapps.trove.data.WeatherContract;
+import com.etapps.trove.data.BookContract;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -80,9 +80,10 @@ public class SettingsActivity extends PreferenceActivity
         // are we starting the preference activity?
         if ( !mBindingPreference ) {
             if (preference.getKey().equals(getString(R.string.pref_results_key))) {
+                //leave it blank for the moment
             } else {
                 // notify code that weather may be impacted
-                getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
+                getContentResolver().notifyChange(BookContract.WeatherEntry.CONTENT_URI, null);
             }
         }
 

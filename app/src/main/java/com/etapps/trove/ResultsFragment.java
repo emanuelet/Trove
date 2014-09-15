@@ -15,17 +15,13 @@
  */
 package com.etapps.trove;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,26 +31,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.etapps.trove.data.WeatherContract;
-import com.etapps.trove.data.WeatherContract.WeatherEntry;
-import com.etapps.trove.data.WeatherContract.LocationEntry;
-
-import java.util.Date;
+import com.etapps.trove.data.BookContract.WeatherEntry;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.widget.ListView} layout.
  */
-public class ForecastFragment extends Fragment implements LoaderCallbacks<Cursor> {
+public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
-    private ForecastAdapter mForecastAdapter;
-
-    private ListView mListView;
-    private int mPosition = ListView.INVALID_POSITION;
-
+    // These indices are tied to FORECAST_COLUMNS. If FORECAST_COLUMNS changes, these
+    // must change.
+    public static final int COL_BOOK_ID = 0;
+    public static final int COL_TROVE_KEY = 1;
+    public static final int COL_BOOK_TITLE = 2;
+    public static final int COL_BOOK_AUTHOR = 3;
+    public static final int COL_BOOK_YEAR = 4;
+    public static final int COL_COLUMN_URL= 5;
     private static final String SELECTED_KEY = "selected_position";
-
-    private static final int FORECAST_LOADER = 0;
-
+    private static final int LOADER = 0;
     // For the forecast view we're showing only a small subset of the stored data.
     // Specify the columns we need.
     private static final String[] FORECAST_COLUMNS = {
@@ -71,28 +64,11 @@ public class ForecastFragment extends Fragment implements LoaderCallbacks<Cursor
             WeatherEntry.COLUMN_BOOK_YEAR,
             WeatherEntry.COLUMN_URL,
     };
-    // These indices are tied to FORECAST_COLUMNS. If FORECAST_COLUMNS changes, these
-    // must change.
-    public static final int COL_BOOK_ID = 0;
-    public static final int COL_TROVE_KEY = 1;
-    public static final int COL_BOOK_TITLE = 2;
-    public static final int COL_BOOK_AUTHOR = 3;
-    public static final int COL_BOOK_YEAR = 4;
-    public static final int COL_COLUMN_URL= 5;
+    private ResultsAdapter mResultsAdapter;
+    private ListView mListView;
+    private int mPosition = ListView.INVALID_POSITION;
 
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callback {
-        /**
-         * DetailFragmentCallback for when an item has been selected.
-         */
-        public void onItemSelected(String date);
-    }
-
-    public ForecastFragment() {
+    public ResultsFragment() {
     }
 
     @Override
@@ -123,18 +99,18 @@ public class ForecastFragment extends Fragment implements LoaderCallbacks<Cursor
 
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
-        mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
+        mResultsAdapter = new ResultsAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        mListView.setAdapter(mForecastAdapter);
+        mListView.setAdapter(mResultsAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Cursor cursor = mForecastAdapter.getCursor();
+                Cursor cursor = mResultsAdapter.getCursor();
                 if (cursor != null && cursor.moveToPosition(position)) {
                     ((Callback)getActivity())
                             .onItemSelected(cursor.getString(COL_TROVE_KEY));
@@ -159,7 +135,7 @@ public class ForecastFragment extends Fragment implements LoaderCallbacks<Cursor
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(FORECAST_LOADER, null, this);
+        getLoaderManager().initLoader(LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -167,7 +143,7 @@ public class ForecastFragment extends Fragment implements LoaderCallbacks<Cursor
     public void onResume() {
         super.onResume();
         /*if (mLocation != null && !mLocation.equals(Utility.getPreferredLocation(getActivity()))) {
-            getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
+            getLoaderManager().restartLoader(LOADER, null, this);
         }*/
     }
 
@@ -207,7 +183,7 @@ public class ForecastFragment extends Fragment implements LoaderCallbacks<Cursor
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mForecastAdapter.swapCursor(data);
+        mResultsAdapter.swapCursor(data);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
@@ -217,6 +193,18 @@ public class ForecastFragment extends Fragment implements LoaderCallbacks<Cursor
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mForecastAdapter.swapCursor(null);
+        mResultsAdapter.swapCursor(null);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(String date);
     }
 }

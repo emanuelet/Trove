@@ -19,21 +19,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.etapps.trove.data.WeatherContract;
-import com.etapps.trove.data.WeatherContract.WeatherEntry;
-import com.etapps.trove.data.WeatherContract.LocationEntry;
+import com.etapps.trove.data.BookContract.WeatherEntry;
 
 /**
  * Manages a local database for weather data.
  */
-public class WeatherDbHelper extends SQLiteOpenHelper {
+public class BooksDbHelper extends SQLiteOpenHelper {
 
+    public static final String DATABASE_NAME = "books.db";
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 1;
 
-    public static final String DATABASE_NAME = "books.db";
-
-    public WeatherDbHelper(Context context) {
+    public BooksDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

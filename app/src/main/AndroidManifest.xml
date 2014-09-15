@@ -6,12 +6,12 @@
 
     <application
         android:allowBackup="true"
+        android:configChanges="orientation|keyboardHidden|screenSize"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:configChanges="orientation|keyboardHidden|screenSize" >
+        android:theme="@style/AppTheme" >
         <activity
-            android:name="com.etapps.trove.MainActivity"
+            android:name=".MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,26 +26,31 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:label="@string/title_activity_detail"
             android:name="com.etapps.trove.DetailActivity"
+            android:label="@string/title_activity_detail"
             android:parentActivityName="com.etapps.trove.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.etapps.trove.MainActivity" />
         </activity>
         <activity
-            android:label="@string/title_activity_settings"
             android:name="com.etapps.trove.SettingsActivity"
+            android:label="@string/title_activity_settings"
             android:parentActivityName="com.etapps.trove.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.etapps.trove.MainActivity" />
         </activity>
 
+        <provider android:name=".data.SuggestionProvider"
+            android:authorities="com.etapps.trove.data.SuggestionProvider" />
         <provider
-            android:authorities="@string/content_authority"
             android:name=".data.WeatherProvider"
+            android:authorities="@string/content_authority"
             android:exported="false"/>
+        <!-- Points to searchable activity so the whole app can invoke search. -->
+        <meta-data android:name="android.app.default_searchable"
+            android:value=".MainActivity" />
     </application>
 
 </manifest>

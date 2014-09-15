@@ -19,7 +19,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.etapps.trove.data.WeatherContract;
+import com.etapps.trove.data.BookContract;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,37 +28,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Utility {
-    public static String getPreferredLocation(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(context.getString(R.string.pref_results_key),
-                context.getString(R.string.pref_results_default));
-    }
 
-    public static boolean isMetric(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(context.getString(R.string.pref_units_key),
-                context.getString(R.string.pref_units_metric))
-                .equals(context.getString(R.string.pref_units_metric));
-    }
 
-    static String formatTemperature(Context context, double temperature, boolean isMetric) {
-        double temp;
-        if (!isMetric) {
-            temp = 9 * temperature / 5 + 32;
-        } else {
-            temp = temperature;
-        }
-        return context.getString(R.string.format_temperature, temp);
-    }
-
-    static String formatDate(String dateString) {
-        Date date = WeatherContract.getDateFromDb(dateString);
-        return DateFormat.getDateInstance().format(date);
-    }
 
     // Format used for storing dates in the database.  ALso used for converting those strings
     // back into date objects for comparison/processing.
     public static final String DATE_FORMAT = "yyyyMMdd";
+
+    static String formatDate(String dateString) {
+        Date date = BookContract.getDateFromDb(dateString);
+        return DateFormat.getDateInstance().format(date);
+    }
 
     /**
      * Helper method to convert the database representation of the date into something to display
@@ -77,8 +57,8 @@ public class Utility {
         // For all days after that: "Mon Jun 8"
 
         Date todayDate = new Date();
-        String todayStr = WeatherContract.getDbDateString(todayDate);
-        Date inputDate = WeatherContract.getDateFromDb(dateStr);
+        String todayStr = BookContract.getDbDateString(todayDate);
+        Date inputDate = BookContract.getDateFromDb(dateStr);
 
         // If the date we're building the String for is today's date, the format
         // is "Today, June 24"
@@ -93,7 +73,7 @@ public class Utility {
             Calendar cal = Calendar.getInstance();
             cal.setTime(todayDate);
             cal.add(Calendar.DATE, 7);
-            String weekFutureString = WeatherContract.getDbDateString(cal.getTime());
+            String weekFutureString = BookContract.getDbDateString(cal.getTime());
 
             if (dateStr.compareTo(weekFutureString) < 0) {
                 // If the input date is less than a week in the future, just return the day name.
@@ -122,7 +102,7 @@ public class Utility {
             Date todayDate = new Date();
             // If the date is today, return the localized version of "Today" instead of the actual
             // day name.
-            if (WeatherContract.getDbDateString(todayDate).equals(dateStr)) {
+            if (BookContract.getDbDateString(todayDate).equals(dateStr)) {
                 return context.getString(R.string.today);
             } else {
                 // If the date is set for tomorrow, the format is "Tomorrow".
@@ -130,7 +110,7 @@ public class Utility {
                 cal.setTime(todayDate);
                 cal.add(Calendar.DATE, 1);
                 Date tomorrowDate = cal.getTime();
-                if (WeatherContract.getDbDateString(tomorrowDate).equals(
+                if (BookContract.getDbDateString(tomorrowDate).equals(
                         dateStr)) {
                     return context.getString(R.string.tomorrow);
                 } else {
@@ -195,6 +175,11 @@ public class Utility {
             title= separated[0];
         }
         title = title.replaceAll(" : ", ": ");
+
         return title;
+    }
+    public static int getResultsNr(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return Integer.valueOf(prefs.getString(context.getString(R.string.pref_results_key), context.getString(R.string.pref_results_default)));
     }
 }

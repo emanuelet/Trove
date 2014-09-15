@@ -1,12 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.sunshine.app.ForecastFragment">
+    android:orientation="vertical"
+    tools:context="com.etapps.trove.ResultsFragment">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:gravity="center"
+        android:text="@string/list_search_header"
+        android:textAppearance="?android:textAppearanceMedium"/>
     <ListView
-        style="@style/ForecastListStyle"
         android:id="@+id/listview_forecast"
+        style="@style/ForecastListStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:divider="@null" />
-</FrameLayout>
+</LinearLayout>

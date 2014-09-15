@@ -30,29 +30,6 @@
     <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
     <string name="pref_results_default" translatable="false">5</string>
 
-    <!-- Strings related to Notification preference -->
-    <string name="pref_last_sync">last_sync</string>
-
-    <!-- Strings for formatting weather-related data -->
-
-    <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
-    <string name="pref_units_label">Temperature Units</string>
-
-    <!-- Label for metric option in temperature unit preference [CHAR LIMIT=25] -->
-    <string name="pref_units_label_metric">Metric</string>
-
-    <!-- Label for imperial option in temperature unit preference [CHAR LIMIT=25] -->
-    <string name="pref_units_label_imperial">Imperial</string>
-
-    <!-- Key name for temperature unit preference in SharedPreferences [CHAR LIMIT=NONE] -->
-    <string name="pref_units_key" translatable="false">units</string>
-
-    <!-- Value in SharedPreferences for metric temperature unit option [CHAR LIMIT=NONE] -->
-    <string name="pref_units_metric" translatable="false">metric</string>
-
-    <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
-    <string name="pref_units_imperial" translatable="false">imperial</string>
-
     <!-- Notification Format -->
     <string name="format_notification">
         Forecast for today: %1$s with a high of %2$s and low of %3$s.
@@ -69,25 +46,6 @@
         <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
     </string>
 
-    <!-- Strings for formatting weather-related data -->
-    <!-- Temperature format [CHAR LIMIT=5 -->
-    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
-
-    <!-- Windspeed formats -->
-    <!-- Wind in mph [CHAR LIMIT=25] -->
-    <string name="format_wind_mph">
-        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> mph <xliff:g id="direction">%2$s</xliff:g>
-    </string>
-    <!-- Wind in kph [CHAR LIMIT=25] -->
-    <string name="format_wind_kmh">
-        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> km/h <xliff:g id="direction">%2$s</xliff:g>
-    </string>
-
-    <!-- Pressure format CHAR LIMIT=25] -->
-    <string name="format_pressure">Pressure: <xliff:g id="pressure">%1.0f</xliff:g> hPa</string>
-
-    <!-- Humidity format CHAR LIMIT=25]-->
-    <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
     <!-- Share format [CHAR LIMIT=NONE]-->
     <string name="format_share">
@@ -101,12 +59,14 @@
     <string name="menu_search">Search</string>
     <string name="search_label">Search</string>
     <string name="search_hint">Search for Books</string>
-    <string name="books_data">content://com.etapps.trove.data.WeatherProvider/books</string>
+    <string name="books_data">content://com.etapps.trove.data.SuggestionProvider/</string>
     <string name="settings_description">Books on Trove.com.au</string>
     <string name="about_pref">Version</string>
     <string name="about_pref_summ"> 0.7 (Alpha)</string>
-    <string name="about_pref_title">About</string>
+    <string name="about_pref_title">Version</string>
     <string name="author_pref_summ">Author</string>
     <string name="author_pref_title">Emanuele Tonello</string>
     <string name="prefs_web_page">Trove Website</string>
+    <string name="list_search_header">Last Search Results</string>
+    <string name="suggestions_content_authority">com.etapps.trove.data.SuggestionProvider</string>
 </resources>

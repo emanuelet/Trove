@@ -5,17 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import com.etapps.trove.data.SuggestionProvider;
 
-public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
+
+public class MainActivity extends ActionBarActivity implements ResultsFragment.Callback {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane;
+    private  SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             mTwoPane = false;
         }
         handleIntent(getIntent());
-        ForecastFragment forecastFragment = ((ForecastFragment) getSupportFragmentManager()
+        ResultsFragment resultsFragment = ((ResultsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
     }
 
@@ -49,7 +53,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         getMenuInflater().inflate(R.menu.main, menu);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(false);
         }
@@ -76,9 +80,17 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
 
     public boolean handleIntent(Intent intent) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            searchView.setQuery(query,false);
+            new FetchResultsTask(this).execute(query);
+        }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            new FetchWeatherTask(this).execute(query);
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+            suggestions.saveRecentQuery(query, null);
+            new FetchResultsTask(this).execute(query);
         }
         return false;
     }

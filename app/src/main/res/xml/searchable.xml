@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2010, The Android Open Source Project
 **
@@ -23,13 +22,14 @@
      http://developer.android.com/guide/topics/search/
  -->
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
-        android:label="@string/search_label"
-        android:hint="@string/search_hint"
-        android:searchSettingsDescription="@string/settings_description"
-        android:searchSuggestAuthority="@string/content_authority"
-        android:searchSuggestIntentAction="android.intent.action.VIEW"
-        android:searchSuggestIntentData="@string/books_data"
-        android:searchSuggestSelection=" ?"
-        android:searchSuggestThreshold="1"
-        android:includeInGlobalSearch="true" >
- </searchable>
+    android:hint="@string/search_hint"
+    android:includeInGlobalSearch="true"
+    android:label="@string/search_label"
+    android:searchMode="queryRewriteFromText"
+    android:searchSettingsDescription="@string/settings_description"
+    android:searchSuggestAuthority="@string/suggestions_content_authority"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestIntentData="@string/books_data"
+    android:searchSuggestSelection=" ?"
+    android:searchSuggestThreshold="1">
+</searchable>

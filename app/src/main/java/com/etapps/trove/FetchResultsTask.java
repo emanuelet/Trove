@@ -15,17 +15,13 @@
  */
 package com.etapps.trove;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.etapps.trove.data.WeatherContract;
-import com.etapps.trove.data.WeatherContract.WeatherEntry;
-import com.etapps.trove.data.WeatherContract.LocationEntry;
+import com.etapps.trove.data.BookContract.WeatherEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,15 +33,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 import java.util.Vector;
 
-public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
+public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
-    private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
+    private final String LOG_TAG = FetchResultsTask.class.getSimpleName();
     private final Context mContext;
 
-    public FetchWeatherTask(Context context) {
+    public FetchResultsTask(Context context) {
         mContext = context;
     }
 
@@ -132,7 +127,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             String holdings;
             String versions;
 
-// Get the JSON object representing the day
+            // Get the JSON object representing the single entry
             JSONObject bookObj = bookArray.getJSONObject(i);
 
             author = bookObj.optString(TRV_CONTRIBUTOR);
@@ -144,6 +139,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             versions = bookObj.getString(TRV_VERSIONS);
             //cleaning of author string
             author = Utility.formatAuthor(author);
+            //cleaning of title string
             title = Utility.formatTitle(title);
 
 
@@ -187,7 +183,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
         String format = "json";
         String zone = "book";
         String key = "dd539bfbq0hec6pq";
-        int numRes = 5;
+        int numRes = Utility.getResultsNr(mContext);
         try {
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at TRV's forecast API page, at

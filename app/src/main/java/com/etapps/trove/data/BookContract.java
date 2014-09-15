@@ -16,11 +16,8 @@
 package com.etapps.trove.data;
 
 import android.content.ContentUris;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.BaseColumns;
-
-import com.etapps.trove.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +26,7 @@ import java.util.Date;
 /**
  * Defines table and column names for the weather database.
  */
-public class WeatherContract {
+public class BookContract {
 
     // The "Content authority" is a name for the entire content provider, similar to the
     // relationship between a domain name and its website.  A convenient string to use for the
@@ -85,23 +82,16 @@ public class WeatherContract {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_LOCATION).build();
-
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
-        public static final String CONTENT_ITEM_TYPE =
-                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
-
         // Table name
-        public static final String TABLE_NAME = "location";
-
+        public static final String TABLE_NAME = "location";        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
         // The location setting string is what will be sent to openweathermap
         // as the location query.
-        public static final String COLUMN_LOCATION_SETTING = "location_setting";
-
+        public static final String COLUMN_LOCATION_SETTING = "location_setting";        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
         // Human readable location string, provided by the API.  Because for styling,
         // "Mountain View" is more recognizable than 94043.
         public static final String COLUMN_CITY_NAME = "city_name";
-
         // In order to uniquely pinpoint the location on the map when we launch the
         // map intent, we store the latitude and longitude as returned by openweathermap.
         public static final String COLUMN_COORD_LAT = "coord_lat";
@@ -110,34 +100,28 @@ public class WeatherContract {
         public static Uri buildLocationUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+
+
     }
 
     /* Inner class that defines the table contents of the weather table */
     public static final class WeatherEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_BOOKS).build();
-
-        public static final String CONTENT_TYPE =
+        public static final String TABLE_NAME = "books";        public static final String CONTENT_TYPE =
                 "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
-
-        public static final String CONTENT_ITEM_TYPE =
-                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
-
-        public static final String TABLE_NAME = "books";
-
         // Column with the foreign key into the location table.
-        public static final String COLUMN_TROVE_KEY = "trove_id";
+        public static final String COLUMN_TROVE_KEY = "trove_id";        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
         public static final String COLUMN_BOOK_TITLE = "title";
-
         public static final String COLUMN_BOOK_AUTHOR = "author";
-
         // Min and max temperatures for the day (stored as floats)
         public static final String COLUMN_BOOK_YEAR = "year";
         public static final String COLUMN_URL = "url";
         public static final String COLUMN_BOOK_HOLDINGS = "holdingsCount";
         public static final String COLUMN_BOOK_VERSIONS = "versionCount";
         private static final String DATE_FORMAT = "yyyyMMdd";
-
 
         public static Uri buildWeatherUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -150,7 +134,6 @@ public class WeatherContract {
         public static Uri buildBooksEntryfromId(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }
-
 
         public static Uri buildBooksEntries() {
             return CONTENT_URI;
@@ -167,5 +150,9 @@ public class WeatherContract {
         public static String getTroveKeyFromUri(Uri uri) {
             return uri.getQueryParameter(COLUMN_TROVE_KEY);
         }
+
+
+
+
     }
 }

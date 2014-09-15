@@ -29,7 +29,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,7 +41,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.etapps.trove.data.WeatherContract.WeatherEntry;
+import com.etapps.trove.data.BookContract.WeatherEntry;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,15 +57,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
 
     private static final String SHARE_HASHTAG = " #Trove";
-
-    private ShareActionProvider mShareActionProvider;
-    private String mUrl;
-    private String mUrlBorrow;
-    private String mUrlBuy;
-    private String mKeyStr;
-
     private static final int DETAIL_LOADER = 0;
-
     private static final String[] COLUMNS = {
             WeatherEntry._ID,
             WeatherEntry.COLUMN_TROVE_KEY,
@@ -77,7 +68,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             WeatherEntry.COLUMN_BOOK_HOLDINGS,
             WeatherEntry.COLUMN_BOOK_VERSIONS
     };
-
+    private ShareActionProvider mShareActionProvider;
+    private String mUrl;
+    private String mUrlBorrow;
+    private String mUrlBuy;
+    private String mKeyStr;
     private ImageButton mBtn_GoTo;
     private ImageView mIconView;
     private TextView mTitleView;
@@ -87,6 +82,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private Button mBtn_Borrow;
     private Button mBtn_Buy;
+    private GetCoverTask task;
 
     private View rootView;
 
@@ -102,20 +98,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        //setRetainInstance(true);
         // Create an object for subclass of AsyncTask
-        GetXMLTask task = new GetXMLTask();
-        // Execute the task
-        //task.execute(new String[] { URL });
+        task = new GetCoverTask();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.v(LOG_TAG, "onCreateView");
         Bundle arguments = getArguments();
         if (arguments != null) {
             mKeyStr = arguments.getString(DetailActivity.TROVE_KEY);
@@ -180,7 +172,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             //mLocation = savedInstanceState.getString(LOCATION_KEY);
@@ -194,7 +185,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(LOG_TAG, "onLoadFinished");
         Uri keyUri = WeatherEntry.buildBooksEntryfromId(mKeyStr);
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
@@ -212,7 +202,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if (data != null && data.moveToFirst() && mTitleView != null) {
-            Log.v(LOG_TAG, "onLoadFinished");
             //mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
 
 
@@ -230,15 +219,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             String versions = data.getString(data.getColumnIndex(
                     WeatherEntry.COLUMN_BOOK_VERSIONS));
 
-            //and I set the views on that data
-            /*if (title.length()>=45) {
-                float size=mTitleView.getTextSize();
-                mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_PX,size-15);
+            //if the title text is too long I shorten it otherwise it can occupy all the space
+            if (title.length() >= 60) {
+                title = title.substring(0, 60) + "...";
             }
-            if (title.length()>=30 && title.length()<45) {
-                float size=mTitleView.getTextSize();
-                mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_PX,size-10);
-            }*/
+
+            //TODO: find a workaround to retrieve the correct thumbnail for the cover
+            String URL = "http://www.youthedesigner.com/wp-content/uploads/2010/03/beautiful-book-covers-67.jpg";
+            // Execute the task
+            //task.execute(URL);
+
+            //and I set the views on that data
             mTitleView.setText(title);
             mAuthorView.setText(author);
             mYearView.setText(year);
@@ -263,35 +254,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
-
-
-
-/*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-
-    }*/
-
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
@@ -315,13 +277,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
-    private class GetXMLTask extends AsyncTask<String, Void, Bitmap> {
+    private class GetCoverTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... urls) {
             Bitmap map = null;
             for (String url : urls) {
                 map = downloadImage(url);
             }
+            //add here the retrieve of the additional data?
             return map;
         }
 
