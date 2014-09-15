@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditTextPreference
+        android:title="@string/pref_results_number_label"
+        android:key="@string/pref_results_key"
+        android:defaultValue="@string/pref_results_default"
+        android:inputType="numberDecimal"
+        android:singleLine="true" />
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:editable="false"
+        android:enabled="false"
+        android:key="@string/about_pref"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/about_pref_summ"
+        android:title="@string/about_pref_title" />
+    <Preference android:summary="@string/author_pref_summ"
+        android:title="@string/author_pref_title">
+        <intent android:action="android.intent.action.VIEW"
+            android:data="https://github.com/emanuelet" />
+    </Preference>
+    <Preference android:title="@string/prefs_web_page" >
+        <intent android:action="android.intent.action.VIEW"
+            android:data="http://trove.nla.gov.au/" />
+    </Preference>
+</PreferenceScreen>

@@ -1,0 +1,133 @@
+<!-- Master layout. -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Header: Day, Date -->
+
+
+            <TextView
+                android:fontFamily="sans-serif-condensed"
+                android:id="@+id/detail_title_textview"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="exampleexampleexampleexample"
+                android:textColor="@color/black"
+                android:textSize="40sp" />
+
+
+            <!-- Main content: high, low, art, weather state -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:fontFamily="sans-serif-condensed"
+                        android:id="@+id/detail_author_textview"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="example"
+                        android:textColor="@color/grey_700"
+                        android:textSize="28sp" />
+
+                    <TextView
+                        android:id="@+id/detail_year_textview"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="example"
+                        android:textAppearance="?android:textAppearanceLarge" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="10dp">
+
+                        <ImageView
+                            android:id="@+id/detail_cover"
+                            android:layout_width="wrap_content"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/apostles"
+                            android:layout_height="wrap_content" />
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/detail_versions_textview" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_footer"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="bottom|center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Borrow"
+            android:id="@+id/btn_borrow"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buy"
+            android:id="@+id/btn_buy" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_goto"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_action_send_now" />
+    </LinearLayout>
+</LinearLayout>
