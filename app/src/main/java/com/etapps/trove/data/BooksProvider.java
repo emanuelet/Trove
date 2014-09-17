@@ -25,35 +25,35 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-public class WeatherProvider extends ContentProvider {
+public class BooksProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int BOOKS = 100;
     private static final int BOOKS_WITH_ID = 101;
     private static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
-    private static final int LOCATION = 300;
-    private static final int LOCATION_ID = 301;
+    private static final int LIBRARY = 300;
+    private static final int LIBRARY_ID = 301;
     private static final SQLiteQueryBuilder sBookbyIdQueryBuilder;
     static{
         sBookbyIdQueryBuilder = new SQLiteQueryBuilder();
         sBookbyIdQueryBuilder.setTables(
-                BookContract.WeatherEntry.TABLE_NAME);
+                BookContract.BooksEntry.TABLE_NAME);
     }
     private static final String sTroveIdSelection =
-            BookContract.WeatherEntry.TABLE_NAME+
-                    "." + BookContract.WeatherEntry.COLUMN_TROVE_KEY + " = ? ";
+            BookContract.BooksEntry.TABLE_NAME+
+                    "." + BookContract.BooksEntry.COLUMN_TROVE_KEY + " = ? ";
 /*
 
     private static final String sLocationSettingWithStartDateSelection =
-            BookContract.LocationEntry.TABLE_NAME+
-                    "." + BookContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    BookContract.WeatherEntry.COLUMN_DATETEXT + " >= ? ";
+            BookContract.LibrariesEntry.TABLE_NAME+
+                    "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+                    BookContract.BooksEntry.COLUMN_DATETEXT + " >= ? ";
 
     private static final String sLocationSettingAndDaySelection =
-            BookContract.LocationEntry.TABLE_NAME +
-                    "." + BookContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    BookContract.WeatherEntry.COLUMN_DATETEXT + " = ? ";*/
+            BookContract.LibrariesEntry.TABLE_NAME +
+                    "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+                    BookContract.BooksEntry.COLUMN_DATETEXT + " = ? ";*/
     private BooksDbHelper mOpenHelper;
 
     private static UriMatcher buildUriMatcher() {
@@ -70,12 +70,13 @@ public class WeatherProvider extends ContentProvider {
         matcher.addURI(authority, BookContract.PATH_BOOKS, BOOKS);
         matcher.addURI(authority, BookContract.PATH_BOOKS + "/*", BOOKS_WITH_ID);
         matcher.addURI(authority, BookContract.PATH_BOOKS + "/*/*", WEATHER_WITH_LOCATION_AND_DATE);
-
+        matcher.addURI(authority, BookContract.PATH_LIBRARIES, LIBRARY);
+        matcher.addURI(authority, BookContract.PATH_LIBRARIES + "/*", LIBRARY_ID);
         return matcher;
     }
 
     private Cursor getBookbyId(Uri uri, String[] projection, String sortOrder) {
-        String locationSetting = BookContract.WeatherEntry.getLocationSettingFromUri(uri);
+        String locationSetting = BookContract.BooksEntry.getLocationSettingFromUri(uri);
         String[] selectionArgs=new String[]{locationSetting};
         String selection= sTroveIdSelection;
 
@@ -99,8 +100,8 @@ public class WeatherProvider extends ContentProvider {
 
     private Cursor getWeatherByLocationSettingAndDate(
             Uri uri, String[] projection, String sortOrder) {
-        String locationSetting = BookContract.WeatherEntry.getLocationSettingFromUri(uri);
-        String date = BookContract.WeatherEntry.getDateFromUri(uri);
+        String locationSetting = BookContract.BooksEntry.getLocationSettingFromUri(uri);
+        String date = BookContract.BooksEntry.getDateFromUri(uri);
 
         /*return sBookbyIdQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
@@ -142,7 +143,7 @@ public class WeatherProvider extends ContentProvider {
             // "weather"
             case BOOKS: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        BookContract.WeatherEntry.TABLE_NAME,
+                        BookContract.BooksEntry.TABLE_NAME,
                         null,
                         selection,
                         selectionArgs,
@@ -153,12 +154,12 @@ public class WeatherProvider extends ContentProvider {
                 break;
             }
             // "location/*"
-            case LOCATION_ID: {
+            case LIBRARY_ID: {
                 Log.v("query","4");
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        BookContract.LocationEntry.TABLE_NAME,
+                        BookContract.LibrariesEntry.TABLE_NAME,
                         projection,
-                        BookContract.LocationEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        BookContract.LibrariesEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
                         null,
                         null,
                         null,
@@ -167,10 +168,10 @@ public class WeatherProvider extends ContentProvider {
                 break;
             }
             // "location"
-            case LOCATION: {
-                Log.v("query","5");
+            case LIBRARY: {
+                Log.v("query libraries",projection+" / "+selection);
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        BookContract.LocationEntry.TABLE_NAME,
+                        BookContract.LibrariesEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -200,15 +201,15 @@ public class WeatherProvider extends ContentProvider {
 
         switch (match) {
             case WEATHER_WITH_LOCATION_AND_DATE:
-                return BookContract.WeatherEntry.CONTENT_ITEM_TYPE;
+                return BookContract.BooksEntry.CONTENT_ITEM_TYPE;
             case BOOKS_WITH_ID:
-                return BookContract.WeatherEntry.CONTENT_TYPE;
+                return BookContract.BooksEntry.CONTENT_TYPE;
             case BOOKS:
-                return BookContract.WeatherEntry.CONTENT_TYPE;
-            case LOCATION:
-                return BookContract.LocationEntry.CONTENT_TYPE;
-            case LOCATION_ID:
-                return BookContract.LocationEntry.CONTENT_ITEM_TYPE;
+                return BookContract.BooksEntry.CONTENT_TYPE;
+            case LIBRARY:
+                return BookContract.LibrariesEntry.CONTENT_TYPE;
+            case LIBRARY_ID:
+                return BookContract.LibrariesEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -222,17 +223,17 @@ public class WeatherProvider extends ContentProvider {
 
         switch (match) {
             case BOOKS: {
-                long _id = db.insert(BookContract.WeatherEntry.TABLE_NAME, null, values);
+                long _id = db.insert(BookContract.BooksEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = BookContract.WeatherEntry.buildWeatherUri(_id);
+                    returnUri = BookContract.BooksEntry.buildWeatherUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
-            case LOCATION: {
-                long _id = db.insert(BookContract.LocationEntry.TABLE_NAME, null, values);
+            case LIBRARY: {
+                long _id = db.insert(BookContract.LibrariesEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = BookContract.LocationEntry.buildLocationUri(_id);
+                    returnUri = BookContract.LibrariesEntry.buildLibrariesUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -252,11 +253,11 @@ public class WeatherProvider extends ContentProvider {
         switch (match) {
             case BOOKS:
                 rowsDeleted = db.delete(
-                        BookContract.WeatherEntry.TABLE_NAME, selection, selectionArgs);
+                        BookContract.BooksEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case LOCATION:
+            case LIBRARY:
                 rowsDeleted = db.delete(
-                        BookContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
+                        BookContract.LibrariesEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -277,11 +278,11 @@ public class WeatherProvider extends ContentProvider {
 
         switch (match) {
             case BOOKS:
-                rowsUpdated = db.update(BookContract.WeatherEntry.TABLE_NAME, values, selection,
+                rowsUpdated = db.update(BookContract.BooksEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
-            case LOCATION:
-                rowsUpdated = db.update(BookContract.LocationEntry.TABLE_NAME, values, selection,
+            case LIBRARY:
+                rowsUpdated = db.update(BookContract.LibrariesEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             default:
@@ -303,7 +304,7 @@ public class WeatherProvider extends ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(BookContract.WeatherEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(BookContract.BooksEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }

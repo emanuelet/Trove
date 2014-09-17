@@ -19,7 +19,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.etapps.trove.data.BookContract.WeatherEntry;
+import com.etapps.trove.data.BookContract.BooksEntry;
+import com.etapps.trove.data.BookContract.LibrariesEntry;
 
 /**
  * Manages a local database for weather data.
@@ -38,16 +39,23 @@ public class BooksDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // Create a table to hold locations.  A location consists of the string supplied in the
         // location setting, the city name, and the latitude and longitude
-        final String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
-                WeatherEntry._ID + " INTEGER PRIMARY KEY," +
-                WeatherEntry.COLUMN_TROVE_KEY + " TEXT UNIQUE NOT NULL, " +
-                WeatherEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, " +
-                WeatherEntry.COLUMN_BOOK_AUTHOR + " TEXT, " +
-                WeatherEntry.COLUMN_BOOK_YEAR + " TEXT NOT NULL, " +
-                WeatherEntry.COLUMN_URL + " TEXT NOT NULL , "+
-                WeatherEntry.COLUMN_BOOK_HOLDINGS + " TEXT, " +
-                WeatherEntry.COLUMN_BOOK_VERSIONS + " TEXT); ";
+        final String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BooksEntry.TABLE_NAME + " (" +
+                BooksEntry._ID + " INTEGER PRIMARY KEY," +
+                BooksEntry.COLUMN_TROVE_KEY + " TEXT UNIQUE NOT NULL, " +
+                BookContract.BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, " +
+                BooksEntry.COLUMN_BOOK_AUTHOR + " TEXT, " +
+                BooksEntry.COLUMN_BOOK_YEAR + " TEXT NOT NULL, " +
+                BooksEntry.COLUMN_URL + " TEXT NOT NULL , "+
+                BooksEntry.COLUMN_BOOK_HOLDINGS + " TEXT, " +
+                BooksEntry.COLUMN_BOOK_VERSIONS + " TEXT); ";
+        final String SQL_CREATE_LIBRARIES_TABLE = "CREATE TABLE " + LibrariesEntry.TABLE_NAME + " (" +
+                LibrariesEntry._ID + " INTEGER PRIMARY KEY," +
+                LibrariesEntry.COLUMN_NUC + " TEXT NOT NULL, " +
+                //LibrariesEntry.COLUMN_LIBRARY_NAME + " TEXT, " +
+                //LibrariesEntry.COLUMN_CITY + " TEXT, " +
+                LibrariesEntry.COLUMN_URL + " TEXT); ";
         sqLiteDatabase.execSQL(SQL_CREATE_BOOKS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_LIBRARIES_TABLE);
     }
 
     @Override
@@ -58,7 +66,8 @@ public class BooksDbHelper extends SQLiteOpenHelper {
         // It does NOT depend on the version number for your application.
         // If you want to update the schema without wiping data, commenting out the next 2 lines
         // should be your top priority before modifying this method.
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WeatherEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + BooksEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LibrariesEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

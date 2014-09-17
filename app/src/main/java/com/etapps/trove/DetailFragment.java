@@ -17,10 +17,7 @@ package com.etapps.trove;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -28,7 +25,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,53 +34,66 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.etapps.trove.data.BookContract.WeatherEntry;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import com.etapps.trove.data.BookContract.BooksEntry;
+import com.etapps.trove.data.BookContract.LibrariesEntry;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
 
+    public static final int COL_LIB_ID = 0;
+    //public static final int COL_LIB_NAME= 1;
+    //public static final int COL_LIB_CITY = 2;
+    public static final int COL_LIB_NUC= 1;
+    public static final int COL_LIB_URL = 2;
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
-
     private static final String SHARE_HASHTAG = " #Trove";
     private static final int DETAIL_LOADER = 0;
     private static final String[] COLUMNS = {
-            WeatherEntry._ID,
-            WeatherEntry.COLUMN_TROVE_KEY,
-            WeatherEntry.COLUMN_BOOK_TITLE,
-            WeatherEntry.COLUMN_BOOK_AUTHOR,
-            WeatherEntry.COLUMN_BOOK_YEAR,
-            WeatherEntry.COLUMN_URL,
-            WeatherEntry.COLUMN_BOOK_HOLDINGS,
-            WeatherEntry.COLUMN_BOOK_VERSIONS
+            BooksEntry._ID,
+            BooksEntry.COLUMN_TROVE_KEY,
+            BooksEntry.COLUMN_BOOK_TITLE,
+            BooksEntry.COLUMN_BOOK_AUTHOR,
+            BooksEntry.COLUMN_BOOK_YEAR,
+            BooksEntry.COLUMN_URL,
+            BooksEntry.COLUMN_BOOK_HOLDINGS,
+            BooksEntry.COLUMN_BOOK_VERSIONS
+    };
+    private static final int LIBRARIES_LOADER = 1;
+    private static final String[] LIBRARIES_COLUMNS = {
+            LibrariesEntry._ID,
+            //LibrariesEntry.COLUMN_LIBRARY_NAME,
+            //LibrariesEntry.COLUMN_CITY,
+            LibrariesEntry.COLUMN_NUC,
+            LibrariesEntry.COLUMN_URL
     };
     private ShareActionProvider mShareActionProvider;
+
     private String mUrl;
     private String mUrlBorrow;
     private String mUrlBuy;
     private String mKeyStr;
+
     private ImageButton mBtn_GoTo;
-    private ImageView mIconView;
+    //private ImageView mIconView;
     private TextView mTitleView;
     private TextView mAuthorView;
     private TextView mYearView;
     private TextView mVersionsView;
-
+    private TextView mBorrowHeaderView;
     private Button mBtn_Borrow;
     private Button mBtn_Buy;
+
     private GetCoverTask task;
 
     private View rootView;
+
+    private LibrariesAdapter mLibrariesAdapter;
+    private ListView mListView;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -118,6 +127,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
 
+        mLibrariesAdapter = new LibrariesAdapter(getActivity(), null, 0);
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.btn_goto);
         mBtn_Borrow = (Button) rootView.findViewById(R.id.btn_borrow);
@@ -125,21 +135,23 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mBtn_GoTo.setOnClickListener(this);
         mBtn_Borrow.setOnClickListener(this);
         mBtn_Buy.setOnClickListener(this);
-        mIconView = (ImageView) rootView.findViewById(R.id.detail_cover);
         mTitleView = (TextView) rootView.findViewById(R.id.detail_title_textview);
         mAuthorView = (TextView) rootView.findViewById(R.id.detail_author_textview);
         mYearView = (TextView) rootView.findViewById(R.id.detail_year_textview);
         mVersionsView = (TextView) rootView.findViewById(R.id.detail_versions_textview);
+        mBorrowHeaderView = (TextView) rootView.findViewById(R.id.detail_borrow_libraries_header);
+        mListView = (ListView) rootView.findViewById(R.id.detail_borrow_libraries_listview);
+        mListView.setAdapter(mLibrariesAdapter);
         return rootView;
     }
 
     @Override
     public void onResume() {
-        Log.v(LOG_TAG, "onResume");
         super.onResume();
         Bundle arguments = getArguments();
         if (arguments != null && arguments.containsKey(DetailActivity.TROVE_KEY)) {
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+            getLoaderManager().restartLoader(LIBRARIES_LOADER, null, this);
         }
 
     }
@@ -180,44 +192,62 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null && arguments.containsKey(DetailActivity.TROVE_KEY)) {
             getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+            getLoaderManager().initLoader(LIBRARIES_LOADER, null, this);
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri keyUri = WeatherEntry.buildBooksEntryfromId(mKeyStr);
+
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
-        return new CursorLoader(
-                getActivity(),
-                keyUri,
-                COLUMNS,
-                null,
-                null,
-                null
-        );
+        switch (id) {
+            case 0:
+                Uri keyUri = BooksEntry.buildBooksEntryfromId(mKeyStr);
+                return new CursorLoader(
+                        getActivity(),
+                        keyUri,
+                        COLUMNS,
+                        null,
+                        null,
+                        null
+                );
+            case 1:
+                Uri libkeyUri = LibrariesEntry.getLibraries();
+                return new CursorLoader(
+                        getActivity(),
+                        libkeyUri,
+                        LIBRARIES_COLUMNS,
+                        null,
+                        null,
+                        null
+                );
+            default:
+                return null;
+        }
+        //TODO:problem with double projection tables
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (data != null && data.moveToFirst() && mTitleView != null) {
+        if (data != null && data.moveToFirst() && loader.getId() == 0) {
             //mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
 
 
             //I retrieve all the data from selection of the content provider
             String title = data.getString(data.getColumnIndex(
-                    WeatherEntry.COLUMN_BOOK_TITLE));
+                    BooksEntry.COLUMN_BOOK_TITLE));
             String author = data.getString(data.getColumnIndex(
-                    WeatherEntry.COLUMN_BOOK_AUTHOR));
+                    BooksEntry.COLUMN_BOOK_AUTHOR));
             String year = data.getString(data.getColumnIndex(
-                    WeatherEntry.COLUMN_BOOK_YEAR));
+                    BooksEntry.COLUMN_BOOK_YEAR));
             String url = data.getString(data.getColumnIndex(
-                    WeatherEntry.COLUMN_URL));
+                    BooksEntry.COLUMN_URL));
             String holdings = data.getString(data.getColumnIndex(
-                    WeatherEntry.COLUMN_BOOK_HOLDINGS));
+                    BooksEntry.COLUMN_BOOK_HOLDINGS));
             String versions = data.getString(data.getColumnIndex(
-                    WeatherEntry.COLUMN_BOOK_VERSIONS));
+                    BooksEntry.COLUMN_BOOK_VERSIONS));
 
             //if the title text is too long I shorten it otherwise it can occupy all the space
             if (title.length() >= 60) {
@@ -236,26 +266,31 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUrl = url;
             mUrlBorrow = url + "?q=+&borrow=true";
             mUrlBuy = url + "?q=+buy=true";
-            if (holdings != null) {
-                mBtn_Borrow.setText("Borrow (" + holdings + ")");
+            if (holdings != null && !holdings.equals("0")) {
+                mBorrowHeaderView.setText("Available at (" + holdings + " total): ");
+            } else {
+                mBorrowHeaderView.setText("No Book available to borrow");
+                mBtn_Borrow.setEnabled(false);
             }
-            if (versions != null) {
+            if (versions != null && !versions.equals("0")) {
                 mVersionsView.setText(versions + " versions available");
-            }
-
-            // For accessibility, add a content description to the icon field
-            mIconView.setContentDescription(title + " by " + author);
-
+            } else mVersionsView.setText("No versions available");
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
         }
+        if (loader.getId()==1) {
+            mLibrariesAdapter.swapCursor(data);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        if (loader.getId()==1) {
+            mLibrariesAdapter.swapCursor(null);
+        }
     }
 
     @Override
@@ -277,60 +312,5 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
-    private class GetCoverTask extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            Bitmap map = null;
-            for (String url : urls) {
-                map = downloadImage(url);
-            }
-            //add here the retrieve of the additional data?
-            return map;
-        }
 
-        // Sets the Bitmap returned by doInBackground
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            mIconView.setImageBitmap(result);
-        }
-
-        // Creates Bitmap from InputStream and returns it
-        private Bitmap downloadImage(String url) {
-            Bitmap bitmap = null;
-            InputStream stream = null;
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inSampleSize = 1;
-
-            try {
-                stream = getHttpConnection(url);
-                bitmap = BitmapFactory.
-                        decodeStream(stream, null, bmOptions);
-                stream.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        // Makes HttpURLConnection and returns InputStream
-        private InputStream getHttpConnection(String urlString)
-                throws IOException {
-            InputStream stream = null;
-            URL url = new URL(urlString);
-            URLConnection connection = url.openConnection();
-
-            try {
-                HttpURLConnection httpConnection = (HttpURLConnection) connection;
-                httpConnection.setRequestMethod("GET");
-                httpConnection.connect();
-
-                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    stream = httpConnection.getInputStream();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return stream;
-        }
-    }
 }

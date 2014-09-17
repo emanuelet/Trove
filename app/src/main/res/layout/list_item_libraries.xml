@@ -23,8 +23,9 @@
     </FrameLayout>-->
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="4"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/list_item_title_textview"
+                android:id="@+id/list_item_library_name_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
@@ -46,24 +47,28 @@
 
 
             <TextView
-                android:id="@+id/list_item_author_textview"
-                android:layout_width="0dp"
+                android:id="@+id/list_item_city_textview"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:fontFamily="sans-serif-condensed"
                 android:text="Author"
                 android:textAppearance="?android:textAppearanceSmall" />
 
-            <TextView
-                android:id="@+id/list_item_year_textview"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="end"
-                android:text="1950"
-                android:textAppearance="?android:textAppearanceLarge" />
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/detail_borrow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/borrow_book_black" />
     </LinearLayout>
 </LinearLayout>

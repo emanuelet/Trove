@@ -45,7 +45,7 @@
         <provider android:name=".data.SuggestionProvider"
             android:authorities="com.etapps.trove.data.SuggestionProvider" />
         <provider
-            android:name=".data.WeatherProvider"
+            android:name=".data.BooksProvider"
             android:authorities="@string/content_authority"
             android:exported="false"/>
         <!-- Points to searchable activity so the whole app can invoke search. -->

@@ -31,7 +31,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.etapps.trove.data.BookContract.WeatherEntry;
+import com.etapps.trove.data.BookContract;
+import com.etapps.trove.data.BookContract.BooksEntry;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.widget.ListView} layout.
@@ -57,12 +58,12 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
             // On the one hand, that's annoying. On the other, you can search the weather table
             // using the location set by the user, which is only in the Location table.
             // So the convenience is worth it.
-            WeatherEntry._ID,
-            WeatherEntry.COLUMN_TROVE_KEY,
-            WeatherEntry.COLUMN_BOOK_TITLE,
-            WeatherEntry.COLUMN_BOOK_AUTHOR,
-            WeatherEntry.COLUMN_BOOK_YEAR,
-            WeatherEntry.COLUMN_URL,
+            BookContract.BooksEntry._ID,
+            BookContract.BooksEntry.COLUMN_TROVE_KEY,
+            BookContract.BooksEntry.COLUMN_BOOK_TITLE,
+            BookContract.BooksEntry.COLUMN_BOOK_AUTHOR,
+            BookContract.BooksEntry.COLUMN_BOOK_YEAR,
+            BookContract.BooksEntry.COLUMN_URL,
     };
     private ResultsAdapter mResultsAdapter;
     private ListView mListView;
@@ -167,7 +168,7 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
         // and filter the query to return weather only for dates after or including today.
         // Only return data after today.
 
-        Uri keyUri = WeatherEntry.buildBooksEntries();
+        Uri keyUri = BooksEntry.buildBooksEntries();
 
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.

@@ -44,7 +44,7 @@ public class BookContract {
     // as the ContentProvider hasn't been given any information on what to do with "givemeroot".
     // At least, let's hope not.  Don't be that dev, reader.  Don't be that dev.
     public static final String PATH_BOOKS = "books";
-    public static final String PATH_LOCATION = "location";
+    public static final String PATH_LIBRARIES = "libraries";
 
     // Format used for storing dates in the database.  ALso used for converting those strings
     // back into date objects for comparison/processing.
@@ -78,44 +78,49 @@ public class BookContract {
     }
 
     /* Inner class that defines the table contents of the location table */
-    public static final class LocationEntry implements BaseColumns {
+    public static final class LibrariesEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LOCATION).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LIBRARIES).build();
         // Table name
-        public static final String TABLE_NAME = "location";        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
-        // The location setting string is what will be sent to openweathermap
-        // as the location query.
-        public static final String COLUMN_LOCATION_SETTING = "location_setting";        public static final String CONTENT_ITEM_TYPE =
-                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
-        // Human readable location string, provided by the API.  Because for styling,
-        // "Mountain View" is more recognizable than 94043.
-        public static final String COLUMN_CITY_NAME = "city_name";
+        public static final String TABLE_NAME = "libraries";
+        public static final String COLUMN_NUC = "nuc";        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_LIBRARIES;
+        public static final String COLUMN_LIBRARY_NAME = "name";        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_LIBRARIES;
+        public static final String COLUMN_CITY = "city";
+        public static final String COLUMN_URL = "url";
         // In order to uniquely pinpoint the location on the map when we launch the
         // map intent, we store the latitude and longitude as returned by openweathermap.
         public static final String COLUMN_COORD_LAT = "coord_lat";
         public static final String COLUMN_COORD_LONG = "coord_long";
 
-        public static Uri buildLocationUri(long id) {
+        public static Uri buildLibrariesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Uri buildLibrariesfromId(String id) {
+            return CONTENT_URI.buildUpon().appendPath(id).build();
+        }
+
+        public static Uri getLibraries() {
+            return CONTENT_URI;
+        }
 
 
     }
 
     /* Inner class that defines the table contents of the weather table */
-    public static final class WeatherEntry implements BaseColumns {
+    public static final class BooksEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_BOOKS).build();
-        public static final String TABLE_NAME = "books";        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+        public static final String TABLE_NAME = "books";
         // Column with the foreign key into the location table.
-        public static final String COLUMN_TROVE_KEY = "trove_id";        public static final String CONTENT_ITEM_TYPE =
-                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+        public static final String COLUMN_TROVE_KEY = "trove_id";        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
         public static final String COLUMN_BOOK_TITLE = "title";
-        public static final String COLUMN_BOOK_AUTHOR = "author";
+        public static final String COLUMN_BOOK_AUTHOR = "author";        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
         // Min and max temperatures for the day (stored as floats)
         public static final String COLUMN_BOOK_YEAR = "year";
         public static final String COLUMN_URL = "url";
@@ -155,4 +160,5 @@ public class BookContract {
 
 
     }
+
 }

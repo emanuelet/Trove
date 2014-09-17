@@ -83,7 +83,7 @@ public class SettingsActivity extends PreferenceActivity
                 //leave it blank for the moment
             } else {
                 // notify code that weather may be impacted
-                getContentResolver().notifyChange(BookContract.WeatherEntry.CONTENT_URI, null);
+                getContentResolver().notifyChange(BookContract.BooksEntry.CONTENT_URI, null);
             }
         }
 
