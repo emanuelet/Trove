@@ -28,7 +28,7 @@ import com.etapps.trove.data.BookContract;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
- * <p>
+ * <p/>
  * See <a href="http://developer.android.com/design/patterns/settings.html">
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
@@ -50,6 +50,15 @@ public class SettingsActivity extends PreferenceActivity
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_results_key)));
+        Preference updatePref = (Preference) findPreference("update_lib");
+        updatePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                //new FetchLibrariesTask(this).execute();
+                return true;
+            }
+        });
     }
 
     /**
@@ -78,7 +87,7 @@ public class SettingsActivity extends PreferenceActivity
         String stringValue = value.toString();
 
         // are we starting the preference activity?
-        if ( !mBindingPreference ) {
+        if (!mBindingPreference) {
             if (preference.getKey().equals(getString(R.string.pref_results_key))) {
                 //leave it blank for the moment
             } else {

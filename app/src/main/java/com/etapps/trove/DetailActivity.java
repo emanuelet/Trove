@@ -16,14 +16,18 @@
 package com.etapps.trove;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-public class DetailActivity extends ActionBarActivity {
+public class DetailActivity extends ActionBarActivity implements DetailFragment.Callback {
 
     public static final String TROVE_KEY = "trove_id";
+
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,6 @@ public class DetailActivity extends ActionBarActivity {
             Bundle arguments = new Bundle();
             arguments.putString(DetailActivity.TROVE_KEY, troveId);
 
-            new FetchLibrariesTask(this).execute(troveId);
-
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
 
@@ -47,6 +49,7 @@ public class DetailActivity extends ActionBarActivity {
                     .add(R.id.weather_detail_container, fragment)
                     .commit();
         }
+        mListView = (ListView) findViewById(R.id.detail_borrow_libraries_listview);
     }
 
     @Override
@@ -67,5 +70,16 @@ public class DetailActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(String url, int position) {
+        if (url != null) {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+
+        }
+
     }
 }

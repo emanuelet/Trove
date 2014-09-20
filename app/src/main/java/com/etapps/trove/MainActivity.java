@@ -3,8 +3,10 @@ package com.etapps.trove;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -44,6 +46,16 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
         handleIntent(getIntent());
         ResultsFragment resultsFragment = ((ResultsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean firstStart = settings.getBoolean("firstStart", true);
+
+        if(firstStart) {
+            new FetchLibrariesTask(this).execute();
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("firstStart", false);
+            editor.commit();
+        }
     }
 
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
@@ -34,11 +33,10 @@ public class LibrariesAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        //String name = cursor.getString(DetailFragment.COL_LIB_NAME);
-        String name = cursor.getString(DetailFragment.COL_LIB_NUC);
-        if (name.length()>=25) {
+        String name = cursor.getString(DetailFragment.COL_LIB_NAME);
+        /*if (name.length()>=25) {
             name= name.substring(0, 25) + "...";
-        }
+        }*/
         // Find TextView and set formatted date on it
         viewHolder.libNameView .setText(name);
         // Read weather forecast from cursor
@@ -46,19 +44,16 @@ public class LibrariesAdapter extends CursorAdapter {
         // Find TextView and set weather forecast on it
         viewHolder.libCityView.setText(city);*/
         String url = cursor.getString(DetailFragment.COL_LIB_URL);
-        // TODO:Set the onclick method with this url
 
     }
 
     private class ViewHolder {
         public final TextView libNameView;
         public final TextView libCityView;
-        public final ImageButton borrowBtn;
 
         public ViewHolder(View view) {
             libNameView = (TextView) view.findViewById(R.id.list_item_library_name_textview);
             libCityView = (TextView) view.findViewById(R.id.list_item_city_textview);
-            borrowBtn = (ImageButton) view.findViewById(R.id.detail_borrow_button);
         }
     }
 }

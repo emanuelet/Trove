@@ -4,12 +4,17 @@
     android:layout_height="match_parent">
 
     <EditTextPreference
-        android:title="@string/pref_results_number_label"
-        android:key="@string/pref_results_key"
         android:defaultValue="@string/pref_results_default"
         android:inputType="numberDecimal"
-        android:singleLine="true" />
+        android:key="@string/pref_results_key"
+        android:singleLine="true"
+        android:title="@string/pref_results_number_label" />
 
+    <Preference
+        android:key="@string/update_lib_pref"
+        android:summary="@string/updlib_pref_summ"
+        android:title="@string/updlib_pref_title">
+    </Preference>
     <EditTextPreference
         android:capitalize="words"
         android:editable="false"

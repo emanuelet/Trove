@@ -20,6 +20,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.etapps.trove.data.BookContract.BooksEntry;
+import com.etapps.trove.data.BookContract.HoldingsEntry;
 import com.etapps.trove.data.BookContract.LibrariesEntry;
 
 /**
@@ -42,19 +43,33 @@ public class BooksDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BooksEntry.TABLE_NAME + " (" +
                 BooksEntry._ID + " INTEGER PRIMARY KEY," +
                 BooksEntry.COLUMN_TROVE_KEY + " TEXT UNIQUE NOT NULL, " +
-                BookContract.BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, " +
+                BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, " +
                 BooksEntry.COLUMN_BOOK_AUTHOR + " TEXT, " +
                 BooksEntry.COLUMN_BOOK_YEAR + " TEXT NOT NULL, " +
                 BooksEntry.COLUMN_URL + " TEXT NOT NULL , "+
                 BooksEntry.COLUMN_BOOK_HOLDINGS + " TEXT, " +
                 BooksEntry.COLUMN_BOOK_VERSIONS + " TEXT); ";
+
+        final String SQL_CREATE_HOLDINGS_TABLE = "CREATE TABLE " + HoldingsEntry.TABLE_NAME + " (" +
+                HoldingsEntry._ID + " INTEGER PRIMARY KEY, " +
+                HoldingsEntry.COLUMN_NUC + " TEXT NOT NULL, " +
+                HoldingsEntry.COLUMN_TROVE_KEY + " TEXT NOT NULL, " +
+                HoldingsEntry.COLUMN_URL + " TEXT, " +
+                // Set up the location column as a foreign key to location table.
+                " FOREIGN KEY (" + HoldingsEntry.COLUMN_TROVE_KEY  + ") REFERENCES " +
+                BooksEntry.TABLE_NAME + " (" + BooksEntry.COLUMN_TROVE_KEY + "), " +
+                " FOREIGN KEY (" + HoldingsEntry.COLUMN_NUC + ") REFERENCES " +
+                LibrariesEntry.TABLE_NAME + " (" + LibrariesEntry.COLUMN_NUC + "));";
+
         final String SQL_CREATE_LIBRARIES_TABLE = "CREATE TABLE " + LibrariesEntry.TABLE_NAME + " (" +
                 LibrariesEntry._ID + " INTEGER PRIMARY KEY," +
                 LibrariesEntry.COLUMN_NUC + " TEXT NOT NULL, " +
-                //LibrariesEntry.COLUMN_LIBRARY_NAME + " TEXT, " +
+                LibrariesEntry.COLUMN_LIBRARY_NAME + " TEXT, " +
                 //LibrariesEntry.COLUMN_CITY + " TEXT, " +
-                LibrariesEntry.COLUMN_URL + " TEXT); ";
+                LibrariesEntry.COLUMN_URL + " TEXT);";
+
         sqLiteDatabase.execSQL(SQL_CREATE_BOOKS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_HOLDINGS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_LIBRARIES_TABLE);
     }
 
@@ -67,6 +82,7 @@ public class BooksDbHelper extends SQLiteOpenHelper {
         // If you want to update the schema without wiping data, commenting out the next 2 lines
         // should be your top priority before modifying this method.
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + BooksEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + HoldingsEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LibrariesEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }

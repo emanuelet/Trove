@@ -34,6 +34,7 @@ public class BooksProvider extends ContentProvider {
     private static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
     private static final int LIBRARY = 300;
     private static final int LIBRARY_ID = 301;
+    private static final int HOLDINGS = 500;
     private static final SQLiteQueryBuilder sBookbyIdQueryBuilder;
     static{
         sBookbyIdQueryBuilder = new SQLiteQueryBuilder();
@@ -72,6 +73,7 @@ public class BooksProvider extends ContentProvider {
         matcher.addURI(authority, BookContract.PATH_BOOKS + "/*/*", WEATHER_WITH_LOCATION_AND_DATE);
         matcher.addURI(authority, BookContract.PATH_LIBRARIES, LIBRARY);
         matcher.addURI(authority, BookContract.PATH_LIBRARIES + "/*", LIBRARY_ID);
+        matcher.addURI(authority, BookContract.PATH_HOLDINGS, HOLDINGS);
         return matcher;
     }
 
@@ -208,6 +210,8 @@ public class BooksProvider extends ContentProvider {
                 return BookContract.BooksEntry.CONTENT_TYPE;
             case LIBRARY:
                 return BookContract.LibrariesEntry.CONTENT_TYPE;
+            case HOLDINGS:
+                return BookContract.HoldingsEntry.CONTENT_TYPE;
             case LIBRARY_ID:
                 return BookContract.LibrariesEntry.CONTENT_ITEM_TYPE;
             default:
@@ -238,6 +242,14 @@ public class BooksProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
+            case HOLDINGS: {
+                long _id = db.insert(BookContract.HoldingsEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = BookContract.HoldingsEntry.buildLibrariesUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -254,6 +266,10 @@ public class BooksProvider extends ContentProvider {
             case BOOKS:
                 rowsDeleted = db.delete(
                         BookContract.BooksEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case HOLDINGS:
+                rowsDeleted = db.delete(
+                        BookContract.HoldingsEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case LIBRARY:
                 rowsDeleted = db.delete(
@@ -279,6 +295,10 @@ public class BooksProvider extends ContentProvider {
         switch (match) {
             case BOOKS:
                 rowsUpdated = db.update(BookContract.BooksEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case HOLDINGS:
+                rowsUpdated = db.update(BookContract.HoldingsEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             case LIBRARY:
@@ -315,6 +335,22 @@ public class BooksProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
+            case HOLDINGS:
+                db.beginTransaction();
+                int returnCounth = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(BookContract.HoldingsEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCounth++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCounth;
             default:
                 return super.bulkInsert(uri, values);
         }

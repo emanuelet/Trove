@@ -69,4 +69,7 @@
     <string name="prefs_web_page">Trove Website</string>
     <string name="list_search_header">Last Search Results</string>
     <string name="suggestions_content_authority">com.etapps.trove.data.SuggestionProvider</string>
+    <string name="updlib_pref_title">Update Libraries List</string>
+    <string name="updlib_pref_summ">Update the list of libraries</string>
+    <string name="update_lib_pref">update_lib</string>
 </resources>

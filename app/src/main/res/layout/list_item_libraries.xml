@@ -52,23 +52,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:fontFamily="sans-serif-condensed"
-                android:text="Author"
+                android:text="City"
                 android:textAppearance="?android:textAppearanceSmall" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+    <!-- <LinearLayout
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_weight="1"
+         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/detail_borrow_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/borrow_book_black" />
-    </LinearLayout>
-</LinearLayout>
+         <ImageButton
+             android:id="@+id/detail_borrow_button"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/borrow_book_black" />
+     </LinearLayout>-->
+ </LinearLayout>

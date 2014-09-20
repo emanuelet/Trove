@@ -15,6 +15,7 @@
  */
 package com.etapps.trove;
 
+import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -41,6 +42,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchLibrariesTask.class.getSimpleName();
     private final Context mContext;
+    private ProgressDialog dialog;
 
     public FetchLibrariesTask(Context context) {
         mContext = context;
@@ -87,48 +89,42 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
         // These are the names of the JSON objects that need to be extracted.
 
         //Trove API
-        //TODO:refactor fro the work response
+        final String TRV_RESPONSE = "response";
+        final String TRV_CONTRIBUTOR = "contributor";
         final String TRV_WORK = "work";
-        final String TRV_URL = "url";
+        final String TRV_ID = "id";
         final String TRV_URL_VALUE = "value";
-        final String TRV_NUC = "nuc";
+        final String TRV_NAME = "name";
         final String TRV_HOLDINGS = "holding";
 
         JSONObject root = new JSONObject(resultJsonStr);
-        JSONObject lev1 = root.getJSONObject(TRV_WORK);
+        JSONObject lev1 = root.getJSONObject(TRV_RESPONSE);
 
 
-        JSONArray holdingsArray = lev1.getJSONArray(TRV_HOLDINGS);
+        JSONArray librArray = lev1.getJSONArray(TRV_CONTRIBUTOR);
 
-        int res = holdingsArray.length();
+        int res = librArray.length();
 
         // Get and insert the new weather information into the database
         Vector<ContentValues> cVVector = new Vector<ContentValues>(res);
 
         for (int i = 0; i < res; i++) {
             // These are the values that will be collected.
-            String url="";
             String nuc;
+            String name;
             //String city;
             //String libName;
 
             // Get the JSON object representing the single entry
-            JSONObject libObj = holdingsArray.getJSONObject(i);
+            JSONObject libObj = librArray.getJSONObject(i);
 
-            nuc = libObj.optString(TRV_NUC);
-            if (libObj.toString().contains("url")) {
-                JSONObject urlObj = libObj.getJSONObject(TRV_URL);
+            nuc = libObj.optString(TRV_ID);
+            name = libObj.optString(TRV_NAME);
 
-                url = urlObj.optString(TRV_URL_VALUE);
-            }
-            Log.v(LOG_TAG,"obj: "+nuc+" / "+ url);
             ContentValues dbValues = new ContentValues();
 
             dbValues.put(LibrariesEntry.COLUMN_NUC, nuc);
-            //dbValues.put(LibrariesEntry.COLUMN_LIBRARY_NAME, );
-            //dbValues.put(LibrariesEntry.COLUMN_CITY, );
-            dbValues.put(LibrariesEntry.COLUMN_URL, url);
-
+            dbValues.put(LibrariesEntry.COLUMN_LIBRARY_NAME, name);
 
             cVVector.add(dbValues);
         }
@@ -143,11 +139,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
 
-        // If there's no zip code, there's nothing to look up.  Verify size of params.
-        if (params.length == 0) {
-            return null;
-        }
-        String trove_id = params[0];
+
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -158,24 +150,21 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
         String resultJsonStr = null;
 
         String format = "json";
-        String reclevel="full";
-        String include="holdings";
+        //String reclevel="full";
         String key = "dd539bfbq0hec6pq";
         try {
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at TRV's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String FORECAST_BASE_URL =
-                    "http://api.trove.nla.gov.au/work/"+trove_id+"?";
+                    "http://api.trove.nla.gov.au/contributor??";
             final String KEY_PARAM = "key";
-            final String INCLUDE_PARAM = "include";
             final String FORMAT_PARAM = "encoding";
-            final String RECLEVEL_PARAM = "reclevel";
+            //final String RECLEVEL_PARAM = "reclevel";        maybe future use?
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(KEY_PARAM, key)
                     .appendQueryParameter(FORMAT_PARAM, format)
-                    .appendQueryParameter(INCLUDE_PARAM, include)
-                    .appendQueryParameter(RECLEVEL_PARAM, reclevel)
+                    //.appendQueryParameter(RECLEVEL_PARAM, reclevel)
                     .build();
 
             URL url = new URL(builtUri.toString());
@@ -234,4 +223,16 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
         // This will only happen if there was an error getting or parsing the forecast.
         return null;
     }
+
+    @Override
+    protected void onPreExecute() {
+        dialog = ProgressDialog.show(mContext, "", "Doing stuff...", true);
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        dialog.dismiss();
+    }
+
+
 }

@@ -15,6 +15,7 @@
  */
 package com.etapps.trove;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.etapps.trove.data.BookContract.BooksEntry;
+import com.etapps.trove.data.BookContract.HoldingsEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +41,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchResultsTask.class.getSimpleName();
     private final Context mContext;
+    private ProgressDialog dialog;
 
     public FetchResultsTask(Context context) {
         mContext = context;
@@ -102,8 +105,12 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         final String TRV_URL = "troveUrl";
         final String TRV_CONTRIBUTOR = "contributor";
         final String TRV_ID = "id";
-        final String TRV_HOLDINGS = "holdingsCount";
+        final String TRV_HOLDINGS_NR = "holdingsCount";
         final String TRV_VERSIONS = "versionCount";
+        final String TRV_URL_HOLDING = "url";
+        final String TRV_URL_VALUE = "value";
+        final String TRV_NUC = "nuc";
+        final String TRV_HOLDING = "holding";
 
         JSONObject root = new JSONObject(resultJsonStr);
         JSONObject lev1 = root.getJSONObject(TRV_RESPONSE);
@@ -116,6 +123,8 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
         // Get and insert the new weather information into the database
         Vector<ContentValues> cVVector = new Vector<ContentValues>(res);
+
+        mContext.getContentResolver().delete(HoldingsEntry.CONTENT_URI, null, null);
 
         for (int i = 0; i < res; i++) {
             // These are the values that will be collected.
@@ -135,13 +144,12 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             title = bookObj.getString(TRV_TITLE);
             id = bookObj.getString(TRV_ID);
             year = bookObj.optString(TRV_YEAR);
-            holdings = bookObj.getString(TRV_HOLDINGS);
+            holdings = bookObj.getString(TRV_HOLDINGS_NR);
             versions = bookObj.getString(TRV_VERSIONS);
             //cleaning of author string
             author = Utility.formatAuthor(author);
             //cleaning of title string
             title = Utility.formatTitle(title);
-
 
             ContentValues dbValues = new ContentValues();
 
@@ -153,6 +161,41 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             dbValues.put(BooksEntry.COLUMN_BOOK_HOLDINGS, holdings);
             dbValues.put(BooksEntry.COLUMN_BOOK_VERSIONS, versions);
 
+
+            JSONArray holdingsArray = bookObj.getJSONArray(TRV_HOLDING);
+
+            int len = holdingsArray.length();
+
+            // Get and insert the new weather information into the database
+            Vector<ContentValues> hVector = new Vector<ContentValues>(len);
+
+            for (int j = 0; j < len; j++) {
+                String urlb="";
+                String nuc;
+
+                // Get the JSON object representing the single entry
+                JSONObject libObj = holdingsArray.getJSONObject(j);
+                nuc = libObj.optString(TRV_NUC);
+                if (libObj.toString().contains("url")) {
+                    JSONObject urlObj = libObj.getJSONObject(TRV_URL_HOLDING);
+
+                    urlb = urlObj.optString(TRV_URL_VALUE);
+                }
+                ContentValues db2Values = new ContentValues();
+
+                db2Values.put(HoldingsEntry.COLUMN_NUC, nuc);
+                db2Values.put(HoldingsEntry.COLUMN_TROVE_KEY,id);
+                db2Values.put(HoldingsEntry.COLUMN_URL,urlb);
+
+
+                hVector.add(db2Values);
+                if (hVector.size() > 0) {
+                    ContentValues[] cvArray = new ContentValues[hVector.size()];
+                    hVector.toArray(cvArray);
+
+                    mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);
+                }
+            }
             cVVector.add(dbValues);
         }
         if (cVVector.size() > 0) {
@@ -182,6 +225,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
         String format = "json";
         String zone = "book";
+        String include="holdings";
         String key = "dd539bfbq0hec6pq";
         int numRes = Utility.getResultsNr(mContext);
         try {
@@ -195,10 +239,12 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             final String FORMAT_PARAM = "encoding";
             final String ZONE_PARAM = "zone";
             final String DAYS_PARAM = "n";
+            final String INCLUDE_PARAM = "include";
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(KEY_PARAM, key)
                     .appendQueryParameter(QUERY_PARAM, query)
                     .appendQueryParameter(FORMAT_PARAM, format)
+                    .appendQueryParameter(INCLUDE_PARAM, include)
                     .appendQueryParameter(ZONE_PARAM, zone)
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numRes))
                     .build();
@@ -258,5 +304,14 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         }
         // This will only happen if there was an error getting or parsing the forecast.
         return null;
+    }
+    @Override
+    protected void onPreExecute() {
+        dialog = ProgressDialog.show(mContext, "", "Loading Results...", true);
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        dialog.dismiss();
     }
 }

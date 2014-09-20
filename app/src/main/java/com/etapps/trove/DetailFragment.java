@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -45,11 +46,12 @@ import com.etapps.trove.data.BookContract.LibrariesEntry;
  */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
 
+
     public static final int COL_LIB_ID = 0;
-    //public static final int COL_LIB_NAME= 1;
-    //public static final int COL_LIB_CITY = 2;
     public static final int COL_LIB_NUC= 1;
-    public static final int COL_LIB_URL = 2;
+    public static final int COL_LIB_NAME= 2;
+    //public static final int COL_LIB_CITY = 3;
+    public static final int COL_LIB_URL = 3;
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String SHARE_HASHTAG = " #Trove";
     private static final int DETAIL_LOADER = 0;
@@ -66,9 +68,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final int LIBRARIES_LOADER = 1;
     private static final String[] LIBRARIES_COLUMNS = {
             LibrariesEntry._ID,
-            //LibrariesEntry.COLUMN_LIBRARY_NAME,
-            //LibrariesEntry.COLUMN_CITY,
             LibrariesEntry.COLUMN_NUC,
+            LibrariesEntry.COLUMN_LIBRARY_NAME,
+            //LibrariesEntry.COLUMN_CITY,
             LibrariesEntry.COLUMN_URL
     };
     private ShareActionProvider mShareActionProvider;
@@ -142,6 +144,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mBorrowHeaderView = (TextView) rootView.findViewById(R.id.detail_borrow_libraries_header);
         mListView = (ListView) rootView.findViewById(R.id.detail_borrow_libraries_listview);
         mListView.setAdapter(mLibrariesAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Cursor cursor = mLibrariesAdapter.getCursor();
+                if (cursor != null && cursor.moveToPosition(position)) {
+                    ((DetailFragment.Callback)getActivity())
+                            .onItemSelected(cursor.getString(COL_LIB_URL),position);
+                }
+            }
+        });
         return rootView;
     }
 
@@ -213,6 +225,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         null
                 );
             case 1:
+                //TODO:build query with the two tables
                 Uri libkeyUri = LibrariesEntry.getLibraries();
                 return new CursorLoader(
                         getActivity(),
@@ -225,7 +238,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             default:
                 return null;
         }
-        //TODO:problem with double projection tables
+
     }
 
     @Override
@@ -312,5 +325,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
-
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(String url, int position);
+    }
 }
