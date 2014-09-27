@@ -36,14 +36,28 @@ public class BooksProvider extends ContentProvider {
     private static final int LIBRARY_ID = 301;
     private static final int HOLDINGS = 500;
     private static final SQLiteQueryBuilder sBookbyIdQueryBuilder;
+    private static final SQLiteQueryBuilder sLibrariesQueryBuilder;
     static{
         sBookbyIdQueryBuilder = new SQLiteQueryBuilder();
         sBookbyIdQueryBuilder.setTables(
                 BookContract.BooksEntry.TABLE_NAME);
     }
+    static{
+        sLibrariesQueryBuilder = new SQLiteQueryBuilder();
+        sLibrariesQueryBuilder.setTables(
+               BookContract.LibrariesEntry.TABLE_NAME + " INNER JOIN " +
+                       BookContract.HoldingsEntry.TABLE_NAME +
+                        " ON " + BookContract.LibrariesEntry.TABLE_NAME +
+                        "." + BookContract.LibrariesEntry.COLUMN_NUC +
+                        " = " + BookContract.HoldingsEntry.TABLE_NAME +
+                        "." + BookContract.HoldingsEntry.COLUMN_NUC);
+    }
     private static final String sTroveIdSelection =
             BookContract.BooksEntry.TABLE_NAME+
                     "." + BookContract.BooksEntry.COLUMN_TROVE_KEY + " = ? ";
+    private static final String sHoldingsLibrariesSelection =
+            BookContract.HoldingsEntry.TABLE_NAME +
+                    "." + BookContract.HoldingsEntry.COLUMN_TROVE_KEY + " = ?" ;
 /*
 
     private static final String sLocationSettingWithStartDateSelection =
@@ -51,10 +65,7 @@ public class BooksProvider extends ContentProvider {
                     "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
                     BookContract.BooksEntry.COLUMN_DATETEXT + " >= ? ";
 
-    private static final String sLocationSettingAndDaySelection =
-            BookContract.LibrariesEntry.TABLE_NAME +
-                    "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    BookContract.BooksEntry.COLUMN_DATETEXT + " = ? ";*/
+    */
     private BooksDbHelper mOpenHelper;
 
     private static UriMatcher buildUriMatcher() {
@@ -100,20 +111,20 @@ public class BooksProvider extends ContentProvider {
         );
     }
 
-    private Cursor getWeatherByLocationSettingAndDate(
-            Uri uri, String[] projection, String sortOrder) {
-        String locationSetting = BookContract.BooksEntry.getLocationSettingFromUri(uri);
-        String date = BookContract.BooksEntry.getDateFromUri(uri);
+    private Cursor getLibrariesbyTroveKey(
+            Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
-        /*return sBookbyIdQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        String locationSetting = BookContract.HoldingsEntry.getLocationSettingFromUri(uri);
+ //check what you querying on
+        Log.v("query libraries",locationSetting+" / "+uri.toString());
+        return sLibrariesQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
-                sLocationSettingAndDaySelection,
-                new String[]{locationSetting, date},
+                sHoldingsLibrariesSelection,
+                new String[]{locationSetting},
                 null,
                 null,
                 sortOrder
-        );*/
-        return null;
+        );
     }
 
     @Override
@@ -130,10 +141,10 @@ public class BooksProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             // "weather/*/*"
-            case WEATHER_WITH_LOCATION_AND_DATE:
+            case HOLDINGS:
             {
-                Log.v("query","1");
-                retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
+
+                retCursor = getLibrariesbyTroveKey(uri, projection, selection, selectionArgs, sortOrder);
                 break;
             }
             // "weather/*"

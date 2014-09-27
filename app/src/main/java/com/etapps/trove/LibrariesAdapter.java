@@ -43,7 +43,7 @@ public class LibrariesAdapter extends CursorAdapter {
         /*String city = cursor.getString(DetailFragment.COL_LIB_CITY);
         // Find TextView and set weather forecast on it
         viewHolder.libCityView.setText(city);*/
-        String url = cursor.getString(DetailFragment.COL_LIB_URL);
+        //String url = cursor.getString(DetailFragment.COL_LIB_URL);
 
     }
 

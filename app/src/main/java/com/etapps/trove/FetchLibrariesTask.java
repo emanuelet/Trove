@@ -226,7 +226,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPreExecute() {
-        dialog = ProgressDialog.show(mContext, "", "Doing stuff...", true);
+        dialog = ProgressDialog.show(mContext, "", "Initialize Libraries DB...", true);
     }
 
     @Override

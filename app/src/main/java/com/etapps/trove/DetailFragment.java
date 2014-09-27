@@ -38,6 +38,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.etapps.trove.data.BookContract;
 import com.etapps.trove.data.BookContract.BooksEntry;
 import com.etapps.trove.data.BookContract.LibrariesEntry;
 
@@ -48,8 +49,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     public static final int COL_LIB_ID = 0;
-    public static final int COL_LIB_NUC= 1;
-    public static final int COL_LIB_NAME= 2;
+    public static final int COL_LIB_NAME= 1;
     //public static final int COL_LIB_CITY = 3;
     public static final int COL_LIB_URL = 3;
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
@@ -67,11 +67,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     };
     private static final int LIBRARIES_LOADER = 1;
     private static final String[] LIBRARIES_COLUMNS = {
-            LibrariesEntry._ID,
-            LibrariesEntry.COLUMN_NUC,
+            LibrariesEntry.TABLE_NAME + "." + LibrariesEntry._ID,
             LibrariesEntry.COLUMN_LIBRARY_NAME,
-            //LibrariesEntry.COLUMN_CITY,
-            LibrariesEntry.COLUMN_URL
     };
     private ShareActionProvider mShareActionProvider;
 
@@ -225,8 +222,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         null
                 );
             case 1:
-                //TODO:build query with the two tables
-                Uri libkeyUri = LibrariesEntry.getLibraries();
+               //TODO:build query with the two tables
+                Uri libkeyUri = BookContract.HoldingsEntry.buildLibrariesfromId(mKeyStr);
                 return new CursorLoader(
                         getActivity(),
                         libkeyUri,

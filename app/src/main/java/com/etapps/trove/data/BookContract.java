@@ -86,14 +86,15 @@ public class BookContract {
         // Table name
         public static final String TABLE_NAME = "libraries";
         public static final String COLUMN_NUC = "nuc";
-        public static final String COLUMN_LIBRARY_NAME = "name";                public static final String COLUMN_CITY = "city";public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_LIBRARIES;
-public static final String COLUMN_URL = "url";
-                // In order to uniquely pinpoint the location on the map when we launch the
+        public static final String COLUMN_LIBRARY_NAME = "name";
+        public static final String COLUMN_CITY = "city";
+        public static final String COLUMN_URL = "url";                // In order to uniquely pinpoint the location on the map when we launch the
         // map intent, we store the latitude and longitude as returned by openweathermap.
-        public static final String COLUMN_COORD_LAT = "coord_lat";                public static final String COLUMN_COORD_LONG = "coord_long";public static final String CONTENT_ITEM_TYPE =
-                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_LIBRARIES;
-        public static final String COLUMN_TROVE_KEY = "trove_id";
+        public static final String COLUMN_COORD_LAT = "coord_lat";
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_LIBRARIES;
+        public static final String COLUMN_COORD_LONG = "coord_long";
+                public static final String COLUMN_TROVE_KEY = "trove_id";
 
         public static Uri buildLibrariesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -102,19 +103,10 @@ public static final String COLUMN_URL = "url";
         public static Uri buildLibrariesfromId(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }
-
         public static Uri getLibraries() {
             return CONTENT_URI;
-        }
-
-
-
-
-
-
-
-
-
+        }public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_LIBRARIES;
 
     }
 
@@ -132,24 +124,25 @@ public static final String COLUMN_URL = "url";
         public static final String COLUMN_LIBRARY_NAME = "name";
         public static Uri buildLibrariesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
-        }public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_HOLDINGS;
-
-public static Uri buildLibrariesfromId(String id) {
-            return CONTENT_URI.buildUpon().appendPath(id).build();
+        }
+        public static Uri buildLibrariesfromId(String trove_key) {
+            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_TROVE_KEY, trove_key).build();
         }
 
-                public static Uri getLibraries() {
+        public static String getLocationSettingFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+        public static Uri getLibraries() {
             return CONTENT_URI;
-        }        public static final String CONTENT_ITEM_TYPE =
+        }
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_HOLDINGS;
+
+
+
+        public static final String CONTENT_ITEM_TYPE =
                 "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_HOLDINGS;
-
-
-
-
-
-
-
 
     }
 
@@ -160,15 +153,15 @@ public static Uri buildLibrariesfromId(String id) {
         public static final String TABLE_NAME = "books";
         // Column with the foreign key into the location table.
         public static final String COLUMN_TROVE_KEY = "trove_id";
-        public static final String COLUMN_BOOK_TITLE = "title";                public static final String COLUMN_BOOK_AUTHOR = "author";public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
-        // Min and max temperatures for the day (stored as floats)
+        public static final String COLUMN_BOOK_TITLE = "title";
+        public static final String COLUMN_BOOK_AUTHOR = "author";        // Min and max temperatures for the day (stored as floats)
         public static final String COLUMN_BOOK_YEAR = "year";
-public static final String COLUMN_URL = "url";
-                public static final String COLUMN_BOOK_HOLDINGS = "holdingsCount";                public static final String COLUMN_BOOK_VERSIONS = "versionCount";public static final String CONTENT_ITEM_TYPE =
-                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
-        private static final String DATE_FORMAT = "yyyyMMdd";
-
+        public static final String COLUMN_URL = "url";
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+        public static final String COLUMN_BOOK_HOLDINGS = "holdingsCount";
+        public static final String COLUMN_BOOK_VERSIONS = "versionCount";
+                        private static final String DATE_FORMAT = "yyyyMMdd";
         public static Uri buildWeatherUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
@@ -176,10 +169,12 @@ public static final String COLUMN_URL = "url";
         public static Uri buildWeatherLocation(String locationSetting) {
             return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
         }
-
         public static Uri buildBooksEntryfromId(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }
+
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
 
         public static Uri buildBooksEntries() {
             return CONTENT_URI;
@@ -196,6 +191,14 @@ public static final String COLUMN_URL = "url";
         public static String getTroveKeyFromUri(Uri uri) {
             return uri.getQueryParameter(COLUMN_TROVE_KEY);
         }
+
+
+
+
+
+
+
+
 
 
 
