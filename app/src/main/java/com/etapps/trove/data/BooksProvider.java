@@ -42,30 +42,31 @@ public class BooksProvider extends ContentProvider {
         sBookbyIdQueryBuilder.setTables(
                 BookContract.BooksEntry.TABLE_NAME);
     }
-    static{
-        sLibrariesQueryBuilder = new SQLiteQueryBuilder();
-        sLibrariesQueryBuilder.setTables(
-               BookContract.LibrariesEntry.TABLE_NAME + " INNER JOIN " +
-                       BookContract.HoldingsEntry.TABLE_NAME +
-                        " ON " + BookContract.LibrariesEntry.TABLE_NAME +
-                        "." + BookContract.LibrariesEntry.COLUMN_NUC +
-                        " = " + BookContract.HoldingsEntry.TABLE_NAME +
-                        "." + BookContract.HoldingsEntry.COLUMN_NUC);
-    }
-    private static final String sTroveIdSelection =
-            BookContract.BooksEntry.TABLE_NAME+
-                    "." + BookContract.BooksEntry.COLUMN_TROVE_KEY + " = ? ";
-    private static final String sHoldingsLibrariesSelection =
-            BookContract.HoldingsEntry.TABLE_NAME +
-                    "." + BookContract.HoldingsEntry.COLUMN_TROVE_KEY + " = ?" ;
-/*
 
-    private static final String sLocationSettingWithStartDateSelection =
-            BookContract.LibrariesEntry.TABLE_NAME+
-                    "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    BookContract.BooksEntry.COLUMN_DATETEXT + " >= ? ";
+        static{
+            sLibrariesQueryBuilder = new SQLiteQueryBuilder();
+            sLibrariesQueryBuilder.setTables(
+                   BookContract.LibrariesEntry.TABLE_NAME + " INNER JOIN " +
+                           BookContract.HoldingsEntry.TABLE_NAME +
+                            " ON " + BookContract.LibrariesEntry.TABLE_NAME +
+                            "." + BookContract.LibrariesEntry.COLUMN_NUC +
+                            " = " + BookContract.HoldingsEntry.TABLE_NAME +
+                            "." + BookContract.HoldingsEntry.COLUMN_NUC);
+        }
+        private static final String sTroveIdSelection =
+                BookContract.BooksEntry.TABLE_NAME+
+                        "." + BookContract.BooksEntry.COLUMN_TROVE_KEY + " = ? ";
+        private static final String sHoldingsLibrariesSelection =
+                BookContract.HoldingsEntry.TABLE_NAME +
+                     "." + BookContract.HoldingsEntry.COLUMN_TROVE_KEY + " = ?" ;
+    /*
 
-    */
+        private static final String sLocationSettingWithStartDateSelection =
+                BookContract.LibrariesEntry.TABLE_NAME+
+                        "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+                        BookContract.BooksEntry.COLUMN_DATETEXT + " >= ? ";
+
+        */
     private BooksDbHelper mOpenHelper;
 
     private static UriMatcher buildUriMatcher() {
@@ -111,19 +112,17 @@ public class BooksProvider extends ContentProvider {
         );
     }
 
-    private Cursor getLibrariesbyTroveKey(
-            Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    private Cursor getLibrariesbyTroveKey(Uri uri, String[] projection) {
 
-        String locationSetting = BookContract.HoldingsEntry.getLocationSettingFromUri(uri);
- //check what you querying on
-        Log.v("query libraries",locationSetting+" / "+uri.toString());
+        String trokveKey = BookContract.HoldingsEntry.getLocationSettingFromUri(uri);
+            //check what you querying on
         return sLibrariesQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sHoldingsLibrariesSelection,
-                new String[]{locationSetting},
+                new String[]{trokveKey},
                 null,
                 null,
-                sortOrder
+                null
         );
     }
 
@@ -143,8 +142,7 @@ public class BooksProvider extends ContentProvider {
             // "weather/*/*"
             case HOLDINGS:
             {
-
-                retCursor = getLibrariesbyTroveKey(uri, projection, selection, selectionArgs, sortOrder);
+                retCursor = getLibrariesbyTroveKey(uri, projection);
                 break;
             }
             // "weather/*"

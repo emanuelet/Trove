@@ -25,6 +25,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,8 +39,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.etapps.trove.data.BookContract;
 import com.etapps.trove.data.BookContract.BooksEntry;
+import com.etapps.trove.data.BookContract.HoldingsEntry;
 import com.etapps.trove.data.BookContract.LibrariesEntry;
 
 /**
@@ -51,7 +52,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_LIB_ID = 0;
     public static final int COL_LIB_NAME= 1;
     //public static final int COL_LIB_CITY = 3;
-    public static final int COL_LIB_URL = 3;
+    public static final int COL_LIB_URL = 2;
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String SHARE_HASHTAG = " #Trove";
     private static final int DETAIL_LOADER = 0;
@@ -69,6 +70,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final String[] LIBRARIES_COLUMNS = {
             LibrariesEntry.TABLE_NAME + "." + LibrariesEntry._ID,
             LibrariesEntry.COLUMN_LIBRARY_NAME,
+            HoldingsEntry.TABLE_NAME + "." + HoldingsEntry.COLUMN_URL,
     };
     private ShareActionProvider mShareActionProvider;
 
@@ -222,8 +224,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         null
                 );
             case 1:
-               //TODO:build query with the two tables
-                Uri libkeyUri = BookContract.HoldingsEntry.buildLibrariesfromId(mKeyStr);
+                Uri libkeyUri = HoldingsEntry.buildLibrariesfromId(mKeyStr);
                 return new CursorLoader(
                         getActivity(),
                         libkeyUri,
@@ -293,6 +294,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
         if (loader.getId()==1) {
             mLibrariesAdapter.swapCursor(data);
+            int c=mLibrariesAdapter.getCount();
+            Log.v(LOG_TAG,""+c );
         }
     }
 
@@ -300,6 +303,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoaderReset(Loader<Cursor> loader) {
         if (loader.getId()==1) {
             mLibrariesAdapter.swapCursor(null);
+            int c=mLibrariesAdapter.getCount();
+            Log.v(LOG_TAG,""+c );
         }
     }
 

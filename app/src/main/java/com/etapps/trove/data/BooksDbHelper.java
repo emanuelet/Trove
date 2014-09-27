@@ -64,9 +64,10 @@ public class BooksDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_LIBRARIES_TABLE = "CREATE TABLE " + LibrariesEntry.TABLE_NAME + " (" +
                 LibrariesEntry._ID + " INTEGER PRIMARY KEY," +
                 LibrariesEntry.COLUMN_NUC + " TEXT NOT NULL, " +
-                LibrariesEntry.COLUMN_LIBRARY_NAME + " TEXT, " +
+                LibrariesEntry.COLUMN_LIBRARY_NAME + " TEXT " +
                 //LibrariesEntry.COLUMN_CITY + " TEXT, " +
-                LibrariesEntry.COLUMN_URL + " TEXT);";
+                //LibrariesEntry.COLUMN_URL + " TEXT);";
+                 ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_BOOKS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_HOLDINGS_TABLE);

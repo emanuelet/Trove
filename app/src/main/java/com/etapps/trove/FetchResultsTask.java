@@ -124,6 +124,8 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         // Get and insert the new weather information into the database
         Vector<ContentValues> cVVector = new Vector<ContentValues>(res);
 
+        Vector<ContentValues> hVector = new Vector<ContentValues>(0);
+
         mContext.getContentResolver().delete(HoldingsEntry.CONTENT_URI, null, null);
 
         for (int i = 0; i < res; i++) {
@@ -167,7 +169,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             int len = holdingsArray.length();
 
             // Get and insert the new weather information into the database
-            Vector<ContentValues> hVector = new Vector<ContentValues>(len);
+            hVector = new Vector<ContentValues>(len);
 
             for (int j = 0; j < len; j++) {
                 String urlb="";
@@ -189,12 +191,13 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
 
                 hVector.add(db2Values);
-                if (hVector.size() > 0) {
-                    ContentValues[] cvArray = new ContentValues[hVector.size()];
-                    hVector.toArray(cvArray);
 
-                    mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);
-                }
+            }
+            if (hVector.size() >0) {
+                Log.v(LOG_TAG, "Hold NR "+hVector.size());
+                ContentValues[] cvArray = new ContentValues[hVector.size()];
+                hVector.toArray(cvArray);
+                mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);
             }
             cVVector.add(dbValues);
         }
@@ -204,6 +207,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             mContext.getContentResolver().delete(BooksEntry.CONTENT_URI, null, null);
             mContext.getContentResolver().bulkInsert(BooksEntry.CONTENT_URI, cvArray);
         }
+
     }
 
     @Override

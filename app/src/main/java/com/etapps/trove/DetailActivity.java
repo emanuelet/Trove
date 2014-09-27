@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -28,6 +29,20 @@ public class DetailActivity extends ActionBarActivity implements DetailFragment.
     public static final String TROVE_KEY = "trove_id";
 
     private ListView mListView;
+
+    private static void setDefaultUncaughtExceptionHandler() {
+        try {
+            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+
+                @Override
+                public void uncaughtException(Thread t, Throwable e) {
+                    Log.e("Detail","Uncaught Exception in thread {"+t+"}", e);
+                }
+            });
+        } catch (SecurityException e) {
+            Log.e("Detail","Could not set the Default Uncaught Exception Handler", e);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +64,7 @@ public class DetailActivity extends ActionBarActivity implements DetailFragment.
                     .add(R.id.weather_detail_container, fragment)
                     .commit();
         }
+        setDefaultUncaughtExceptionHandler();
         mListView = (ListView) findViewById(R.id.detail_borrow_libraries_listview);
     }
 
@@ -75,6 +91,7 @@ public class DetailActivity extends ActionBarActivity implements DetailFragment.
     @Override
     public void onItemSelected(String url, int position) {
         if (url != null) {
+            Log.v("onItemSelected",url);
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);

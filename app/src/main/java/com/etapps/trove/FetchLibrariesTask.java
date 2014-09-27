@@ -16,10 +16,8 @@
 package com.etapps.trove;
 
 import android.app.ProgressDialog;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -49,7 +47,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
     }
 
 
-    private long addLocation(String nuc, String cityName, String name, String url) {
+    /*private long addLocation(String nuc, String cityName, String name, String url) {
 
         // First, check if the location with this city name exists in the db
         Cursor cursor = mContext.getContentResolver().query(
@@ -74,7 +72,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
 
             return ContentUris.parseId(locationInsertUri);
         }
-    }
+    }*/
 
     /**
      * Take the String representing the complete forecast in JSON Format and
@@ -105,6 +103,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
 
         int res = librArray.length();
 
+        Log.v(LOG_TAG, "LibNr "+res);
         // Get and insert the new weather information into the database
         Vector<ContentValues> cVVector = new Vector<ContentValues>(res);
 
@@ -112,8 +111,6 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
             // These are the values that will be collected.
             String nuc;
             String name;
-            //String city;
-            //String libName;
 
             // Get the JSON object representing the single entry
             JSONObject libObj = librArray.getJSONObject(i);
@@ -157,7 +154,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
             // Possible parameters are avaiable at TRV's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String FORECAST_BASE_URL =
-                    "http://api.trove.nla.gov.au/contributor??";
+                    "http://api.trove.nla.gov.au/contributor?";
             final String KEY_PARAM = "key";
             final String FORMAT_PARAM = "encoding";
             //final String RECLEVEL_PARAM = "reclevel";        maybe future use?
@@ -232,6 +229,11 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         dialog.dismiss();
+    }
+
+    @Override
+    protected void onProgressUpdate(Void... values) {
+        dialog.setProgress(values.length);
     }
 
 
