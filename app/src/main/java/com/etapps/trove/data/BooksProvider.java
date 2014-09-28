@@ -344,6 +344,22 @@ public class BooksProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
+            case LIBRARY:
+                db.beginTransaction();
+                int returnCountl = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(BookContract.LibrariesEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCountl++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCountl;
             case HOLDINGS:
                 db.beginTransaction();
                 int returnCounth = 0;

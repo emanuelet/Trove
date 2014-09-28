@@ -47,21 +47,30 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         mContext = context;
     }
 
-    /**
-     * Helper method to handle insertion of a new location in the weather database.
-     *
-     * @param locationSetting The location string used to request updates from the server.
-     * @param cityName A human-readable city name, e.g "Mountain View"
-     * @param lat the latitude of the city
-     * @param lon the longitude of the city
-     * @return the row ID of the added location.
-     */
-    /*private long addLocation(String locationSetting, String cityName, double lat, double lon) {
 
+    private void addLibrary() {
+
+        /*String format = "json";
+        String key = "dd539bfbq0hec6pq";
+        int numRes = Utility.getResultsNr(mContext);
+
+        final String FORECAST_BASE_URL =
+                "http://api.trove.nla.gov.au/contributor?";
+        final String KEY_PARAM = "key";
+        final String FORMAT_PARAM = "encoding";
+        Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+                .appendQueryParameter(KEY_PARAM, key)
+                .appendQueryParameter(FORMAT_PARAM, format)
+                .build();
+
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
         // First, check if the location with this city name exists in the db
+        Cursor crs= mContext.getContentResolver().rawQuery("select nuc\n" +
+                "from holdings\n" +
+                "where nuc not in (select nuc from libraries);");
         Cursor cursor = mContext.getContentResolver().query(
                 LibrariesEntry.CONTENT_URI,
-                new String[]{LibrariesEntry._ID},
+                new String[]{LibrariesEntry.COLUMN_NUC},
                 LibrariesEntry.COLUMN_LOCATION_SETTING + " = ?",
                 new String[]{locationSetting},
                 null);
@@ -80,8 +89,63 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
                     .insert(LibrariesEntry.CONTENT_URI, locationValues);
 
             return ContentUris.parseId(locationInsertUri);
+        }*/
+    }
+
+    private String retrieveFromUrl(Uri builtUri) {
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        // Will contain the raw JSON response as a string.
+        String resultJsonStr = null;
+        try {
+
+            URL url = new URL(builtUri.toString());
+            // Create the request to OpenWeatherMap, and open the connection
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return null;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+            resultJsonStr = buffer.toString();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attemping
+            // to parse it.
+            return null;
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
         }
-    }*/
+        return resultJsonStr;
+    }
 
     /**
      * Take the String representing the complete forecast in JSON Format and
@@ -172,7 +236,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             hVector = new Vector<ContentValues>(len);
 
             for (int j = 0; j < len; j++) {
-                String urlb="";
+                String urlb = "";
                 String nuc;
 
                 // Get the JSON object representing the single entry
@@ -186,15 +250,15 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
                 ContentValues db2Values = new ContentValues();
 
                 db2Values.put(HoldingsEntry.COLUMN_NUC, nuc);
-                db2Values.put(HoldingsEntry.COLUMN_TROVE_KEY,id);
-                db2Values.put(HoldingsEntry.COLUMN_URL,urlb);
+                db2Values.put(HoldingsEntry.COLUMN_TROVE_KEY, id);
+                db2Values.put(HoldingsEntry.COLUMN_URL, urlb);
 
 
                 hVector.add(db2Values);
 
             }
-            if (hVector.size() >0) {
-                Log.v(LOG_TAG, "Hold NR "+hVector.size());
+            if (hVector.size() > 0) {
+                Log.v(LOG_TAG, "Hold NR " + hVector.size());
                 ContentValues[] cvArray = new ContentValues[hVector.size()];
                 hVector.toArray(cvArray);
                 mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);
@@ -229,76 +293,31 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
         String format = "json";
         String zone = "book";
-        String include="holdings";
+        String include = "holdings";
         String key = "dd539bfbq0hec6pq";
         int numRes = Utility.getResultsNr(mContext);
-        try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at TRV's forecast API page, at
-            // http://openweathermap.org/API#forecast
-            final String FORECAST_BASE_URL =
-                    "http://api.trove.nla.gov.au/result?";
-            final String KEY_PARAM = "key";
-            final String QUERY_PARAM = "q";
-            final String FORMAT_PARAM = "encoding";
-            final String ZONE_PARAM = "zone";
-            final String DAYS_PARAM = "n";
-            final String INCLUDE_PARAM = "include";
-            Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(KEY_PARAM, key)
-                    .appendQueryParameter(QUERY_PARAM, query)
-                    .appendQueryParameter(FORMAT_PARAM, format)
-                    .appendQueryParameter(INCLUDE_PARAM, include)
-                    .appendQueryParameter(ZONE_PARAM, zone)
-                    .appendQueryParameter(DAYS_PARAM, Integer.toString(numRes))
-                    .build();
+        // Construct the URL for the OpenWeatherMap query
+        // Possible parameters are avaiable at TRV's forecast API page, at
+        // http://openweathermap.org/API#forecast
+        final String TROVE_BASE_URL =
+                "http://api.trove.nla.gov.au/result?";
+        final String KEY_PARAM = "key";
+        final String QUERY_PARAM = "q";
+        final String FORMAT_PARAM = "encoding";
+        final String ZONE_PARAM = "zone";
+        final String DAYS_PARAM = "n";
+        final String INCLUDE_PARAM = "include";
+        Uri builtUri = Uri.parse(TROVE_BASE_URL).buildUpon()
+                .appendQueryParameter(KEY_PARAM, key)
+                .appendQueryParameter(QUERY_PARAM, query)
+                .appendQueryParameter(FORMAT_PARAM, format)
+                .appendQueryParameter(INCLUDE_PARAM, include)
+                .appendQueryParameter(ZONE_PARAM, zone)
+                .appendQueryParameter(DAYS_PARAM, Integer.toString(numRes))
+                .build();
 
-            URL url = new URL(builtUri.toString());
 
-            // Create the request to OpenWeatherMap, and open the connection
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                return null;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-            resultJsonStr = buffer.toString();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
-            // to parse it.
-            return null;
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
-                }
-            }
-        }
+        resultJsonStr = retrieveFromUrl(builtUri);
 
         try {
             getDataFromJson(resultJsonStr);
@@ -309,6 +328,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         // This will only happen if there was an error getting or parsing the forecast.
         return null;
     }
+
     @Override
     protected void onPreExecute() {
         dialog = ProgressDialog.show(mContext, "", "Loading Results...", true);
