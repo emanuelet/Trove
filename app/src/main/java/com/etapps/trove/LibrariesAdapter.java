@@ -49,11 +49,11 @@ public class LibrariesAdapter extends CursorAdapter {
 
     private class ViewHolder {
         public final TextView libNameView;
-        public final TextView libCityView;
+        //public final TextView libCityView;
 
         public ViewHolder(View view) {
             libNameView = (TextView) view.findViewById(R.id.list_item_library_name_textview);
-            libCityView = (TextView) view.findViewById(R.id.list_item_city_textview);
+//            libCityView = (TextView) view.findViewById(R.id.list_item_city_textview);
         }
     }
 }

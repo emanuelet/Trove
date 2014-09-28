@@ -33,47 +33,53 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/black"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
 
 
                 <!-- Main content: high, low, art, weather state -->
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="2"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/detail_author_textview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-condensed"
+                            android:text="clare"
                             android:textColor="@color/grey_700"
-                            android:textSize="28sp" />
+                            android:textSize="22sp" />
 
                         <TextView
                             android:id="@+id/detail_year_textview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="1998"
                             android:textAppearance="?android:textAppearanceLarge" />
 
-                        <TextView
-                            android:id="@+id/detail_versions_textview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="4dp" />
+
 
 
                     </LinearLayout>
-
+                    <TextView
+                        android:id="@+id/detail_versions_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp" />
                 </LinearLayout>
 
-
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -108,16 +114,12 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top">
+
 
             <FrameLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="false"
-                android:layout_gravity="top|center_horizontal">
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical|center_horizontal">
 
                 <ImageView
                     android:id="@+id/detail_cover"
@@ -128,37 +130,6 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_launcher" />
             </FrameLayout>
-
-            <Button
-                android:id="@+id/btn_borrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/footer_buttons"
-                android:layout_centerHorizontal="true"
-                android:text="Borrow" />
-
-            <LinearLayout
-                android:id="@+id/footer_buttons"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom|center_horizontal"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_buy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Buy" />
-
-                <ImageButton
-                    android:id="@+id/btn_goto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:src="@drawable/ic_action_send_now" />
-            </LinearLayout>
-        </RelativeLayout>
 
     </LinearLayout>
 

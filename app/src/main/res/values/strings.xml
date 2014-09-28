@@ -62,7 +62,7 @@
     <string name="books_data">content://com.etapps.trove.data.SuggestionProvider/</string>
     <string name="settings_description">Books on Trove.com.au</string>
     <string name="about_pref">Version</string>
-    <string name="about_pref_summ"> 0.7 (Alpha)</string>
+    <string name="about_pref_summ"> 0.9 (Beta)</string>
     <string name="about_pref_title">Version</string>
     <string name="author_pref_summ">Author</string>
     <string name="author_pref_title">Emanuele Tonello</string>
@@ -72,4 +72,6 @@
     <string name="updlib_pref_title">Update Libraries List</string>
     <string name="updlib_pref_summ">Update the list of libraries</string>
     <string name="update_lib_pref">update_lib</string>
+    <string name="action_go">Go To</string>
+    <string name="action_buy">Buy</string>
 </resources>

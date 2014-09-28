@@ -41,7 +41,7 @@
                 android:textAppearance="?android:textAppearanceLarge" />
 
         </LinearLayout>
-        <LinearLayout android:layout_width="fill_parent"
+        <!--<LinearLayout android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
@@ -52,10 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:fontFamily="sans-serif-condensed"
-                android:text="City"
                 android:textAppearance="?android:textAppearanceSmall" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
 

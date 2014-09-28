@@ -31,7 +31,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -46,7 +45,7 @@ import com.etapps.trove.data.BookContract.LibrariesEntry;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     public static final int COL_LIB_ID = 0;
@@ -86,7 +85,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mYearView;
     private TextView mVersionsView;
     private TextView mBorrowHeaderView;
-    private Button mBtn_Borrow;
     private Button mBtn_Buy;
 
     private GetCoverTask task;
@@ -130,12 +128,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         mLibrariesAdapter = new LibrariesAdapter(getActivity(), null, 0);
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.btn_goto);
-        mBtn_Borrow = (Button) rootView.findViewById(R.id.btn_borrow);
-        mBtn_Buy = (Button) rootView.findViewById(R.id.btn_buy);
-        mBtn_GoTo.setOnClickListener(this);
-        mBtn_Borrow.setOnClickListener(this);
-        mBtn_Buy.setOnClickListener(this);
+        mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.action_go);
+        mBtn_Buy = (Button) rootView.findViewById(R.id.action_buy);
         mTitleView = (TextView) rootView.findViewById(R.id.detail_title_textview);
         mAuthorView = (TextView) rootView.findViewById(R.id.detail_author_textview);
         mYearView = (TextView) rootView.findViewById(R.id.detail_year_textview);
@@ -154,6 +148,24 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }
         });
         return rootView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_go) {
+            Uri uri = Uri.parse(mUrl);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_buy) {
+            Uri uri = Uri.parse(mUrlBuy);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -261,8 +273,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     BooksEntry.COLUMN_BOOK_VERSIONS));
 
             //if the title text is too long I shorten it otherwise it can occupy all the space
-            if (title.length() >= 60) {
-                title = title.substring(0, 60) + "...";
+            if (title.length() >= 75) {
+                title = title.substring(0, 75) + "...";
             }
 
             //TODO: find a workaround to retrieve the correct thumbnail for the cover
@@ -278,13 +290,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUrlBorrow = url + "?q=+&borrow=true";
             mUrlBuy = url + "?q=+buy=true";
             if (holdings != null && !holdings.equals("0")) {
-                mBorrowHeaderView.setText("Available at (" + holdings + " total): ");
+                mBorrowHeaderView.setText("Available to borrow at (" + holdings + "): ");
             } else {
                 mBorrowHeaderView.setText("No Book available to borrow");
-                mBtn_Borrow.setEnabled(false);
             }
-            if (versions != null && !versions.equals("0")) {
-                mVersionsView.setText(versions + " versions available");
+            if (versions != null && !versions.equals("0") && !versions.equals("1")) {
+                mVersionsView.setText(versions + " versions");
+            } else if (versions != null && versions.equals("1")) {
+                mVersionsView.setText("");
             } else mVersionsView.setText("No versions available");
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
@@ -305,25 +318,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mLibrariesAdapter.swapCursor(null);
             int c=mLibrariesAdapter.getCount();
             Log.v(LOG_TAG,""+c );
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == mBtn_GoTo) {
-            Uri uri = Uri.parse(mUrl);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
-        }
-        if (v == mBtn_Borrow) {
-            Uri uri = Uri.parse(mUrlBorrow);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
-        }
-        if (v == mBtn_Buy) {
-            Uri uri = Uri.parse(mUrlBuy);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
         }
     }
 
