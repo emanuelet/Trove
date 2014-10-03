@@ -66,9 +66,8 @@
                             android:textAppearance="?android:textAppearanceLarge" />
 
 
-
-
                     </LinearLayout>
+
                     <TextView
                         android:id="@+id/detail_versions_textview"
                         android:layout_width="wrap_content"
@@ -79,7 +78,8 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"/>
+                    android:background="@android:color/darker_gray" />
+
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -104,7 +104,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/detail_footer"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
@@ -131,6 +131,6 @@
                     android:src="@drawable/ic_launcher" />
             </FrameLayout>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 </LinearLayout>

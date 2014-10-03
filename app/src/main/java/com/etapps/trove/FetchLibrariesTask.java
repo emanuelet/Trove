@@ -98,12 +98,11 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
         JSONObject root = new JSONObject(resultJsonStr);
         JSONObject lev1 = root.getJSONObject(TRV_RESPONSE);
 
-
         JSONArray librArray = lev1.getJSONArray(TRV_CONTRIBUTOR);
 
         int res = librArray.length();
 
-        Log.v(LOG_TAG, "LibNr "+res);
+        Log.v(LOG_TAG, "LibNr " + res);
         // Get and insert the new weather information into the database
         Vector<ContentValues> cVVector = new Vector<ContentValues>(res);
 
@@ -135,9 +134,6 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... params) {
-
-
-
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -150,9 +146,6 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
         //String reclevel="full";
         String key = "dd539bfbq0hec6pq";
         try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at TRV's forecast API page, at
-            // http://openweathermap.org/API#forecast
             final String FORECAST_BASE_URL =
                     "http://api.trove.nla.gov.au/contributor?";
             final String KEY_PARAM = "key";
@@ -161,7 +154,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(KEY_PARAM, key)
                     .appendQueryParameter(FORMAT_PARAM, format)
-                    //.appendQueryParameter(RECLEVEL_PARAM, reclevel)
+                            //.appendQueryParameter(RECLEVEL_PARAM, reclevel)
                     .build();
 
             URL url = new URL(builtUri.toString());

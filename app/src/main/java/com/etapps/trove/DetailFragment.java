@@ -47,9 +47,8 @@ import com.etapps.trove.data.BookContract.LibrariesEntry;
  */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-
     public static final int COL_LIB_ID = 0;
-    public static final int COL_LIB_NAME= 1;
+    public static final int COL_LIB_NAME = 1;
     //public static final int COL_LIB_CITY = 3;
     public static final int COL_LIB_URL = 2;
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
@@ -67,25 +66,23 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     };
     private static final int LIBRARIES_LOADER = 1;
     private static final String[] LIBRARIES_COLUMNS = {
-            LibrariesEntry.TABLE_NAME + "." + LibrariesEntry._ID,
-            LibrariesEntry.COLUMN_LIBRARY_NAME,
-            HoldingsEntry.TABLE_NAME + "." + HoldingsEntry.COLUMN_URL,
+            //LibrariesEntry.TABLE_NAME + "." + LibrariesEntry._ID,
+            HoldingsEntry.TABLE_NAME + "." + HoldingsEntry._ID,
+            LibrariesEntry.TABLE_NAME + "." + LibrariesEntry.COLUMN_LIBRARY_NAME,
+            HoldingsEntry.TABLE_NAME + "." + HoldingsEntry.COLUMN_URL
     };
     private ShareActionProvider mShareActionProvider;
 
     private String mUrl;
-    private String mUrlBorrow;
     private String mUrlBuy;
     private String mKeyStr;
 
-    private ImageButton mBtn_GoTo;
     //private ImageView mIconView;
     private TextView mTitleView;
     private TextView mAuthorView;
     private TextView mYearView;
     private TextView mVersionsView;
     private TextView mBorrowHeaderView;
-    private Button mBtn_Buy;
 
     private GetCoverTask task;
 
@@ -108,7 +105,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Create an object for subclass of AsyncTask
-        task = new GetCoverTask();
+        //task = new GetCoverTask();
 
     }
 
@@ -128,8 +125,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         mLibrariesAdapter = new LibrariesAdapter(getActivity(), null, 0);
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.action_go);
-        mBtn_Buy = (Button) rootView.findViewById(R.id.action_buy);
+        ImageButton mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.action_go);
+        Button mBtn_Buy = (Button) rootView.findViewById(R.id.action_buy);
         mTitleView = (TextView) rootView.findViewById(R.id.detail_title_textview);
         mAuthorView = (TextView) rootView.findViewById(R.id.detail_author_textview);
         mYearView = (TextView) rootView.findViewById(R.id.detail_year_textview);
@@ -142,8 +139,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Cursor cursor = mLibrariesAdapter.getCursor();
                 if (cursor != null && cursor.moveToPosition(position)) {
-                    ((DetailFragment.Callback)getActivity())
-                            .onItemSelected(cursor.getString(COL_LIB_URL),position);
+                    ((DetailFragment.Callback) getActivity())
+                            .onItemSelected(cursor.getString(COL_LIB_URL), position);
                 }
             }
         });
@@ -214,6 +211,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         Bundle arguments = getArguments();
         if (arguments != null && arguments.containsKey(DetailActivity.TROVE_KEY)) {
+
             getLoaderManager().initLoader(DETAIL_LOADER, null, this);
             getLoaderManager().initLoader(LIBRARIES_LOADER, null, this);
         }
@@ -255,9 +253,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if (data != null && data.moveToFirst() && loader.getId() == 0) {
-            //mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
-
-
             //I retrieve all the data from selection of the content provider
             String title = data.getString(data.getColumnIndex(
                     BooksEntry.COLUMN_BOOK_TITLE));
@@ -287,7 +282,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mAuthorView.setText(author);
             mYearView.setText(year);
             mUrl = url;
-            mUrlBorrow = url + "?q=+&borrow=true";
+            String mUrlBorrow = url + "?q=+&borrow=true";
             mUrlBuy = url + "?q=+buy=true";
             if (holdings != null && !holdings.equals("0")) {
                 mBorrowHeaderView.setText("Available to borrow at (" + holdings + "): ");
@@ -305,19 +300,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
         }
-        if (loader.getId()==1) {
-            mLibrariesAdapter.swapCursor(data);
-            int c=mLibrariesAdapter.getCount();
-            Log.v(LOG_TAG,""+c );
+        if (data != null && data.moveToFirst() && loader.getId() == 1) {
+            int c = mLibrariesAdapter.getCount();
+            Log.v(LOG_TAG, "libraries count: " + c);
+            if (c > 0) {
+                mLibrariesAdapter.swapCursor(data);
+            }
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        if (loader.getId()==1) {
+        if (loader.getId() == 1) {
             mLibrariesAdapter.swapCursor(null);
-            int c=mLibrariesAdapter.getCount();
-            Log.v(LOG_TAG,""+c );
         }
     }
 

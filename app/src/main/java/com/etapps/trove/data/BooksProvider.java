@@ -31,42 +31,45 @@ public class BooksProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int BOOKS = 100;
     private static final int BOOKS_WITH_ID = 101;
-    private static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
     private static final int LIBRARY = 300;
     private static final int LIBRARY_ID = 301;
     private static final int HOLDINGS = 500;
+    private static final int LIBRARIES_NOT_FETCHED = 600;
     private static final SQLiteQueryBuilder sBookbyIdQueryBuilder;
     private static final SQLiteQueryBuilder sLibrariesQueryBuilder;
-    static{
+
+    static {
         sBookbyIdQueryBuilder = new SQLiteQueryBuilder();
         sBookbyIdQueryBuilder.setTables(
                 BookContract.BooksEntry.TABLE_NAME);
     }
 
-        static{
-            sLibrariesQueryBuilder = new SQLiteQueryBuilder();
-            sLibrariesQueryBuilder.setTables(
-                   BookContract.LibrariesEntry.TABLE_NAME + " INNER JOIN " +
-                           BookContract.HoldingsEntry.TABLE_NAME +
-                            " ON " + BookContract.LibrariesEntry.TABLE_NAME +
-                            "." + BookContract.LibrariesEntry.COLUMN_NUC +
-                            " = " + BookContract.HoldingsEntry.TABLE_NAME +
-                            "." + BookContract.HoldingsEntry.COLUMN_NUC);
-        }
-        private static final String sTroveIdSelection =
-                BookContract.BooksEntry.TABLE_NAME+
-                        "." + BookContract.BooksEntry.COLUMN_TROVE_KEY + " = ? ";
-        private static final String sHoldingsLibrariesSelection =
-                BookContract.HoldingsEntry.TABLE_NAME +
-                     "." + BookContract.HoldingsEntry.COLUMN_TROVE_KEY + " = ?" ;
-    /*
+    static {
+        sLibrariesQueryBuilder = new SQLiteQueryBuilder();
+        sLibrariesQueryBuilder.setTables(
+                BookContract.LibrariesEntry.TABLE_NAME + " INNER JOIN " +
+                        BookContract.HoldingsEntry.TABLE_NAME +
+                        " ON " + BookContract.LibrariesEntry.TABLE_NAME +
+                        "." + BookContract.LibrariesEntry.COLUMN_NUC +
+                        " = " + BookContract.HoldingsEntry.TABLE_NAME +
+                        "." + BookContract.HoldingsEntry.COLUMN_NUC);
+    }
 
-        private static final String sLocationSettingWithStartDateSelection =
-                BookContract.LibrariesEntry.TABLE_NAME+
-                        "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                        BookContract.BooksEntry.COLUMN_DATETEXT + " >= ? ";
 
-        */
+    private static final String sTroveIdSelection =
+            BookContract.BooksEntry.TABLE_NAME +
+                    "." + BookContract.BooksEntry.COLUMN_TROVE_KEY + " = ? ";
+    private static final String sHoldingsLibrariesSelection =
+            BookContract.HoldingsEntry.TABLE_NAME +
+                    "." + BookContract.HoldingsEntry.COLUMN_TROVE_KEY + " = ?";
+
+
+/*    private static final String sLibrariesNotAlreadyFetched =
+            BookContract.LibrariesEntry.TABLE_NAME +
+                    "." + BookContract.LibrariesEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+                    BookContract.BooksEntry.COLUMN_DATETEXT + " >= ? ";*/
+
+
     private BooksDbHelper mOpenHelper;
 
     private static UriMatcher buildUriMatcher() {
@@ -82,17 +85,17 @@ public class BooksProvider extends ContentProvider {
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, BookContract.PATH_BOOKS, BOOKS);
         matcher.addURI(authority, BookContract.PATH_BOOKS + "/*", BOOKS_WITH_ID);
-        matcher.addURI(authority, BookContract.PATH_BOOKS + "/*/*", WEATHER_WITH_LOCATION_AND_DATE);
         matcher.addURI(authority, BookContract.PATH_LIBRARIES, LIBRARY);
         matcher.addURI(authority, BookContract.PATH_LIBRARIES + "/*", LIBRARY_ID);
         matcher.addURI(authority, BookContract.PATH_HOLDINGS, HOLDINGS);
+        //matcher.addURI(authority, BookContract.PATH_HOLDINGS + "/*", LIBRARIES_NOT_FETCHED);
         return matcher;
     }
 
     private Cursor getBookbyId(Uri uri, String[] projection, String sortOrder) {
         String locationSetting = BookContract.BooksEntry.getLocationSettingFromUri(uri);
-        String[] selectionArgs=new String[]{locationSetting};
-        String selection= sTroveIdSelection;
+        String[] selectionArgs = new String[]{locationSetting};
+        String selection = sTroveIdSelection;
 
         /*if (key == null) {
             selection = sTroveIdSelection;
@@ -114,9 +117,11 @@ public class BooksProvider extends ContentProvider {
 
     private Cursor getLibrariesbyTroveKey(Uri uri, String[] projection) {
 
-        String trokveKey = BookContract.HoldingsEntry.getLocationSettingFromUri(uri);
-            //check what you querying on
+        String trokveKey = BookContract.HoldingsEntry.getTroveKeyFromUri(uri);
+
+        //check what you querying on
         return sLibrariesQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                //new String[]{BookContract.LibrariesEntry.TABLE_NAME + "." + BookContract.LibrariesEntry.COLUMN_NUC},
                 projection,
                 sHoldingsLibrariesSelection,
                 new String[]{trokveKey},
@@ -139,19 +144,38 @@ public class BooksProvider extends ContentProvider {
         // and query the database accordingly.
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            // "weather/*/*"
-            case HOLDINGS:
-            {
-                retCursor = getLibrariesbyTroveKey(uri, projection);
+            // "holdings"
+            case HOLDINGS: {
+                if (sortOrder != null) {
+                    retCursor = mOpenHelper.getReadableDatabase().rawQuery(
+                            "select holdings._id, holdings.nuc\n" +
+                                    "from holdings\n" +
+                                    "where holdings.nuc not in (select libraries.nuc from libraries);",
+                            selectionArgs
+                    );
+                } else {
+
+                    retCursor = getLibrariesbyTroveKey(uri, projection);
+                }
                 break;
             }
-            // "weather/*"
+            // "holdings/*"
+            case LIBRARIES_NOT_FETCHED: {
+                Log.v("query", "libraries not fetched: ");
+                retCursor = mOpenHelper.getReadableDatabase().rawQuery(
+                        "select holdings._id, holdings.nuc\n" +
+                                "from holdings\n" +
+                                "where holdings.nuc not in (select nuc from libraries);",
+                        selectionArgs
+                );
+                break;
+            }
+            // "books/*"
             case BOOKS_WITH_ID: {
-
                 retCursor = getBookbyId(uri, projection, sortOrder);
                 break;
             }
-            // "weather"
+            // "books"
             case BOOKS: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BookContract.BooksEntry.TABLE_NAME,
@@ -164,23 +188,8 @@ public class BooksProvider extends ContentProvider {
                 );
                 break;
             }
-            // "location/*"
-            case LIBRARY_ID: {
-                Log.v("query","4");
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        BookContract.LibrariesEntry.TABLE_NAME,
-                        projection,
-                        BookContract.LibrariesEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
-                        null,
-                        null,
-                        null,
-                        sortOrder
-                );
-                break;
-            }
-            // "location"
+            // "libraries"
             case LIBRARY: {
-                Log.v("query libraries",projection+" / "+selection);
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BookContract.LibrariesEntry.TABLE_NAME,
                         projection,
@@ -192,10 +201,22 @@ public class BooksProvider extends ContentProvider {
                 );
                 break;
             }
-
+            // "librries/*"
+            case LIBRARY_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BookContract.LibrariesEntry.TABLE_NAME,
+                        projection,
+                        BookContract.LibrariesEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        null,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
             default: {
-                retCursor=null;
-                Log.e("query","Unknown uri: " + uri);
+                retCursor = null;
+                Log.e("query", "Unknown uri: " + uri);
             }
         }
         if (retCursor != null) {
@@ -204,6 +225,7 @@ public class BooksProvider extends ContentProvider {
         return retCursor;
     }
 
+
     @Override
     public String getType(Uri uri) {
 
@@ -211,16 +233,16 @@ public class BooksProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
-            case WEATHER_WITH_LOCATION_AND_DATE:
-                return BookContract.BooksEntry.CONTENT_ITEM_TYPE;
+            case HOLDINGS:
+                return BookContract.HoldingsEntry.CONTENT_TYPE;
+            case LIBRARIES_NOT_FETCHED:
+                return BookContract.HoldingsEntry.CONTENT_TYPE;
             case BOOKS_WITH_ID:
                 return BookContract.BooksEntry.CONTENT_TYPE;
             case BOOKS:
                 return BookContract.BooksEntry.CONTENT_TYPE;
             case LIBRARY:
                 return BookContract.LibrariesEntry.CONTENT_TYPE;
-            case HOLDINGS:
-                return BookContract.HoldingsEntry.CONTENT_TYPE;
             case LIBRARY_ID:
                 return BookContract.LibrariesEntry.CONTENT_ITEM_TYPE;
             default:
@@ -237,7 +259,7 @@ public class BooksProvider extends ContentProvider {
         switch (match) {
             case BOOKS: {
                 long _id = db.insert(BookContract.BooksEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
+                if (_id > 0)
                     returnUri = BookContract.BooksEntry.buildWeatherUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
@@ -245,7 +267,7 @@ public class BooksProvider extends ContentProvider {
             }
             case LIBRARY: {
                 long _id = db.insert(BookContract.LibrariesEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
+                if (_id > 0)
                     returnUri = BookContract.LibrariesEntry.buildLibrariesUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
@@ -253,7 +275,7 @@ public class BooksProvider extends ContentProvider {
             }
             case HOLDINGS: {
                 long _id = db.insert(BookContract.HoldingsEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
+                if (_id > 0)
                     returnUri = BookContract.HoldingsEntry.buildLibrariesUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);

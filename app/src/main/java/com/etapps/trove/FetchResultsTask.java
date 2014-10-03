@@ -18,12 +18,14 @@ package com.etapps.trove;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.etapps.trove.data.BookContract.BooksEntry;
 import com.etapps.trove.data.BookContract.HoldingsEntry;
+import com.etapps.trove.data.BookContract.LibrariesEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,48 +50,82 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
     }
 
 
-    private void addLibrary() {
+    private void checkLibraries() {
+        // retrieve the cursor with the holdings entries not in the libraries table as well
 
-        /*String format = "json";
+        String selection = HoldingsEntry.COLUMN_NUC + " NOT IN (select nuc from libraries)";
+
+        Cursor cursor = mContext.getContentResolver().query(
+                HoldingsEntry.CONTENT_URI,
+                new String[]{HoldingsEntry.COLUMN_NUC},
+                selection,
+                null,
+                "ASC");
+
+        if (!cursor.moveToFirst()) {
+            Log.v(LOG_TAG, "there is not missing libraries ");
+        } else {
+            try {
+                addLibraries(cursor);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void addLibraries(Cursor nucEntries) throws JSONException {
+        String format = "json";
         String key = "dd539bfbq0hec6pq";
-        int numRes = Utility.getResultsNr(mContext);
 
         final String FORECAST_BASE_URL =
-                "http://api.trove.nla.gov.au/contributor?";
+                "http://api.trove.nla.gov.au/contributor/";
         final String KEY_PARAM = "key";
         final String FORMAT_PARAM = "encoding";
-        Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                .appendQueryParameter(KEY_PARAM, key)
-                .appendQueryParameter(FORMAT_PARAM, format)
-                .build();
 
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        // First, check if the location with this city name exists in the db
-        Cursor crs= mContext.getContentResolver().rawQuery("select nuc\n" +
-                "from holdings\n" +
-                "where nuc not in (select nuc from libraries);");
-        Cursor cursor = mContext.getContentResolver().query(
-                LibrariesEntry.CONTENT_URI,
-                new String[]{LibrariesEntry.COLUMN_NUC},
-                LibrariesEntry.COLUMN_LOCATION_SETTING + " = ?",
-                new String[]{locationSetting},
-                null);
+        final String TRV_CONTRIBUTOR = "contributor";
+        final String TRV_NAME = "name";
 
-        if (cursor.moveToFirst()) {
-            int locationIdIndex = cursor.getColumnIndex(LibrariesEntry._ID);
-            return cursor.getLong(locationIdIndex);
-        } else {
-            ContentValues locationValues = new ContentValues();
-            locationValues.put(LibrariesEntry.COLUMN_LOCATION_SETTING, locationSetting);
-            locationValues.put(LibrariesEntry.COLUMN_CITY_NAME, cityName);
-            locationValues.put(LibrariesEntry.COLUMN_COORD_LAT, lat);
-            locationValues.put(LibrariesEntry.COLUMN_COORD_LONG, lon);
+        String nuc;
+        String baseUrl;
+        String resultStr;
+        String name;
+        Uri builtUri;
 
-            Uri locationInsertUri = mContext.getContentResolver()
-                    .insert(LibrariesEntry.CONTENT_URI, locationValues);
+        int i = nucEntries.getCount();
+        Vector<ContentValues> libVector = new Vector<ContentValues>(i);
+        //iterate the cursor until i have elements
+        while (nucEntries.moveToNext()) {
+            ContentValues libraryValues = new ContentValues();
+            nuc = nucEntries.getString(1);
+            Log.v(LOG_TAG, "Nuc: " + nuc);
+            baseUrl = FORECAST_BASE_URL + nuc + "?";
+            builtUri = Uri.parse(baseUrl).buildUpon()
+                    .appendQueryParameter(KEY_PARAM, key)
+                    .appendQueryParameter(FORMAT_PARAM, format)
+                    .build();
+            resultStr = retrieveFromUrl(builtUri);
+            JSONObject root = new JSONObject(resultStr);
+            JSONObject contr = root.getJSONObject(TRV_CONTRIBUTOR);
+            name = contr.optString(TRV_NAME);
+            Log.v(LOG_TAG, "Name: " + name);
+            if (name != "") {
+                libraryValues.put(LibrariesEntry.COLUMN_NUC, nuc);
+                libraryValues.put(LibrariesEntry.COLUMN_LIBRARY_NAME, name);
+                //libraryValues.put(LibrariesEntry.COLUMN_CITY, cityName);  future use
+                //libraryValues.put(LibrariesEntry.COLUMN_URL, url);
+                libVector.add(libraryValues);
+            }
+        }
 
-            return ContentUris.parseId(locationInsertUri);
-        }*/
+        if (libVector.size() > 0) {
+            ContentValues[] cvArray = new ContentValues[libVector.size()];
+            libVector.toArray(cvArray);
+            mContext.getContentResolver().bulkInsert(LibrariesEntry.CONTENT_URI, cvArray);
+            Log.v(LOG_TAG, "added " + libVector.size() + " rows");
+        }
+        //return ContentUris.parseId(locationInsertUri);
+
     }
 
     private String retrieveFromUrl(Uri builtUri) {
@@ -185,11 +221,12 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
         int res = bookArray.length();
 
-        // Get and insert the new weather information into the database
+        // Get and insert the new book information into the database
         Vector<ContentValues> cVVector = new Vector<ContentValues>(res);
 
         Vector<ContentValues> hVector = new Vector<ContentValues>(0);
 
+        //I clean the holdings table before start the iteration otherwise it will be wiped for every new book entry
         mContext.getContentResolver().delete(HoldingsEntry.CONTENT_URI, null, null);
 
         for (int i = 0; i < res; i++) {
@@ -232,7 +269,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
             int len = holdingsArray.length();
 
-            // Get and insert the new weather information into the database
+            // Get and insert the new holdings information into the database
             hVector = new Vector<ContentValues>(len);
 
             for (int j = 0; j < len; j++) {
@@ -253,12 +290,11 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
                 db2Values.put(HoldingsEntry.COLUMN_TROVE_KEY, id);
                 db2Values.put(HoldingsEntry.COLUMN_URL, urlb);
 
-
                 hVector.add(db2Values);
 
             }
             if (hVector.size() > 0) {
-                Log.v(LOG_TAG, "Hold NR " + hVector.size());
+                Log.v(LOG_TAG, "Hold Nr: " + hVector.size());
                 ContentValues[] cvArray = new ContentValues[hVector.size()];
                 hVector.toArray(cvArray);
                 mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);
@@ -271,7 +307,9 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             mContext.getContentResolver().delete(BooksEntry.CONTENT_URI, null, null);
             mContext.getContentResolver().bulkInsert(BooksEntry.CONTENT_URI, cvArray);
         }
-
+        //at this point, i Have the tables populated with the new data
+        //and I go to check if there are libraries not present in the Libraries table
+        checkLibraries();
     }
 
     @Override

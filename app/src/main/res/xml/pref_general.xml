@@ -10,11 +10,11 @@
         android:singleLine="true"
         android:title="@string/pref_results_number_label" />
 
-    <Preference
-        android:key="@string/update_lib_pref"
-        android:summary="@string/updlib_pref_summ"
-        android:title="@string/updlib_pref_title">
-    </Preference>
+    <!--   <Preference
+           android:key="@string/update_lib_pref"
+           android:summary="@string/updlib_pref_summ"
+           android:title="@string/updlib_pref_title">
+       </Preference>-->
     <EditTextPreference
         android:capitalize="words"
         android:editable="false"
@@ -25,13 +25,16 @@
         android:singleLine="true"
         android:summary="@string/about_pref_summ"
         android:title="@string/about_pref_title" />
-    <Preference android:summary="@string/author_pref_summ"
+    <Preference
+        android:summary="@string/author_pref_summ"
         android:title="@string/author_pref_title">
-        <intent android:action="android.intent.action.VIEW"
+        <intent
+            android:action="android.intent.action.VIEW"
             android:data="https://github.com/emanuelet" />
     </Preference>
-    <Preference android:title="@string/prefs_web_page" >
-        <intent android:action="android.intent.action.VIEW"
+    <Preference android:title="@string/prefs_web_page">
+        <intent
+            android:action="android.intent.action.VIEW"
             android:data="http://trove.nla.gov.au/" />
     </Preference>
 </PreferenceScreen>

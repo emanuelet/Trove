@@ -4,17 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_go"
-        android:icon="@drawable/ic_action_send_now"
+        android:icon="@drawable/goto_link"
         android:title="@string/action_go"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_buy"
-        android:icon="@drawable/borrow_book_black"
+        android:icon="@drawable/borrow_book_white"
         android:title="@string/action_buy"
-        app:showAsAction="ifRoom"
-        />
-    <item android:id="@+id/action_share"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/sharealt"
         android:title="@string/action_share"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         app:showAsAction="always" />
