@@ -36,11 +36,11 @@ public class DetailActivity extends ActionBarActivity implements DetailFragment.
 
                 @Override
                 public void uncaughtException(Thread t, Throwable e) {
-                    Log.e("Detail","Uncaught Exception in thread {"+t+"}", e);
+                    Log.e("Detail", "Uncaught Exception in thread {" + t + "}", e);
                 }
             });
         } catch (SecurityException e) {
-            Log.e("Detail","Could not set the Default Uncaught Exception Handler", e);
+            Log.e("Detail", "Could not set the Default Uncaught Exception Handler", e);
         }
     }
 
@@ -91,7 +91,6 @@ public class DetailActivity extends ActionBarActivity implements DetailFragment.
     @Override
     public void onItemSelected(String url, int position) {
         if (url != null) {
-            Log.v("onItemSelected",url);
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);

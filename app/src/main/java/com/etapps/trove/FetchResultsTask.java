@@ -63,7 +63,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
                 "ASC");
 
         if (!cursor.moveToFirst()) {
-            Log.v(LOG_TAG, "there is not missing libraries ");
+            Log.v(LOG_TAG, "there is no missing libraries ");
         } else {
             try {
                 addLibraries(cursor);
@@ -98,7 +98,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         while (nucEntries.moveToNext()) {
             ContentValues libraryValues = new ContentValues();
             nuc = nucEntries.getString(1);
-            Log.v(LOG_TAG, "Nuc: " + nuc);
+            //Log.v(LOG_TAG, "Nuc: " + nuc);
             baseUrl = FORECAST_BASE_URL + nuc + "?";
             builtUri = Uri.parse(baseUrl).buildUpon()
                     .appendQueryParameter(KEY_PARAM, key)
@@ -108,7 +108,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             JSONObject root = new JSONObject(resultStr);
             JSONObject contr = root.getJSONObject(TRV_CONTRIBUTOR);
             name = contr.optString(TRV_NAME);
-            Log.v(LOG_TAG, "Name: " + name);
+            //Log.v(LOG_TAG, "Name: " + name);
             if (name != "") {
                 libraryValues.put(LibrariesEntry.COLUMN_NUC, nuc);
                 libraryValues.put(LibrariesEntry.COLUMN_LIBRARY_NAME, name);
@@ -294,7 +294,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
             }
             if (hVector.size() > 0) {
-                Log.v(LOG_TAG, "Hold Nr: " + hVector.size());
+                //Log.v(LOG_TAG, "Hold Nr: " + hVector.size());
                 ContentValues[] cvArray = new ContentValues[hVector.size()];
                 hVector.toArray(cvArray);
                 mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);

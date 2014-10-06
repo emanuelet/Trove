@@ -50,7 +50,7 @@ public class SettingsActivity extends PreferenceActivity
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_results_key)));
-        Preference updatePref = (Preference) findPreference("update_lib");
+        /*Preference updatePref = (Preference) findPreference(getString(R.string.update_lib_pref)));
         updatePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -58,7 +58,7 @@ public class SettingsActivity extends PreferenceActivity
                 //new FetchLibrariesTask(this).execute();
                 return true;
             }
-        });
+        });*/
     }
 
     /**

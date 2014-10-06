@@ -46,7 +46,7 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
     public static final int COL_BOOK_TITLE = 2;
     public static final int COL_BOOK_AUTHOR = 3;
     public static final int COL_BOOK_YEAR = 4;
-    public static final int COL_COLUMN_URL= 5;
+    public static final int COL_COLUMN_URL = 5;
     private static final String SELECTED_KEY = "selected_position";
     private static final int LOADER = 0;
     // For the forecast view we're showing only a small subset of the stored data.
@@ -107,13 +107,14 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
         // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         mListView.setAdapter(mResultsAdapter);
+        mListView.setEmptyView(rootView.findViewById(R.id.empty));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Cursor cursor = mResultsAdapter.getCursor();
                 if (cursor != null && cursor.moveToPosition(position)) {
-                    ((Callback)getActivity())
+                    ((Callback) getActivity())
                             .onItemSelected(cursor.getString(COL_TROVE_KEY));
                 }
                 mPosition = position;

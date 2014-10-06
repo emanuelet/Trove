@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine</item>
+        <item name="actionModeShareDrawable">@drawable/sharealt</item>
+        <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
     </style>
 
     <style name="ForecastTheme" parent="AppTheme">
@@ -11,8 +13,12 @@
 
     <style name="ActionBar.Solid.Sunshine" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="background">@color/light_green</item>
+
     </style>
 
+    <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/morevert</item>
+    </style>
     <!--<style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/ActionBar.Solid.Sunshine">
         <item name="displayOptions">useLogo|showHome</item>
         <item name="logo">@drawable/ic_launcher</item>

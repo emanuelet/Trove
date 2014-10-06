@@ -11,7 +11,9 @@ import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.etapps.trove.data.SuggestionProvider;
 
@@ -21,7 +23,9 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane;
-    private  SearchView searchView;
+    private SearchView searchView;
+
+    private TextView mHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +53,15 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean firstStart = settings.getBoolean("firstStart", true);
 
-        if(firstStart) {
+        if (firstStart) {
             new FetchLibrariesTask(this).execute();
-
+            mHeader = (TextView) findViewById(R.id.list_header);
+            TextView mEmpty = (TextView) findViewById(R.id.empty);
+            mHeader.setVisibility(View.INVISIBLE);
+            mEmpty.setText("To Start Searching hit the Search button above.");
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstStart", false);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -94,8 +101,9 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
     public boolean handleIntent(Intent intent) {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            searchView.setQuery(query,false);
+            searchView.setQuery(query, false);
             new FetchResultsTask(this).execute(query);
+            mHeader.setVisibility(View.VISIBLE);
         }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -103,6 +111,7 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
                     SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
             new FetchResultsTask(this).execute(query);
+            mHeader.setVisibility(View.VISIBLE);
         }
         return false;
     }

@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,13 +37,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
+                android:maxLength="41"
                 android:text="Example Title"
                 android:textAppearance="?android:textAppearanceLarge" />
 
         </LinearLayout>
-        <LinearLayout android:layout_width="fill_parent"
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
 
             <TextView
@@ -51,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:fontFamily="sans-serif-condensed"
+                android:maxLength="40"
                 android:text="Author"
                 android:textAppearance="?android:textAppearanceSmall" />
 

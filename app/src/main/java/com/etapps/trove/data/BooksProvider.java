@@ -119,6 +119,9 @@ public class BooksProvider extends ContentProvider {
 
         String trokveKey = BookContract.HoldingsEntry.getTroveKeyFromUri(uri);
 
+        //i use unique to be sure to return unique lines
+        sLibrariesQueryBuilder.setDistinct(true);
+        //TODO: check problem with perth keyword by frances ...
         //check what you querying on
         return sLibrariesQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 //new String[]{BookContract.LibrariesEntry.TABLE_NAME + "." + BookContract.LibrariesEntry.COLUMN_NUC},
@@ -159,7 +162,7 @@ public class BooksProvider extends ContentProvider {
                 }
                 break;
             }
-            // "holdings/*"
+            /*// "holdings*//*"
             case LIBRARIES_NOT_FETCHED: {
                 Log.v("query", "libraries not fetched: ");
                 retCursor = mOpenHelper.getReadableDatabase().rawQuery(
@@ -169,7 +172,7 @@ public class BooksProvider extends ContentProvider {
                         selectionArgs
                 );
                 break;
-            }
+            }*/
             // "books/*"
             case BOOKS_WITH_ID: {
                 retCursor = getBookbyId(uri, projection, sortOrder);

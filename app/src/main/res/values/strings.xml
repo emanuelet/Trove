@@ -7,7 +7,7 @@
          or something similar.
     -->
     <string name="app_name">Trove</string>
-    <string name="main_fragment">com.etapps.trove.ForecastFragment</string>
+    <string name="main_fragment">com.etapps.trove.ResultsFragment</string>
     <!--
          By convention, "action" denotes that this String will be used as the label for an Action,
          typically from the action bar.  The ActionBar is limited real estate, so shorter is better.
@@ -28,7 +28,7 @@
     <string name="pref_results_key" translatable="false">results_nr</string>
 
     <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
-    <string name="pref_results_default" translatable="false">5</string>
+    <string name="pref_results_default" translatable="false">10</string>
 
     <!-- Notification Format -->
     <string name="format_notification">
@@ -62,10 +62,10 @@
     <string name="books_data">content://com.etapps.trove.data.SuggestionProvider/</string>
     <string name="settings_description">Books on Trove.com.au</string>
     <string name="about_pref">Version</string>
-    <string name="about_pref_summ"> 0.9 (Beta)</string>
+    <string name="about_pref_summ"> 1 (Beta)</string>
     <string name="about_pref_title">Version</string>
-    <string name="author_pref_summ">Author</string>
-    <string name="author_pref_title">Emanuele Tonello</string>
+    <string name="author_pref_summ">Emanuele Tonello</string>
+    <string name="author_pref_title">Author</string>
     <string name="prefs_web_page">Trove Website</string>
     <string name="list_search_header">Last Search Results</string>
     <string name="suggestions_content_authority">com.etapps.trove.data.SuggestionProvider</string>
@@ -74,4 +74,5 @@
     <string name="update_lib_pref">update_lib</string>
     <string name="action_go">Go To</string>
     <string name="action_buy">Buy</string>
+    <string name="no_results_string">No Results. Retry</string>
 </resources>

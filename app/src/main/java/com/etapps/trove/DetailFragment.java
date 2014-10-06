@@ -25,7 +25,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -301,8 +300,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }
         }
         if (data != null && data.moveToFirst() && loader.getId() == 1) {
-            int c = mLibrariesAdapter.getCount();
-            Log.v(LOG_TAG, "libraries count: " + c);
+            int c = data.getCount();
+            //Log.v(LOG_TAG, "libraries count: " + c);
             if (c > 0) {
                 mLibrariesAdapter.swapCursor(data);
             }

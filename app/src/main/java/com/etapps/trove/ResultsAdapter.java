@@ -43,13 +43,16 @@ public class ResultsAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         String title = cursor.getString(ResultsFragment.COL_BOOK_TITLE);
-        if (title.length()>=35) {
-            title= title.substring(0, 35) + "...";
+        if (title.length() >= 41) {
+            title = title.substring(0, 39) + "...";
         }
         // Find TextView and set formatted date on it
         viewHolder.titleView.setText(title);
         // Read weather forecast from cursor
         String author = cursor.getString(ResultsFragment.COL_BOOK_AUTHOR);
+        if (author.length() >= 40) {
+            author = author.substring(0, 38) + "..";
+        }
         // Find TextView and set weather forecast on it
         viewHolder.authorView.setText(author);
         String year = cursor.getString(ResultsFragment.COL_BOOK_YEAR);
