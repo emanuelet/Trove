@@ -264,40 +264,41 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             dbValues.put(BooksEntry.COLUMN_BOOK_HOLDINGS, holdings);
             dbValues.put(BooksEntry.COLUMN_BOOK_VERSIONS, versions);
 
+            if (!holdings.equals("0")) {
+                JSONArray holdingsArray = bookObj.getJSONArray(TRV_HOLDING);
 
-            JSONArray holdingsArray = bookObj.getJSONArray(TRV_HOLDING);
+                int len = holdingsArray.length();
 
-            int len = holdingsArray.length();
+                // Get and insert the new holdings information into the database
+                hVector = new Vector<ContentValues>(len);
 
-            // Get and insert the new holdings information into the database
-            hVector = new Vector<ContentValues>(len);
+                for (int j = 0; j < len; j++) {
+                    String urlb = "";
+                    String nuc;
 
-            for (int j = 0; j < len; j++) {
-                String urlb = "";
-                String nuc;
+                    // Get the JSON object representing the single entry
+                    JSONObject libObj = holdingsArray.getJSONObject(j);
+                    nuc = libObj.optString(TRV_NUC);
+                    if (libObj.toString().contains("url")) {
+                        JSONObject urlObj = libObj.getJSONObject(TRV_URL_HOLDING);
 
-                // Get the JSON object representing the single entry
-                JSONObject libObj = holdingsArray.getJSONObject(j);
-                nuc = libObj.optString(TRV_NUC);
-                if (libObj.toString().contains("url")) {
-                    JSONObject urlObj = libObj.getJSONObject(TRV_URL_HOLDING);
+                        urlb = urlObj.optString(TRV_URL_VALUE);
+                    }
+                    ContentValues db2Values = new ContentValues();
 
-                    urlb = urlObj.optString(TRV_URL_VALUE);
+                    db2Values.put(HoldingsEntry.COLUMN_NUC, nuc);
+                    db2Values.put(HoldingsEntry.COLUMN_TROVE_KEY, id);
+                    db2Values.put(HoldingsEntry.COLUMN_URL, urlb);
+
+                    hVector.add(db2Values);
+
                 }
-                ContentValues db2Values = new ContentValues();
-
-                db2Values.put(HoldingsEntry.COLUMN_NUC, nuc);
-                db2Values.put(HoldingsEntry.COLUMN_TROVE_KEY, id);
-                db2Values.put(HoldingsEntry.COLUMN_URL, urlb);
-
-                hVector.add(db2Values);
-
-            }
-            if (hVector.size() > 0) {
-                //Log.v(LOG_TAG, "Hold Nr: " + hVector.size());
-                ContentValues[] cvArray = new ContentValues[hVector.size()];
-                hVector.toArray(cvArray);
-                mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);
+                if (hVector.size() > 0) {
+                    //Log.v(LOG_TAG, "Hold Nr: " + hVector.size());
+                    ContentValues[] cvArray = new ContentValues[hVector.size()];
+                    hVector.toArray(cvArray);
+                    mContext.getContentResolver().bulkInsert(HoldingsEntry.CONTENT_URI, cvArray);
+                }
             }
             cVVector.add(dbValues);
         }

@@ -1,8 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine</item>
+    <style name="AppTheme" parent="android:Theme.DeviceDefault.Light">
+    <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine</item>
         <item name="actionModeShareDrawable">@drawable/sharealt</item>
         <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
     </style>

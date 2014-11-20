@@ -48,6 +48,8 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
             mTwoPane = false;
         }
         handleIntent(getIntent());
+        mHeader = (TextView) findViewById(R.id.list_header);
+        TextView mEmpty = (TextView) findViewById(R.id.empty);
         ResultsFragment resultsFragment = ((ResultsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -55,8 +57,8 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
 
         if (firstStart) {
             new FetchLibrariesTask(this).execute();
-            mHeader = (TextView) findViewById(R.id.list_header);
-            TextView mEmpty = (TextView) findViewById(R.id.empty);
+
+
             mHeader.setVisibility(View.INVISIBLE);
             mEmpty.setText("To Start Searching hit the Search button above.");
             SharedPreferences.Editor editor = settings.edit();
@@ -103,7 +105,9 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
             String query = intent.getStringExtra(SearchManager.QUERY);
             searchView.setQuery(query, false);
             new FetchResultsTask(this).execute(query);
-            mHeader.setVisibility(View.VISIBLE);
+            if (mHeader.getVisibility() == View.INVISIBLE) {
+                mHeader.setVisibility(View.VISIBLE);
+            }
         }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -111,7 +115,9 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
                     SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
             new FetchResultsTask(this).execute(query);
-            mHeader.setVisibility(View.VISIBLE);
+            if (mHeader.getVisibility() == View.INVISIBLE) {
+                mHeader.setVisibility(View.VISIBLE);
+            }
         }
         return false;
     }
