@@ -1,33 +1,14 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.DeviceDefault.Light">
-    <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine</item>
-        <item name="actionModeShareDrawable">@drawable/sharealt</item>
-        <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Set AppCompat’s actionBarStyle -->
+        <!--<item name="actionBarStyle">@style/MyActionBarStyle</item>-->
+
+        <!-- Set AppCompat’s color theming attrs -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <!-- The rest of your attributes -->
     </style>
-
-    <style name="ForecastTheme" parent="AppTheme">
-        <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine.NoTitle</item>
-    </style>
-
-    <style name="ActionBar.Solid.Sunshine" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="background">@color/light_green</item>
-
-    </style>
-
-    <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
-        <item name="android:src">@drawable/morevert</item>
-    </style>
-    <!--<style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/ActionBar.Solid.Sunshine">
-        <item name="displayOptions">useLogo|showHome</item>
-        <item name="logo">@drawable/ic_launcher</item>
-    </style>-->
-
-    <!-- Style for forecast listview -->
-    <style name="ForecastListStyle">
-        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
-        for two-pane layout -->
-    </style>
-
 </resources>
