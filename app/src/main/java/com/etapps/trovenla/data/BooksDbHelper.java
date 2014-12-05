@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove.data;
+package com.etapps.trovenla.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.etapps.trove.data.BookContract.BooksEntry;
-import com.etapps.trove.data.BookContract.HoldingsEntry;
-import com.etapps.trove.data.BookContract.LibrariesEntry;
+import com.etapps.trovenla.data.BookContract.BooksEntry;
+import com.etapps.trovenla.data.BookContract.HoldingsEntry;
+import com.etapps.trovenla.data.BookContract.LibrariesEntry;
 
 /**
  * Manages a local database for weather data.
@@ -46,7 +46,7 @@ public class BooksDbHelper extends SQLiteOpenHelper {
                 BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, " +
                 BooksEntry.COLUMN_BOOK_AUTHOR + " TEXT, " +
                 BooksEntry.COLUMN_BOOK_YEAR + " TEXT NOT NULL, " +
-                BooksEntry.COLUMN_URL + " TEXT NOT NULL , "+
+                BooksEntry.COLUMN_URL + " TEXT NOT NULL , " +
                 BooksEntry.COLUMN_BOOK_HOLDINGS + " TEXT, " +
                 BooksEntry.COLUMN_BOOK_VERSIONS + " TEXT); ";
 
@@ -56,7 +56,7 @@ public class BooksDbHelper extends SQLiteOpenHelper {
                 HoldingsEntry.COLUMN_TROVE_KEY + " TEXT NOT NULL, " +
                 HoldingsEntry.COLUMN_URL + " TEXT, " +
                 // Set up the location column as a foreign key to location table.
-                " FOREIGN KEY (" + HoldingsEntry.COLUMN_TROVE_KEY  + ") REFERENCES " +
+                " FOREIGN KEY (" + HoldingsEntry.COLUMN_TROVE_KEY + ") REFERENCES " +
                 BooksEntry.TABLE_NAME + " (" + BooksEntry.COLUMN_TROVE_KEY + "), " +
                 " FOREIGN KEY (" + HoldingsEntry.COLUMN_NUC + ") REFERENCES " +
                 LibrariesEntry.TABLE_NAME + " (" + LibrariesEntry.COLUMN_NUC + "));";
@@ -67,7 +67,7 @@ public class BooksDbHelper extends SQLiteOpenHelper {
                 LibrariesEntry.COLUMN_LIBRARY_NAME + " TEXT " +
                 //LibrariesEntry.COLUMN_CITY + " TEXT, " +
                 //LibrariesEntry.COLUMN_URL + " TEXT);";
-                 ");";
+                ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_BOOKS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_HOLDINGS_TABLE);

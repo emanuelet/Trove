@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.etapps.trove">
+    package="com.etapps.trovenla">
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.etapps.trovenla.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,26 +26,27 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="com.etapps.trove.DetailActivity"
+            android:name="com.etapps.trovenla.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName="com.etapps.trove.MainActivity" >
+            android:parentActivityName="com.etapps.trovenla.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.etapps.trove.MainActivity" />
+                android:value="com.etapps.trovenla.MainActivity" />
         </activity>
         <activity
-            android:name="com.etapps.trove.SettingsActivity"
+            android:name="com.etapps.trovenla.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.etapps.trove.MainActivity" >
+            android:parentActivityName="com.etapps.trovenla.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.etapps.trove.MainActivity" />
+                android:value="com.etapps.trovenla.MainActivity" />
         </activity>
 
-        <provider android:name=".data.SuggestionProvider"
-            android:authorities="com.etapps.trove.data.SuggestionProvider" />
         <provider
-            android:name=".data.BooksProvider"
+            android:name="com.etapps.trovenla.data.SuggestionProvider"
+            android:authorities="com.etapps.trovenla.data.SuggestionProvider" />
+        <provider
+            android:name="com.etapps.trovenla.data.BooksProvider"
             android:authorities="@string/content_authority"
             android:exported="false"/>
         <!-- Points to searchable activity so the whole app can invoke search. -->

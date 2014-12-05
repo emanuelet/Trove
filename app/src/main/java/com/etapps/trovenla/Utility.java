@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.etapps.trove.data.BookContract;
+import com.etapps.trovenla.data.BookContract;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Utility {
-
 
 
     // Format used for storing dates in the database.  ALso used for converting those strings
@@ -163,21 +162,22 @@ public class Utility {
                     name = separated2[0];
                 } else name = part2;
                 author = name + " " + surname;
-            } else author= surname;
+            } else author = surname;
         }
-        author=author.replaceFirst(" ","");
+        author = author.replaceFirst(" ", "");
         return author;
     }
 
     public static String formatTitle(String title) {
         if (title.contains("/")) {
             String[] separated = title.split("/", 2);
-            title= separated[0];
+            title = separated[0];
         }
         title = title.replaceAll(" : ", ": ");
 
         return title;
     }
+
     public static int getResultsNr(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return Integer.valueOf(prefs.getString(context.getString(R.string.pref_results_key), context.getString(R.string.pref_results_default)));

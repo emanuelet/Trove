@@ -1,4 +1,4 @@
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -38,7 +38,7 @@ public class LibrariesAdapter extends CursorAdapter {
             name= name.substring(0, 25) + "...";
         }*/
         // Find TextView and set formatted date on it
-        viewHolder.libNameView .setText(name);
+        viewHolder.libNameView.setText(name);
         // Read weather forecast from cursor
         /*String city = cursor.getString(DetailFragment.COL_LIB_CITY);
         // Find TextView and set weather forecast on it

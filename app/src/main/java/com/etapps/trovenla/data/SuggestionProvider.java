@@ -1,4 +1,4 @@
-package com.etapps.trove.data;
+package com.etapps.trovenla.data;
 
 import android.content.SearchRecentSuggestionsProvider;
 

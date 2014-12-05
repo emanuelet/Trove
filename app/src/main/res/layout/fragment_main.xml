@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.etapps.trove.ResultsFragment">
+    tools:context="com.etapps.trovenla.ResultsFragment">
 
     <TextView
         android:id="@+id/list_header"

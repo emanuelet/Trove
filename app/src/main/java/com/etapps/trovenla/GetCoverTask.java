@@ -1,4 +1,4 @@
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

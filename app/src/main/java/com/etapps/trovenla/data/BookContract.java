@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove.data;
+package com.etapps.trovenla.data;
 
 import android.content.ContentUris;
 import android.net.Uri;
@@ -32,7 +32,7 @@ public class BookContract {
     // relationship between a domain name and its website.  A convenient string to use for the
     // content authority is the package name for the app, which is guaranteed to be unique on the
     // device.
-    public static final String CONTENT_AUTHORITY = "com.etapps.trove";
+    public static final String CONTENT_AUTHORITY = "com.etapps.trovenla";
 
     // Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
     // the content provider.
@@ -90,20 +90,19 @@ public class BookContract {
         public static final String COLUMN_NUC = "nuc";
         public static final String COLUMN_LIBRARY_NAME = "name";
         public static final String COLUMN_TROVE_KEY = "trove_id";        //public static final String COLUMN_CITY = "city";
-        //public static final String COLUMN_URL = "url";                // In order to uniquely pinpoint the location on the map when we launch the
-        // map intent, we store the latitude and longitude as returned by openweathermap.
+
+        public static Uri buildLibrariesUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }        //public static final String COLUMN_URL = "url";                // In order to uniquely pinpoint the location on the map when we launch the
+
+        public static Uri buildLibrariesfromId(String id) {
+            return CONTENT_URI.buildUpon().appendPath(id).build();
+        }        // map intent, we store the latitude and longitude as returned by openweathermap.
+
         //public static final String COLUMN_COORD_LAT = "coord_lat";
         //public static final String COLUMN_COORD_LONG = "coord_long";
         public static final String CONTENT_TYPE =
                 "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_LIBRARIES;
-
-        public static Uri buildLibrariesUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
-
-        public static Uri buildLibrariesfromId(String id) {
-            return CONTENT_URI.buildUpon().appendPath(id).build();
-        }
 
         public static Uri getLibraries() {
             return CONTENT_URI;
@@ -166,13 +165,14 @@ public class BookContract {
         public static final String COLUMN_URL = "url";
         public static final String COLUMN_BOOK_HOLDINGS = "holdingsCount";
         public static final String COLUMN_BOOK_VERSIONS = "versionCount";
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
         private static final String DATE_FORMAT = "yyyyMMdd";
 
         public static Uri buildWeatherUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
 
         public static Uri buildWeatherLocation(String locationSetting) {
             return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
@@ -197,6 +197,7 @@ public class BookContract {
         public static String getTroveKeyFromUri(Uri uri) {
             return uri.getQueryParameter(COLUMN_TROVE_KEY);
         }
+
 
         public static final String CONTENT_ITEM_TYPE =
                 "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;

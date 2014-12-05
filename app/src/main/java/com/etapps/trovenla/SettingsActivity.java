@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import com.etapps.trove.data.BookContract;
+import com.etapps.trovenla.data.BookContract;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.

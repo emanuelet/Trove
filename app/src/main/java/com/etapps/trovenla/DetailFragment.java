@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,9 +37,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.etapps.trove.data.BookContract.BooksEntry;
-import com.etapps.trove.data.BookContract.HoldingsEntry;
-import com.etapps.trove.data.BookContract.LibrariesEntry;
+import com.etapps.trovenla.data.BookContract.BooksEntry;
+import com.etapps.trovenla.data.BookContract.HoldingsEntry;
+import com.etapps.trovenla.data.BookContract.LibrariesEntry;
 
 /**
  * A placeholder fragment containing a simple view.

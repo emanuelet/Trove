@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove.data;
+package com.etapps.trovenla.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

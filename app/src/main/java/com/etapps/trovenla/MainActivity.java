@@ -1,4 +1,4 @@
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.etapps.trove.data.SuggestionProvider;
+import com.etapps.trovenla.data.SuggestionProvider;
 
 
 public class MainActivity extends ActionBarActivity implements ResultsFragment.Callback {

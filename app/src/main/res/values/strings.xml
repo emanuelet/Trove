@@ -7,7 +7,7 @@
          or something similar.
     -->
     <string name="app_name">Trove</string>
-    <string name="main_fragment">com.etapps.trove.ResultsFragment</string>
+    <string name="main_fragment">com.etapps.trovenla.ResultsFragment</string>
     <!--
          By convention, "action" denotes that this String will be used as the label for an Action,
          typically from the action bar.  The ActionBar is limited real estate, so shorter is better.
@@ -53,13 +53,13 @@
         A high of <xliff:g id="high">%3$s</xliff:g> and low of
         <xliff:g id="low">%4$s</xliff:g></string>
     <!-- SyncAdapter related -->
-    <string name="sync_account_type">trove.etapps.com</string>
-    <string name="sync_authority">"com.etapps.trove"</string>
-    <string name="content_authority">com.etapps.trove</string>
+    <string name="sync_account_type">trovenla.etapps.com</string>
+    <string name="sync_authority">"com.etapps.trovenla"</string>
+    <string name="content_authority">com.etapps.trovenla</string>
     <string name="menu_search">Search</string>
     <string name="search_label">Search</string>
     <string name="search_hint">Search for Books</string>
-    <string name="books_data">content://com.etapps.trove.data.SuggestionProvider/</string>
+    <string name="books_data">content://com.etapps.trovenla.data.SuggestionProvider/</string>
     <string name="settings_description">Books on Trove.com.au</string>
     <string name="about_pref">Version</string>
     <string name="about_pref_summ"> 1 (Beta)</string>
@@ -68,7 +68,7 @@
     <string name="author_pref_title">Author</string>
     <string name="prefs_web_page">Trove Website</string>
     <string name="list_search_header">Last Search Results</string>
-    <string name="suggestions_content_authority">com.etapps.trove.data.SuggestionProvider</string>
+    <string name="suggestions_content_authority">com.etapps.trovenla.data.SuggestionProvider</string>
     <string name="updlib_pref_title">Update Libraries List</string>
     <string name="updlib_pref_summ">Update the list of libraries</string>
     <string name="update_lib_pref">update_lib</string>

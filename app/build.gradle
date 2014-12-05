@@ -5,11 +5,11 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "com.etapps.trove"
+        applicationId "com.etapps.trovenla"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 4
-        versionName "2"
+        versionName "1.5"
     }
     buildTypes {
         release {

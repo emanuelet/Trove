@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,8 +31,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.etapps.trove.data.BookContract;
-import com.etapps.trove.data.BookContract.BooksEntry;
+import com.etapps.trovenla.data.BookContract;
+import com.etapps.trovenla.data.BookContract.BooksEntry;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.widget.ListView} layout.

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trove;
+package com.etapps.trovenla;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -23,9 +23,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.etapps.trove.data.BookContract.BooksEntry;
-import com.etapps.trove.data.BookContract.HoldingsEntry;
-import com.etapps.trove.data.BookContract.LibrariesEntry;
+import com.etapps.trovenla.data.BookContract.BooksEntry;
+import com.etapps.trovenla.data.BookContract.HoldingsEntry;
+import com.etapps.trovenla.data.BookContract.LibrariesEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,7 +79,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         String key = "dd539bfbq0hec6pq";
 
         final String FORECAST_BASE_URL =
-                "http://api.trove.nla.gov.au/contributor/";
+                "http://api.trovenla.nla.gov.au/contributor/";
         final String KEY_PARAM = "key";
         final String FORMAT_PARAM = "encoding";
 
@@ -339,7 +339,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         // Possible parameters are avaiable at TRV's forecast API page, at
         // http://openweathermap.org/API#forecast
         final String TROVE_BASE_URL =
-                "http://api.trove.nla.gov.au/result?";
+                "http://api.trovenla.nla.gov.au/result?";
         final String KEY_PARAM = "key";
         final String QUERY_PARAM = "q";
         final String FORMAT_PARAM = "encoding";
