@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (findViewById(R.id.weather_detail_container) != null) {
+        if (findViewById(R.id.detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
             // (res/layout-sw600dp). If this view is present, then the activity should be
             // in two-pane mode.
@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.weather_detail_container, new DetailFragment())
+                        .replace(R.id.detail_container, new DetailFragment())
                         .commit();
             }
         } else {
@@ -57,7 +57,6 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
 
         if (firstStart) {
             new FetchLibrariesTask(this).execute();
-
 
             mHeader.setVisibility(View.INVISIBLE);
             mEmpty.setText("To Start Searching hit the Search button above.");
@@ -89,6 +88,10 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_search) {
+            searchView.requestFocus();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -130,12 +133,12 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
             // fragment transaction.
             Bundle args = new Bundle();
             args.putString(DetailActivity.TROVE_KEY, date);
-
+            args.putBoolean(DetailActivity.TWO_PANE, true);
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.weather_detail_container, fragment)
+                    .replace(R.id.detail_container, fragment)
                     .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class)

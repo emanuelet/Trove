@@ -30,6 +30,7 @@ import android.widget.ListView;
 public class DetailActivity extends ActionBarActivity implements DetailFragment.Callback {
 
     public static final String TROVE_KEY = "trove_id";
+    public static final String TWO_PANE = "two_pane";
 
     private ListView mListView;
 
@@ -60,24 +61,16 @@ public class DetailActivity extends ActionBarActivity implements DetailFragment.
             Bundle arguments = new Bundle();
             arguments.putString(DetailActivity.TROVE_KEY, troveId);
 
+
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.weather_detail_container, fragment)
+                    .add(R.id.detail_container, fragment)
                     .commit();
         }
         setDefaultUncaughtExceptionHandler();
         mListView = (ListView) findViewById(R.id.detail_borrow_libraries_listview);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void actionBarSetup() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            ActionBar ab = getSupportActionBar();
-            ab.setTitle("My Title");
-            ab.setSubtitle("sub-title");
-        }
     }
 
     @Override

@@ -52,7 +52,6 @@
                 android:id="@+id/detail_year_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2009"
                 android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
@@ -80,7 +79,6 @@
                 android:id="@+id/detail_versions_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23"
                 android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView

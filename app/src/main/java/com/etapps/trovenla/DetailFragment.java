@@ -278,10 +278,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             //task.execute(URL);
 
             //and I set the views on that data
-            ((DetailActivity) getActivity()).getSupportActionBar().setTitle(
-                    title);
-            ((DetailActivity) getActivity()).getSupportActionBar().setSubtitle(
-                    author);
+            Bundle arguments = getArguments();
+            if (arguments != null && arguments.containsKey(DetailActivity.TWO_PANE)) {
+                if (!arguments.containsKey(DetailActivity.TWO_PANE)) {
+                    ((DetailActivity) getActivity()).getSupportActionBar().setTitle(
+                            title);
+                    ((DetailActivity) getActivity()).getSupportActionBar().setSubtitle(
+                            author);
+                }
+            }
+
 
             if (year.equals("")) {
                 mYearViewSub.setVisibility(View.GONE);
