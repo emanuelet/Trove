@@ -2,16 +2,12 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_go"
         android:icon="@drawable/goto_link"
         android:title="@string/action_go"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_buy"
-        android:icon="@drawable/borrow_book_white"
-        android:title="@string/action_buy"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/sharealt"

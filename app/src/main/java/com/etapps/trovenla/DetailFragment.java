@@ -32,7 +32,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -76,12 +75,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private String mUrlBuy;
     private String mKeyStr;
 
-    //private ImageView mIconView;
-    private TextView mTitleView;
-    private TextView mAuthorView;
     private TextView mYearView;
+    private TextView mYearViewSub;
     private TextView mVersionsView;
+    private TextView mVersionsViewSub;
     private TextView mBorrowHeaderView;
+
+    private View mDv1;
+    private View mDv2;
 
     private GetCoverTask task;
 
@@ -117,19 +118,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mKeyStr = arguments.getString(DetailActivity.TROVE_KEY);
         }
 
-        if (savedInstanceState != null) {
-            //mLocation = savedInstanceState.getString(LOCATION_KEY);
-        }
-
-
         mLibrariesAdapter = new LibrariesAdapter(getActivity(), null, 0);
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ImageButton mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.action_go);
-        Button mBtn_Buy = (Button) rootView.findViewById(R.id.action_buy);
-        mTitleView = (TextView) rootView.findViewById(R.id.detail_title_textview);
-        mAuthorView = (TextView) rootView.findViewById(R.id.detail_author_textview);
+        ImageButton mBtn_Buy = (ImageButton) rootView.findViewById(R.id.detail_buy_btn);
         mYearView = (TextView) rootView.findViewById(R.id.detail_year_textview);
+        mDv1 = (View) rootView.findViewById(R.id.dv1);
+        mDv2 = (View) rootView.findViewById(R.id.dv2);
+        mYearViewSub = (TextView) rootView.findViewById(R.id.detail_year_textview_sublabel);
         mVersionsView = (TextView) rootView.findViewById(R.id.detail_versions_textview);
+        mVersionsViewSub = (TextView) rootView.findViewById(R.id.detail_versions_textview_sublabel);
         mBorrowHeaderView = (TextView) rootView.findViewById(R.id.detail_borrow_libraries_header);
         mListView = (ListView) rootView.findViewById(R.id.detail_borrow_libraries_listview);
         mListView.setAdapter(mLibrariesAdapter);
@@ -143,6 +141,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 }
             }
         });
+        mBtn_Buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(mUrlBuy);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+            }
+        });
         return rootView;
     }
 
@@ -151,12 +157,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         int id = item.getItemId();
         if (id == R.id.action_go) {
             Uri uri = Uri.parse(mUrl);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
-            return true;
-        }
-        if (id == R.id.action_buy) {
-            Uri uri = Uri.parse(mUrlBuy);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
             return true;
@@ -204,9 +204,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            //mLocation = savedInstanceState.getString(LOCATION_KEY);
-        }
+//        if (savedInstanceState != null) {
+//            //mLocation = savedInstanceState.getString(LOCATION_KEY);
+//        }
 
         Bundle arguments = getArguments();
         if (arguments != null && arguments.containsKey(DetailActivity.TROVE_KEY)) {
@@ -255,6 +255,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             //I retrieve all the data from selection of the content provider
             String title = data.getString(data.getColumnIndex(
                     BooksEntry.COLUMN_BOOK_TITLE));
+
             String author = data.getString(data.getColumnIndex(
                     BooksEntry.COLUMN_BOOK_AUTHOR));
             String year = data.getString(data.getColumnIndex(
@@ -277,8 +278,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             //task.execute(URL);
 
             //and I set the views on that data
-            mTitleView.setText(title);
-            mAuthorView.setText(author);
+            ((DetailActivity) getActivity()).getSupportActionBar().setTitle(
+                    title);
+            ((DetailActivity) getActivity()).getSupportActionBar().setSubtitle(
+                    author);
+
+            if (year.equals("")) {
+                mYearViewSub.setVisibility(View.GONE);
+                mDv1.setVisibility(View.GONE);
+            }
             mYearView.setText(year);
             mUrl = url;
             String mUrlBorrow = url + "?q=+&borrow=true";
@@ -289,9 +297,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 mBorrowHeaderView.setText("No Book available to borrow");
             }
             if (versions != null && !versions.equals("0") && !versions.equals("1")) {
-                mVersionsView.setText(versions + " versions");
+                mVersionsView.setText(versions);
             } else if (versions != null && versions.equals("1")) {
                 mVersionsView.setText("");
+                mVersionsViewSub.setVisibility(View.GONE);
+                mDv2.setVisibility(View.GONE);
             } else mVersionsView.setText("No versions available");
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.

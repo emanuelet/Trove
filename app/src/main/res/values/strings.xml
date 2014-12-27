@@ -6,7 +6,7 @@
          It's to keep this short, so your launcher icon isn't displayed with "The greatest Wea"
          or something similar.
     -->
-    <string name="app_name">Trove</string>
+    <string name="app_name">Trove NLA</string>
     <string name="main_fragment">com.etapps.trovenla.ResultsFragment</string>
     <!--
          By convention, "action" denotes that this String will be used as the label for an Action,
@@ -72,7 +72,12 @@
     <string name="updlib_pref_title">Update Libraries List</string>
     <string name="updlib_pref_summ">Update the list of libraries</string>
     <string name="update_lib_pref">update_lib</string>
-    <string name="action_go">Go To</string>
+    <string name="action_go">Go To Page</string>
     <string name="action_buy">Buy</string>
     <string name="no_results_string">No Results. Retry</string>
+    <string name="borrow_label_details">Avaliable to borrow at</string>
+    <string name="year_sublabel_detail">Year</string>
+    <string name="version_sublabel_details">Versions</string>
+    <string name="buy_sublabel_details">Buy</string>
+    <string name="available_label_detail">Avaliable at</string>
 </resources>

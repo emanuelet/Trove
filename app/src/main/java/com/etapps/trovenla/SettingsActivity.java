@@ -59,6 +59,10 @@ public class SettingsActivity extends PreferenceActivity
                 return true;
             }
         });*/
+        Preference pref = findPreference(getString(R.string.about_pref));
+        if(pref!=null) {
+            pref.setSummary("2014. " + getString(R.string.app_name) + " version " + Utility.getAppVersionName(getApplicationContext()));
+        }
     }
 
     /**

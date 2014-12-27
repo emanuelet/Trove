@@ -17,6 +17,7 @@ package com.etapps.trovenla;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
 import com.etapps.trovenla.data.BookContract;
@@ -181,5 +182,15 @@ public class Utility {
     public static int getResultsNr(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return Integer.valueOf(prefs.getString(context.getString(R.string.pref_results_key), context.getString(R.string.pref_results_default)));
+    }
+    public static String getAppVersionName(Context context) {
+        String versionName="unknown";
+        try {
+//			Context context = AliveX.getContext();
+            versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0 ).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
     }
 }

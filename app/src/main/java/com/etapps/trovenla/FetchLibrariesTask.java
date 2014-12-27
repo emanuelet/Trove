@@ -147,7 +147,7 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
         String key = "dd539bfbq0hec6pq";
         try {
             final String FORECAST_BASE_URL =
-                    "http://api.trovenla.nla.gov.au/contributor?";
+                    "http://api.trove.nla.gov.au/contributor?";
             final String KEY_PARAM = "key";
             final String FORMAT_PARAM = "encoding";
             //final String RECLEVEL_PARAM = "reclevel";        maybe future use?

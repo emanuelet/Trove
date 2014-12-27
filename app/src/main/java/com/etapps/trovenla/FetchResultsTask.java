@@ -79,7 +79,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         String key = "dd539bfbq0hec6pq";
 
         final String FORECAST_BASE_URL =
-                "http://api.trovenla.nla.gov.au/contributor/";
+                "http://api.trove.nla.gov.au/contributor/";
         final String KEY_PARAM = "key";
         final String FORMAT_PARAM = "encoding";
 
@@ -339,7 +339,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         // Possible parameters are avaiable at TRV's forecast API page, at
         // http://openweathermap.org/API#forecast
         final String TROVE_BASE_URL =
-                "http://api.trovenla.nla.gov.au/result?";
+                "http://api.trove.nla.gov.au/result?";
         final String KEY_PARAM = "key";
         final String QUERY_PARAM = "q";
         final String FORMAT_PARAM = "encoding";
@@ -359,7 +359,9 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         resultJsonStr = retrieveFromUrl(builtUri);
 
         try {
-            getDataFromJson(resultJsonStr);
+            if (resultJsonStr!=null) {
+                getDataFromJson(resultJsonStr);
+            }
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
