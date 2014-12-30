@@ -26,6 +26,8 @@ import android.preference.PreferenceManager;
 
 import com.etapps.trovenla.data.BookContract;
 
+import java.util.Calendar;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
  * <p/>
@@ -61,7 +63,9 @@ public class SettingsActivity extends PreferenceActivity
         });*/
         Preference pref = findPreference(getString(R.string.about_pref));
         if(pref!=null) {
-            pref.setSummary("2014. " + getString(R.string.app_name) + " version " + Utility.getAppVersionName(getApplicationContext()));
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            pref.setSummary(year+". " + getString(R.string.app_name) + " version " + Utility.getAppVersionName(getApplicationContext()));
         }
     }
 
