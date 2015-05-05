@@ -70,7 +70,7 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
     private ResultsAdapter mResultsAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
-    private static final String MOPUB_BANNER_AD_UNIT_ID = "0167a384d1f74f3d9879ac9b0b55ca51";
+    private static final String MOPUB_BANNER_AD_UNIT_ID =ConfigUtils.getUrl("MOPUB_BANNER_AD_UNIT_ID");
     private MoPubView moPubView;
 
     public ResultsFragment() {

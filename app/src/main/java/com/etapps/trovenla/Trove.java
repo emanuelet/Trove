@@ -14,8 +14,8 @@ import io.fabric.sdk.android.Fabric;
  */
 public class Trove extends Application {
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "InQ5dYPWVngO7KifxD2blgKuf";
-    private static final String TWITTER_SECRET = "GdQhiX6WqMdvuc6vUD72tj2CUK4YftUmOMtXMhTzdHl5WyfB1x";
+    private static final String TWITTER_KEY =  ConfigUtils.getUrl("TWITTER_KEY");
+    private static final String TWITTER_SECRET =  ConfigUtils.getUrl("TWITTER_SECRET");
 
     @Override
     public void onCreate() {
