@@ -38,7 +38,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:text="Example Title"
-                android:textAppearance="?android:textAppearanceLarge" />
+                android:textAppearance="?android:textAppearanceLarge"
+                android:ellipsize="end"
+                android:maxLines="2" />
 
         </LinearLayout>
         <!--<LinearLayout android:layout_width="fill_parent"

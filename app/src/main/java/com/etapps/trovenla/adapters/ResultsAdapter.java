@@ -1,4 +1,4 @@
-package com.etapps.trovenla;
+package com.etapps.trovenla.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.etapps.trovenla.R;
+import com.etapps.trovenla.ResultsFragment;
 
 /**
  * {@link ResultsAdapter} exposes a list of weather forecasts
@@ -43,9 +46,6 @@ public class ResultsAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         String title = cursor.getString(ResultsFragment.COL_BOOK_TITLE);
-        if (title.length() >= 41) {
-            title = title.substring(0, 39) + "...";
-        }
         // Find TextView and set formatted date on it
         viewHolder.titleView.setText(title);
         // Read weather forecast from cursor

@@ -16,10 +16,13 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.etapps.trovenla.data.SuggestionProvider;
+import com.etapps.trovenla.tasks.FetchLibrariesTask;
+import com.etapps.trovenla.tasks.FetchResultsTask;
+import com.mopub.common.MoPub;
+import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends ActionBarActivity implements ResultsFragment.Callback {
-
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane;
@@ -30,6 +33,8 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new MoPub());
+
         setContentView(R.layout.activity_main);
         if (findViewById(R.id.detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -126,13 +131,13 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
     }
 
     @Override
-    public void onItemSelected(String date) {
+    public void onItemSelected(String title) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle args = new Bundle();
-            args.putString(DetailActivity.TROVE_KEY, date);
+            args.putString(DetailActivity.TROVE_KEY, title);
             args.putBoolean(DetailActivity.TWO_PANE, true);
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
@@ -142,7 +147,7 @@ public class MainActivity extends ActionBarActivity implements ResultsFragment.C
                     .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class)
-                    .putExtra(DetailActivity.TROVE_KEY, date);
+                    .putExtra(DetailActivity.TROVE_KEY, title);
             startActivity(intent);
         }
     }

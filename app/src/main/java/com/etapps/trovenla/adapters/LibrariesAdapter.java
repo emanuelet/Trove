@@ -1,4 +1,4 @@
-package com.etapps.trovenla;
+package com.etapps.trovenla.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+
+import com.etapps.trovenla.DetailFragment;
+import com.etapps.trovenla.R;
 
 /**
  * Created by emanuele on 16/09/14.
@@ -34,9 +37,6 @@ public class LibrariesAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         String name = cursor.getString(DetailFragment.COL_LIB_NAME);
-        /*if (name.length()>=25) {
-            name= name.substring(0, 25) + "...";
-        }*/
         // Find TextView and set formatted date on it
         viewHolder.libNameView.setText(name);
         // Read weather forecast from cursor

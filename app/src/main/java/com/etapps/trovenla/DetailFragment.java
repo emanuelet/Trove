@@ -24,6 +24,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,9 +37,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.etapps.trovenla.adapters.LibrariesAdapter;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
 import com.etapps.trovenla.data.BookContract.HoldingsEntry;
 import com.etapps.trovenla.data.BookContract.LibrariesEntry;
+import com.etapps.trovenla.tasks.GetCoverTask;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -255,7 +258,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             //I retrieve all the data from selection of the content provider
             String title = data.getString(data.getColumnIndex(
                     BooksEntry.COLUMN_BOOK_TITLE));
-
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(title);
             String author = data.getString(data.getColumnIndex(
                     BooksEntry.COLUMN_BOOK_AUTHOR));
             String year = data.getString(data.getColumnIndex(

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trovenla;
+package com.etapps.trovenla.tasks;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.etapps.trovenla.Utility;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
 import com.etapps.trovenla.data.BookContract.HoldingsEntry;
 import com.etapps.trovenla.data.BookContract.LibrariesEntry;
@@ -109,7 +110,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
             JSONObject contr = root.getJSONObject(TRV_CONTRIBUTOR);
             name = contr.optString(TRV_NAME);
             //Log.v(LOG_TAG, "Name: " + name);
-            if (name != "") {
+            if (!name.equals("")) {
                 libraryValues.put(LibrariesEntry.COLUMN_NUC, nuc);
                 libraryValues.put(LibrariesEntry.COLUMN_LIBRARY_NAME, name);
                 //libraryValues.put(LibrariesEntry.COLUMN_CITY, cityName);  future use
@@ -143,7 +144,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return null;
@@ -155,7 +156,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {

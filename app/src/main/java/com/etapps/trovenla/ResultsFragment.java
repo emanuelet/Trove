@@ -31,8 +31,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.etapps.trovenla.adapters.ResultsAdapter;
 import com.etapps.trovenla.data.BookContract;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
+import com.mopub.mobileads.MoPubView;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.widget.ListView} layout.
@@ -68,6 +70,8 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
     private ResultsAdapter mResultsAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
+    private static final String MOPUB_BANNER_AD_UNIT_ID = "0167a384d1f74f3d9879ac9b0b55ca51";
+    private MoPubView moPubView;
 
     public ResultsFragment() {
     }
@@ -132,6 +136,9 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
+        moPubView = (MoPubView) rootView.findViewById(R.id.mopub_sample_ad);
+        moPubView.setAdUnitId(MOPUB_BANNER_AD_UNIT_ID); // Enter your Ad Unit ID from www.mopub.com
+        moPubView.loadAd();
         return rootView;
     }
 
@@ -158,6 +165,12 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
             outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        moPubView.destroy();
     }
 
     @Override
