@@ -32,5 +32,6 @@
     <com.mopub.mobileads.MoPubView
         android:id="@+id/mopub_sample_ad"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp"
+        android:visibility="gone" />
 </LinearLayout>
