@@ -70,7 +70,6 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
     private ResultsAdapter mResultsAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
-    private static final String MOPUB_BANNER_AD_UNIT_ID =ConfigUtils.getUrl("MOPUB_BANNER_AD_UNIT_ID");
     private MoPubView moPubView;
 
     public ResultsFragment() {
@@ -137,7 +136,7 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
         }
 
         moPubView = (MoPubView) rootView.findViewById(R.id.mopub_sample_ad);
-        moPubView.setAdUnitId(MOPUB_BANNER_AD_UNIT_ID); // Enter your Ad Unit ID from www.mopub.com
+        moPubView.setAdUnitId(ConfigUtils.getUrl("MOPUB_BANNER_AD_UNIT_ID", getActivity())); // Enter your Ad Unit ID from www.mopub.com
         moPubView.loadAd();
         return rootView;
     }

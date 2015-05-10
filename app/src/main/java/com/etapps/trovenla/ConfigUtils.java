@@ -1,6 +1,9 @@
 package com.etapps.trovenla;
 
-import java.io.FileInputStream;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,12 +15,16 @@ import java.util.Properties;
 public class ConfigUtils {
 
 
-    public static String getUrl(String property){
+    public static String getUrl(String property, Context mContext){
         Properties properties = new Properties();
         InputStream inputStream = null;
         String value="";
+        Resources resources = mContext.getResources();
+        AssetManager assetManager = resources.getAssets();
+
+// Read from the /assets directory
         try {
-            inputStream = new FileInputStream("config.properties");
+            inputStream = assetManager.open("config.properties");
             properties.load(inputStream);
             value=properties.getProperty(property);
 

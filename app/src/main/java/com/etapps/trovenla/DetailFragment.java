@@ -37,6 +37,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.etapps.trovenla.activities.DetailActivity;
 import com.etapps.trovenla.adapters.LibrariesAdapter;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
 import com.etapps.trovenla.data.BookContract.HoldingsEntry;

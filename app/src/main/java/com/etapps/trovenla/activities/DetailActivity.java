@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trovenla;
+package com.etapps.trovenla.activities;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-public class DetailActivity extends ActionBarActivity implements DetailFragment.Callback {
+import com.etapps.trovenla.DetailFragment;
+import com.etapps.trovenla.R;
+
+public class DetailActivity extends AppCompatActivity implements DetailFragment.Callback {
 
     public static final String TROVE_KEY = "trove_id";
     public static final String TWO_PANE = "two_pane";

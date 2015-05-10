@@ -8,21 +8,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.etapps.trovenla.activities.DetailActivity;
+import com.etapps.trovenla.activities.SettingsActivity;
 import com.etapps.trovenla.data.SuggestionProvider;
 import com.etapps.trovenla.tasks.FetchLibrariesTask;
 import com.etapps.trovenla.tasks.FetchResultsTask;
 import com.mopub.common.MoPub;
+
 import io.fabric.sdk.android.Fabric;
 
 
-public class MainActivity extends ActionBarActivity implements ResultsFragment.Callback {
+public class MainActivity extends AppCompatActivity implements ResultsFragment.Callback {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane;

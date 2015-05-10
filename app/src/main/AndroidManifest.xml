@@ -3,11 +3,13 @@
     package="com.etapps.trovenla">
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:configChanges="orientation|keyboardHidden|screenSize"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -26,7 +28,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="com.etapps.trovenla.DetailActivity"
+            android:name=".activities.DetailActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName="com.etapps.trovenla.MainActivity">
             <meta-data
@@ -34,8 +36,9 @@
                 android:value="com.etapps.trovenla.MainActivity" />
         </activity>
         <activity
-            android:name="com.etapps.trovenla.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:theme="@style/SettingsTheme"
             android:parentActivityName="com.etapps.trovenla.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -67,7 +70,8 @@
         <activity
             android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
