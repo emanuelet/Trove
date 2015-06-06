@@ -25,7 +25,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.Utility;
+import com.etapps.trovenla.utils.Utility;
 import com.etapps.trovenla.data.BookContract;
 
 import java.util.Calendar;

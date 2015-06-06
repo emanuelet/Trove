@@ -1,4 +1,4 @@
-package com.etapps.trovenla;
+package com.etapps.trovenla.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;

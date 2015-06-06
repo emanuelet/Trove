@@ -3,7 +3,7 @@ package com.etapps.trovenla;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
-import com.mopub.common.MoPub;
+import com.etapps.trovenla.utils.ConfigUtils;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 

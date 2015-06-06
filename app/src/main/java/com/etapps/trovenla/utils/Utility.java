@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trovenla;
+package com.etapps.trovenla.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
+import com.etapps.trovenla.R;
 import com.etapps.trovenla.data.BookContract;
 
 import java.text.DateFormat;

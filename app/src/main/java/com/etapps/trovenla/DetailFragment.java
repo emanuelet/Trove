@@ -24,7 +24,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -124,7 +126,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         mLibrariesAdapter = new LibrariesAdapter(getActivity(), null, 0);
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        ImageButton mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.action_go);
+//        ImageButton mBtn_GoTo = (ImageButton) rootView.findViewById(R.id.action_go);
         ImageButton mBtn_Buy = (ImageButton) rootView.findViewById(R.id.detail_buy_btn);
         mYearView = (TextView) rootView.findViewById(R.id.detail_year_textview);
         mDv1 = (View) rootView.findViewById(R.id.dv1);
@@ -259,7 +261,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             //I retrieve all the data from selection of the content provider
             String title = data.getString(data.getColumnIndex(
                     BooksEntry.COLUMN_BOOK_TITLE));
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(title);
+            ActionBar appbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            appbar.setTitle(title);
             String author = data.getString(data.getColumnIndex(
                     BooksEntry.COLUMN_BOOK_AUTHOR));
             String year = data.getString(data.getColumnIndex(
@@ -285,9 +288,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             Bundle arguments = getArguments();
             if (arguments != null && arguments.containsKey(DetailActivity.TWO_PANE)) {
                 if (!arguments.containsKey(DetailActivity.TWO_PANE)) {
-                    ((DetailActivity) getActivity()).getSupportActionBar().setTitle(
+                    appbar = ((DetailActivity) getActivity()).getSupportActionBar();
+                    appbar.setTitle(
                             title);
-                    ((DetailActivity) getActivity()).getSupportActionBar().setSubtitle(
+                    appbar.setSubtitle(
                             author);
                 }
             }

@@ -34,6 +34,7 @@ import android.widget.ListView;
 import com.etapps.trovenla.adapters.ResultsAdapter;
 import com.etapps.trovenla.data.BookContract;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
+import com.etapps.trovenla.utils.ConfigUtils;
 import com.mopub.mobileads.MoPubView;
 
 /**

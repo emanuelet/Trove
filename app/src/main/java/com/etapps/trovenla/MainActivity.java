@@ -26,6 +26,7 @@ import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends AppCompatActivity implements ResultsFragment.Callback {
+    public static boolean libFetched=false;
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane;
@@ -99,7 +100,9 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
             return true;
         }
         if (id == R.id.action_search) {
-            searchView.requestFocus();
+            if (libFetched) {
+                searchView.requestFocus();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

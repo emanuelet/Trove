@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.etapps.trovenla.MainActivity;
 import com.etapps.trovenla.data.BookContract.LibrariesEntry;
 
 import org.json.JSONArray;
@@ -216,17 +217,18 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPreExecute() {
-        dialog = ProgressDialog.show(mContext, "", "Initialize Libraries DB...", true);
+//        dialog = ProgressDialog.show(mContext, "", "Initialize Libraries DB...", true);
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        dialog.dismiss();
+//        dialog.dismiss();
+        MainActivity.libFetched=true;
     }
 
     @Override
     protected void onProgressUpdate(Void... values) {
-        dialog.setProgress(values.length);
+//        dialog.setProgress(values.length);
     }
 
 

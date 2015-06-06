@@ -42,7 +42,7 @@
                 android:textAppearance="?android:textAppearanceLarge"
                 android:ellipsize="middle"
                 android:longClickable="false"
-                android:singleLine="false"
+                android:singleLine="true"
                 android:text="Title"
                 android:maxLines="2" />
 

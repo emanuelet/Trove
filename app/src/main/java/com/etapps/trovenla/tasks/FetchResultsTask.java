@@ -23,7 +23,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.etapps.trovenla.Utility;
+import com.etapps.trovenla.utils.Utility;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
 import com.etapps.trovenla.data.BookContract.HoldingsEntry;
 import com.etapps.trovenla.data.BookContract.LibrariesEntry;
