@@ -180,15 +180,15 @@ public class Utility {
         return title;
     }
 
-    public static int getResultsNr(Context context) {
+    public static String getResultsNr(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return Integer.valueOf(prefs.getString(context.getString(R.string.pref_results_key), context.getString(R.string.pref_results_default)));
+        return prefs.getString(context.getString(R.string.pref_results_key), context.getString(R.string.pref_results_default));
     }
+
     public static String getAppVersionName(Context context) {
-        String versionName="unknown";
+        String versionName = "unknown";
         try {
-//			Context context = AliveX.getContext();
-            versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0 ).versionName;
+            versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

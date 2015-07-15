@@ -48,33 +48,6 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
     }
 
 
-    /*private long addLocation(String nuc, String cityName, String name, String url) {
-
-        // First, check if the location with this city name exists in the db
-        Cursor cursor = mContext.getContentResolver().query(
-                LibrariesEntry.CONTENT_URI,
-                new String[]{LibrariesEntry._ID},
-                LibrariesEntry.COLUMN_NUC + " = ?",
-                new String[]{nuc},
-                null);
-
-        if (cursor.moveToFirst()) {
-            int libIndex = cursor.getColumnIndex(LibrariesEntry._ID);
-            return cursor.getLong(libIndex);
-        } else {
-            ContentValues libraryValues = new ContentValues();
-            libraryValues.put(LibrariesEntry.COLUMN_NUC, nuc);
-            libraryValues.put(LibrariesEntry.COLUMN_LIBRARY_NAME, name);
-            libraryValues.put(LibrariesEntry.COLUMN_CITY, cityName);
-            libraryValues.put(LibrariesEntry.COLUMN_URL, url);
-
-            Uri locationInsertUri = mContext.getContentResolver()
-                    .insert(LibrariesEntry.CONTENT_URI, libraryValues);
-
-            return ContentUris.parseId(locationInsertUri);
-        }
-    }*/
-
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
@@ -222,13 +195,11 @@ public class FetchLibrariesTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-//        dialog.dismiss();
-        MainActivity.libFetched=true;
+        MainActivity.libFetched = true;
     }
 
     @Override
     protected void onProgressUpdate(Void... values) {
-//        dialog.setProgress(values.length);
     }
 
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- Layout for weather forecast list item for future day (not today) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/touch_selector"
@@ -10,17 +9,6 @@
     android:orientation="horizontal"
     android:paddingEnd="10dp"
     android:paddingStart="10dp">
-
-    <!--<FrameLayout
-        android:layout_width="60dp"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/list_item_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
-    </FrameLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +31,7 @@
                 android:ellipsize="middle"
                 android:longClickable="false"
                 android:singleLine="true"
-                android:text="Title"
+                tools:text="Title"
                 android:maxLines="2" />
 
         </LinearLayout>
@@ -61,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:fontFamily="sans-serif-condensed"
-                android:text="Author"
+                tools:text="Author"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:ellipsize="end"
                 android:singleLine="true" />
@@ -73,7 +61,7 @@
                 android:layout_weight="3"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="end"
-                android:text="1950"
+                tools:text="1950"
                 android:textAppearance="?android:textAppearanceLarge" />
         </LinearLayout>
 

@@ -29,7 +29,7 @@ public interface TroveApi {
     @GET("/result")
     void getBooks(@Query("key") String key,
                   @Query("encoding") String format,
-                  @Query("n") String days,
+                  @Query("n") String results,
                   @Query("q") String query,
                   @Query("zone") String zone,
                   @Query("include") String include,

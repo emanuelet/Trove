@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trovenla;
+package com.etapps.trovenla.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,7 +25,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
@@ -39,6 +38,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.etapps.trovenla.R;
 import com.etapps.trovenla.activities.DetailActivity;
 import com.etapps.trovenla.adapters.LibrariesAdapter;
 import com.etapps.trovenla.data.BookContract.BooksEntry;

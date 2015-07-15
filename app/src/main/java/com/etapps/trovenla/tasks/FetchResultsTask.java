@@ -335,7 +335,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         String zone = "book";
         String include = "holdings";
         String key = "dd539bfbq0hec6pq";
-        int numRes = Utility.getResultsNr(mContext);
+        String numRes = Utility.getResultsNr(mContext);
         // Construct the URL for the OpenWeatherMap query
         // Possible parameters are avaiable at TRV's forecast API page, at
         // http://openweathermap.org/API#forecast
@@ -353,7 +353,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(INCLUDE_PARAM, include)
                 .appendQueryParameter(ZONE_PARAM, zone)
-                .appendQueryParameter(DAYS_PARAM, Integer.toString(numRes))
+                .appendQueryParameter(DAYS_PARAM, numRes)
                 .build();
 
 

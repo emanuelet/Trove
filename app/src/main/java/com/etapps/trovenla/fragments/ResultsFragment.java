@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.etapps.trovenla;
+package com.etapps.trovenla.fragments;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,9 +32,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.ResultsAdapter;
 import com.etapps.trovenla.data.BookContract;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.widget.ListView} layout.
@@ -67,7 +72,10 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
             BookContract.BooksEntry.COLUMN_URL,
     };
     private ResultsAdapter mResultsAdapter;
-    private ListView mListView;
+    @Bind(R.id.listview_forecast)
+    ListView mListView;
+    @Bind(R.id.books)
+    RecyclerView mBooks;
     private int mPosition = ListView.INVALID_POSITION;
 
     public ResultsFragment() {
@@ -105,8 +113,8 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // Get a reference to the ListView, and attach this adapter to it.
-        mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        ButterKnife.bind(this, rootView);
+
         mListView.setAdapter(mResultsAdapter);
         mListView.setEmptyView(rootView.findViewById(R.id.empty));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

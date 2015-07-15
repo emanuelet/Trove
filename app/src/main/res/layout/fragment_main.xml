@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.etapps.trovenla.ResultsFragment">
+    tools:context="com.etapps.trovenla.fragments.ResultsFragment">
 
     <TextView
         android:id="@+id/list_header"
@@ -21,6 +21,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="@null" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/books"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical" />
 
     <TextView
         android:id="@+id/empty"

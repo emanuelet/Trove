@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.etapps.trovenla.DetailFragment;
+import com.etapps.trovenla.fragments.DetailFragment;
 import com.etapps.trovenla.R;
 
 /**

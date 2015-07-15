@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.ResultsFragment;
+import com.etapps.trovenla.fragments.ResultsFragment;
 
 /**
  * {@link ResultsAdapter} exposes a list of weather forecasts

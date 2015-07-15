@@ -18,14 +18,13 @@ package com.etapps.trovenla.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.etapps.trovenla.DetailFragment;
+import com.etapps.trovenla.fragments.DetailFragment;
 import com.etapps.trovenla.R;
 
 public class DetailActivity extends AppCompatActivity implements DetailFragment.Callback {
