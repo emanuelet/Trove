@@ -46,10 +46,10 @@
         </activity>
 
         <provider
-            android:name="com.etapps.trovenla.data.SuggestionProvider"
-            android:authorities="com.etapps.trovenla.data.SuggestionProvider" />
+            android:name=".data.SuggestionProvider"
+            android:authorities=".data.SuggestionProvider" />
         <provider
-            android:name="com.etapps.trovenla.data.BooksProvider"
+            android:name=".data.BooksProvider"
             android:authorities="@string/content_authority"
             android:exported="false"/>
         <!-- Points to searchable activity so the whole app can invoke search. -->
@@ -58,18 +58,6 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="cf748500329716efa39a0579d2e87fc1f961f223" />
-        <activity
-            android:name="com.mopub.mobileads.MoPubActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="com.mopub.mobileads.MraidActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="com.mopub.common.MoPubBrowser"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

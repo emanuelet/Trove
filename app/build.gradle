@@ -28,9 +28,16 @@ android {
         versionName "1.8.0"
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 }
 
@@ -39,14 +46,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:design:22.2.0'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.google.android.gms:play-services-ads:7.5.0'
     compile 'com.github.emanuelet:Android-MultiStateView:0.4.5'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
-        transitive = true;
-    }
-    compile('com.mopub.sdk.android:mopub:3.7.0@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.4.0@aar') {
         transitive = true;
     }
     compile('com.twitter.sdk.android:twitter:1.4.0@aar') {

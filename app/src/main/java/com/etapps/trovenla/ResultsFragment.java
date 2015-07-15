@@ -34,8 +34,6 @@ import android.widget.ListView;
 import com.etapps.trovenla.adapters.ResultsAdapter;
 import com.etapps.trovenla.data.BookContract;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
-import com.etapps.trovenla.utils.ConfigUtils;
-import com.mopub.mobileads.MoPubView;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.widget.ListView} layout.
@@ -71,7 +69,6 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
     private ResultsAdapter mResultsAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
-    private MoPubView moPubView;
 
     public ResultsFragment() {
     }
@@ -136,9 +133,6 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-        moPubView = (MoPubView) rootView.findViewById(R.id.mopub_sample_ad);
-        moPubView.setAdUnitId(ConfigUtils.getUrl("MOPUB_BANNER_AD_UNIT_ID", getActivity())); // Enter your Ad Unit ID from www.mopub.com
-        moPubView.loadAd();
         return rootView;
     }
 
@@ -170,7 +164,6 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
     @Override
     public void onDestroy() {
         super.onDestroy();
-        moPubView.destroy();
     }
 
     @Override

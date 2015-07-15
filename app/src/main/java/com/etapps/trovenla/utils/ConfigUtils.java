@@ -15,10 +15,10 @@ import java.util.Properties;
 public class ConfigUtils {
 
 
-    public static String getUrl(String property, Context mContext){
+    public static String getUrl(String property, Context mContext) {
         Properties properties = new Properties();
         InputStream inputStream = null;
-        String value="";
+        String value = "";
         Resources resources = mContext.getResources();
         AssetManager assetManager = resources.getAssets();
 
@@ -26,14 +26,14 @@ public class ConfigUtils {
         try {
             inputStream = assetManager.open("config.properties");
             properties.load(inputStream);
-            value=properties.getProperty(property);
+            value = properties.getProperty(property);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if(inputStream != null){
+        } finally {
+            if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {

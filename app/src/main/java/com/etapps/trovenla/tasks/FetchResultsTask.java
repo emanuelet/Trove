@@ -23,10 +23,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.etapps.trovenla.utils.Utility;
 import com.etapps.trovenla.data.BookContract.BooksEntry;
 import com.etapps.trovenla.data.BookContract.HoldingsEntry;
 import com.etapps.trovenla.data.BookContract.LibrariesEntry;
+import com.etapps.trovenla.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -360,7 +360,7 @@ public class FetchResultsTask extends AsyncTask<String, Void, Void> {
         resultJsonStr = retrieveFromUrl(builtUri);
 
         try {
-            if (resultJsonStr!=null) {
+            if (resultJsonStr != null) {
                 getDataFromJson(resultJsonStr);
             }
         } catch (JSONException e) {

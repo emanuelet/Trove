@@ -20,13 +20,10 @@ import com.etapps.trovenla.activities.SettingsActivity;
 import com.etapps.trovenla.data.SuggestionProvider;
 import com.etapps.trovenla.tasks.FetchLibrariesTask;
 import com.etapps.trovenla.tasks.FetchResultsTask;
-import com.mopub.common.MoPub;
-
-import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends AppCompatActivity implements ResultsFragment.Callback {
-    public static boolean libFetched=false;
+    public static boolean libFetched = false;
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane;
@@ -37,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new MoPub());
 
         setContentView(R.layout.activity_main);
         if (findViewById(R.id.detail_container) != null) {
