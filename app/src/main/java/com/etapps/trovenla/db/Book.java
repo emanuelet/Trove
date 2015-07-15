@@ -1,7 +1,6 @@
 package com.etapps.trovenla.db;
 
-import com.etapps.trovenla.models.queries.Relevance;
-
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -12,11 +11,8 @@ public class Book extends RealmObject {
 
     @PrimaryKey
     private String id;
-
     private String url;
-
     private String troveUrl;
-
     private String title;
     private String contributor;
     private String issued;
@@ -24,19 +20,14 @@ public class Book extends RealmObject {
     private long versionCount;
     private String score;
     private String value;
-
     private String snippet;
+    private RealmList<Library> libraries;
 
-    /**
-     * @return The id
-     */
+
     public String getId() {
         return id;
     }
 
-    /**
-     * @param id The id
-     */
     public void setId(String id) {
         this.id = id;
     }
@@ -165,5 +156,13 @@ public class Book extends RealmObject {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public RealmList<Library> getLibraries() {
+        return libraries;
+    }
+
+    public void setLibraries(RealmList<Library> libraries) {
+        this.libraries = libraries;
     }
 }

@@ -61,7 +61,6 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
             Bundle arguments = new Bundle();
             arguments.putString(DetailActivity.TROVE_KEY, troveId);
 
-
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
 
@@ -70,7 +69,6 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
                     .commit();
         }
         setDefaultUncaughtExceptionHandler();
-        mListView = (ListView) findViewById(R.id.detail_borrow_libraries_listview);
     }
 
     @Override
@@ -99,7 +97,6 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
-
         }
 
     }

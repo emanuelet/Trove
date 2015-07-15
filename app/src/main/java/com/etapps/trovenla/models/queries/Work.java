@@ -32,9 +32,9 @@ public class Work {
     @Expose
     private String snippet;
     @Expose
-    private List<Object> holding = new ArrayList<Object>();
+    private List<Holding> holding = new ArrayList<>();
     @Expose
-    private List<Identifier> identifier = new ArrayList<Identifier>();
+    private List<Identifier> identifier = new ArrayList<>();
 
     /**
      * 
@@ -239,7 +239,7 @@ public class Work {
      * @return
      *     The holding
      */
-    public List<Object> getHolding() {
+    public List<Holding> getHolding() {
         return holding;
     }
 
@@ -248,7 +248,7 @@ public class Work {
      * @param holding
      *     The holding
      */
-    public void setHolding(List<Object> holding) {
+    public void setHolding(List<Holding> holding) {
         this.holding = holding;
     }
 

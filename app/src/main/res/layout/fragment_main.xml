@@ -5,35 +5,10 @@
     android:orientation="vertical"
     tools:context="com.etapps.trovenla.fragments.ResultsFragment">
 
-    <TextView
-        android:id="@+id/list_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey"
-        android:gravity="center"
-        android:text="@string/list_search_header"
-        android:textAppearance="?android:textAppearanceMedium" />
-
-    <ListView
-        android:id="@+id/listview_forecast"
-        style="@style/ForecastListStyle"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@null" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/books"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical" />
-
-    <TextView
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_results_string"
-        android:textSize="40sp" />
 </LinearLayout>

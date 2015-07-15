@@ -17,7 +17,7 @@ import io.realm.RealmResults;
 /**
  * Created by emanuele on 15/07/15.
  */
-public class BookAdapter extends RealmAdapter<Book, BookAdapter.ContsHolder> {
+public class BookAdapter extends RealmAdapter<Book, BookAdapter.BookHolder> {
 
     private final Context mContext;
     OnItemClickListener mItemClickListener;
@@ -30,16 +30,16 @@ public class BookAdapter extends RealmAdapter<Book, BookAdapter.ContsHolder> {
     }
 
     @Override
-    public ContsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BookHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //TODO: switch for different view type
         View v = LayoutInflater
                 .from(mContext)
                 .inflate(R.layout.list_item_results, parent, false);
-        return new ContsHolder(v);
+        return new BookHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ContsHolder holder, int position) {
+    public void onBindViewHolder(BookHolder holder, int position) {
         Book contact = this.mContacts.get(position);
         holder.setTitle(contact.getTitle());
         holder.setYear(contact.getIssued());
@@ -76,7 +76,7 @@ public class BookAdapter extends RealmAdapter<Book, BookAdapter.ContsHolder> {
         public void onItemClick(View view, int position);
     }
 
-    public class ContsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.list_item_title_textview)
         TextView mTitle;
         @Bind(R.id.list_item_author_textview)
@@ -84,7 +84,7 @@ public class BookAdapter extends RealmAdapter<Book, BookAdapter.ContsHolder> {
         @Bind(R.id.list_item_year_textview)
         TextView mYear;
 
-        public ContsHolder(View itemView) {
+        public BookHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);

@@ -15,13 +15,10 @@
  */
 package com.etapps.trovenla.fragments;
 
-import android.database.Cursor;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,54 +26,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.adapters.ResultsAdapter;
-import com.etapps.trovenla.data.BookContract;
-import com.etapps.trovenla.data.BookContract.BooksEntry;
+import com.etapps.trovenla.Trove;
+import com.etapps.trovenla.adapters.BookAdapter;
+import com.etapps.trovenla.db.Book;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.widget.ListView} layout.
  */
-public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor> {
-
-    // These indices are tied to FORECAST_COLUMNS. If FORECAST_COLUMNS changes, these
-    // must change.
-    public static final int COL_BOOK_ID = 0;
-    public static final int COL_TROVE_KEY = 1;
-    public static final int COL_BOOK_TITLE = 2;
-    public static final int COL_BOOK_AUTHOR = 3;
-    public static final int COL_BOOK_YEAR = 4;
-    public static final int COL_COLUMN_URL = 5;
+public class ResultsFragment extends Fragment {
     private static final String SELECTED_KEY = "selected_position";
-    private static final int LOADER = 0;
-    // For the forecast view we're showing only a small subset of the stored data.
-    // Specify the columns we need.
-    private static final String[] FORECAST_COLUMNS = {
-            // In this case the id needs to be fully qualified with a table name, since
-            // the content provider joins the location & weather tables in the background
-            // (both have an _id column)
-            // On the one hand, that's annoying. On the other, you can search the weather table
-            // using the location set by the user, which is only in the Location table.
-            // So the convenience is worth it.
-            BookContract.BooksEntry._ID,
-            BookContract.BooksEntry.COLUMN_TROVE_KEY,
-            BookContract.BooksEntry.COLUMN_BOOK_TITLE,
-            BookContract.BooksEntry.COLUMN_BOOK_AUTHOR,
-            BookContract.BooksEntry.COLUMN_BOOK_YEAR,
-            BookContract.BooksEntry.COLUMN_URL,
-    };
-    private ResultsAdapter mResultsAdapter;
-    @Bind(R.id.listview_forecast)
-    ListView mListView;
+
     @Bind(R.id.books)
     RecyclerView mBooks;
     private int mPosition = ListView.INVALID_POSITION;
+    private Context mContext;
+    private BookAdapter adapter;
+    private Realm realm;
 
     public ResultsFragment() {
     }
@@ -86,12 +59,13 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        mContext = getActivity();
+        realm = Realm.getInstance(mContext);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
-
     }
 
     @Override
@@ -106,29 +80,11 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // The ArrayAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
-        mResultsAdapter = new ResultsAdapter(getActivity(), null, 0);
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         ButterKnife.bind(this, rootView);
 
-        mListView.setAdapter(mResultsAdapter);
-        mListView.setEmptyView(rootView.findViewById(R.id.empty));
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Cursor cursor = mResultsAdapter.getCursor();
-                if (cursor != null && cursor.moveToPosition(position)) {
-                    ((Callback) getActivity())
-                            .onItemSelected(cursor.getString(COL_TROVE_KEY));
-                }
-                mPosition = position;
-            }
-        });
+        initList();
 
         // If there's instance state, mine it for useful information.
         // The end-goal here is that the user never knows that turning their device sideways
@@ -144,18 +100,31 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
         return rootView;
     }
 
+    private void initList() {
+        mBooks.setLayoutManager(new LinearLayoutManager(mContext));
+        RealmResults<Book> books = realm.where(Book.class).findAll();
+        adapter = new BookAdapter(mContext, books);
+        mBooks.setAdapter(adapter);
+        mBooks.setHasFixedSize(true);
+        adapter.SetOnItemClickListener(new BookAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Book item = adapter.getItematPosition(position);
+                ((Callback) getActivity())
+                        .onItemSelected(item.getId());
+                mPosition = position;
+            }
+        });
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        /*if (mLocation != null && !mLocation.equals(Utility.getPreferredLocation(getActivity()))) {
-            getLoaderManager().restartLoader(LOADER, null, this);
-        }*/
     }
 
     @Override
@@ -174,44 +143,6 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
         super.onDestroy();
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // This is called when a new Loader needs to be created.  This
-        // fragment only uses one loader, so we don't care about checking the id.
-
-        // To only show current and future dates, get the String representation for today,
-        // and filter the query to return weather only for dates after or including today.
-        // Only return data after today.
-
-        Uri keyUri = BooksEntry.buildBooksEntries();
-
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-        return new CursorLoader(
-                getActivity(),
-                keyUri,
-                FORECAST_COLUMNS,
-                null,
-                null,
-                null
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mResultsAdapter.swapCursor(data);
-        if (mPosition != ListView.INVALID_POSITION) {
-            // If we don't need to restart the loader, and there's a desired position to restore
-            // to, do so now.
-            mListView.smoothScrollToPosition(mPosition);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mResultsAdapter.swapCursor(null);
-    }
-
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -221,6 +152,6 @@ public class ResultsFragment extends Fragment implements LoaderCallbacks<Cursor>
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(String date);
+        public void onItemSelected(String id);
     }
 }

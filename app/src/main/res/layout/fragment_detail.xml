@@ -1,10 +1,7 @@
-<!-- Master layout. -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-
 
     <TextView
         android:id="@+id/detail_borrow_libraries_header"
@@ -14,39 +11,26 @@
         android:text="@string/borrow_label_details"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ScrollView
-        android:layout_width="fill_parent"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/libraries"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
-        android:fillViewport="true"
-        android:elevation="10dp"
-        android:focusableInTouchMode="false">
-
-
-        <ListView
-            android:id="@+id/detail_borrow_libraries_listview"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:stackFromBottom="false" />
-
-
-    </ScrollView>
-
+        android:layout_weight="7"/>
 
     <LinearLayout
+        android:id="@+id/cont"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:elevation="0dp"
         android:gravity="center"
-        android:paddingTop="5dp"
-        android:id="@+id/cont"
-        android:elevation="0dp">
+        android:paddingTop="5dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/detail_year_textview"
@@ -57,23 +41,23 @@
             <TextView
                 android:id="@+id/detail_year_textview_sublabel"
                 android:layout_width="wrap_content"
-                android:text="@string/year_sublabel_detail"
                 android:layout_height="wrap_content"
+                android:text="@string/year_sublabel_detail"
                 android:textAppearance="?android:textAppearanceSmall" />
         </LinearLayout>
 
         <View
+            android:id="@+id/dv1"
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:id="@+id/dv1"
-            android:background="@android:color/darker_gray"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/detail_versions_textview"
@@ -90,25 +74,25 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/dv2"
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:id="@+id/dv2"
-            android:background="@android:color/darker_gray"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/detail_buy_btn"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/borrow_book_black"
                 android:background="?android:attr/selectableItemBackground"
-                android:id="@+id/detail_buy_btn"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/borrow_book_black" />
 
             <TextView
                 android:id="@+id/detail_buy_textview_sublabel"

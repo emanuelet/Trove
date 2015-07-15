@@ -11,9 +11,7 @@ import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.etapps.trovenla.activities.DetailActivity;
 import com.etapps.trovenla.activities.SettingsActivity;
@@ -27,13 +25,11 @@ import com.etapps.trovenla.fragments.ResultsFragment;
 import com.etapps.trovenla.models.Contributor;
 import com.etapps.trovenla.models.Libraries;
 import com.etapps.trovenla.models.queries.Books;
+import com.etapps.trovenla.models.queries.Holding;
 import com.etapps.trovenla.models.queries.Work;
-import com.etapps.trovenla.tasks.FetchResultsTask;
 import com.etapps.trovenla.utils.Constants;
-import com.etapps.trovenla.utils.Db;
 import com.etapps.trovenla.utils.Utility;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -48,10 +44,6 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
 
     private boolean mTwoPane;
     private SearchView searchView;
-    @Bind(R.id.list_header)
-    TextView mHeader;
-    @Bind(R.id.empty)
-    TextView mEmpty;
     private Context mContext;
     private TroveApi rest;
     private Realm realm;
@@ -82,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
 
         ButterKnife.bind(this);
         rest = TroveRest.getAdapter(mContext, TroveApi.class);
-        realm = Db.getRealm(mContext);
+        realm = Realm.getInstance(mContext);
 
         ResultsFragment resultsFragment = ((ResultsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
@@ -93,16 +85,7 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
             rest.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL, new Callback<Libraries>() {
                 @Override
                 public void success(Libraries libraries, Response response) {
-                    RealmList<Library> libList = new RealmList<>();
-                    for (Contributor i : libraries.getResponse().getContributor()) {
-                        Library lib = new Library();
-                        lib.setNuc(i.getId());
-                        lib.setName(i.getName());
-                        libList.add(lib);
-                    }
-                    realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(libList);
-                    realm.commitTransaction();
+                    addLibrary(libraries);
                 }
 
                 @Override
@@ -111,12 +94,24 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
                 }
             });
 
-            mHeader.setVisibility(View.INVISIBLE);
-            mEmpty.setText("To Start Searching hit the Search button above.");
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstStart", false);
             editor.apply();
         }
+    }
+
+    private void addLibrary(Libraries libraries) {
+        RealmList<Library> libList = new RealmList<>();
+        for (Contributor i : libraries.getResponse().getContributor()) {
+            Library lib = new Library();
+            lib.setNuc(i.getId());
+            lib.setName(i.getName());
+            lib.setUrl(i.getUrl());
+            libList.add(lib);
+        }
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(libList);
+        realm.commitTransaction();
     }
 
 
@@ -163,9 +158,6 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
             String query = intent.getStringExtra(SearchManager.QUERY);
             searchView.setQuery(query, false);
             startSearch(query);
-            if (mHeader.getVisibility() == View.INVISIBLE) {
-                mHeader.setVisibility(View.VISIBLE);
-            }
         }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -173,15 +165,15 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
                     SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
             startSearch(query);
-            if (mHeader.getVisibility() == View.INVISIBLE) {
-                mHeader.setVisibility(View.VISIBLE);
-            }
         }
         return false;
     }
 
     private void startSearch(String query) {
-        new FetchResultsTask(this).execute(query);
+        //I first clear the book results table
+        realm.beginTransaction();
+        realm.clear(Book.class);
+        realm.commitTransaction();
         rest.getBooks(
                 Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS,
                 new Callback<Books>() {
@@ -207,7 +199,9 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
         Book bk = new Book();
         bk.setId(i.getId());
         bk.setTitle(i.getTitle());
-        bk.setContributor(i.getContributor().get(0));
+        if (i.getContributor().get(0) != null) {
+            bk.setContributor(i.getContributor().get(0));
+        }
         bk.setHoldingsCount(i.getHoldingsCount());
         bk.setScore(i.getRelevance().getScore());
         bk.setValue(i.getRelevance().getValue());
@@ -218,6 +212,16 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
         if (i.getSnippet() != null) {
             bk.setSnippet(i.getSnippet());
         }
+        RealmList<Library> llist = new RealmList<>();
+        for (Holding s : i.getHolding()) {
+            Library l = new Library();
+            l.setNuc(s.getNuc());
+            if (s.getUrl() != null) {
+                l.setUrl(s.getUrl().getValue());
+            }
+            llist.add(l);
+        }
+        bk.setLibraries(llist);
         return bk;
     }
 
