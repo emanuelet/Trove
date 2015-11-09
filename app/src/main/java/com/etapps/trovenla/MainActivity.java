@@ -28,6 +28,8 @@ import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.models.queries.Holding;
 import com.etapps.trovenla.models.queries.Work;
 import com.etapps.trovenla.utils.Constants;
+import com.etapps.trovenla.utils.PrefsUtils;
+import com.etapps.trovenla.utils.Results;
 import com.etapps.trovenla.utils.Utility;
 
 import butterknife.ButterKnife;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
     private Context mContext;
     private TroveApi rest;
     private Realm realm;
+    private Results results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,17 +78,17 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
         ButterKnife.bind(this);
         rest = TroveRest.getAdapter(mContext, TroveApi.class);
         realm = Realm.getInstance(mContext);
+        results = new Results(realm);
 
         ResultsFragment resultsFragment = ((ResultsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean firstStart = settings.getBoolean("firstStart", true);
 
-        if (firstStart) {
+        if (PrefsUtils.isFirstStart(mContext)) {
             rest.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL, new Callback<Libraries>() {
                 @Override
                 public void success(Libraries libraries, Response response) {
-                    addLibrary(libraries);
+
+                    results.addLibraries(libraries);
                 }
 
                 @Override
@@ -94,26 +97,9 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
                 }
             });
 
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("firstStart", false);
-            editor.apply();
+            PrefsUtils.firstStart(mContext);
         }
     }
-
-    private void addLibrary(Libraries libraries) {
-        RealmList<Library> libList = new RealmList<>();
-        for (Contributor i : libraries.getResponse().getContributor()) {
-            Library lib = new Library();
-            lib.setNuc(i.getId());
-            lib.setName(i.getName());
-            lib.setUrl(i.getUrl());
-            libList.add(lib);
-        }
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(libList);
-        realm.commitTransaction();
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,13 +165,7 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
                 new Callback<Books>() {
                     @Override
                     public void success(Books books, Response response) {
-                        RealmList<Book> bkList = new RealmList<>();
-                        for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
-                            bkList.add(bookResult(i));
-                        }
-                        realm.beginTransaction();
-                        realm.copyToRealmOrUpdate(bkList);
-                        realm.commitTransaction();
+                        results.addAll(books);
                     }
 
                     @Override
@@ -193,36 +173,6 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
 
                     }
                 });
-    }
-
-    private Book bookResult(Work i) {
-        Book bk = new Book();
-        bk.setId(i.getId());
-        bk.setTitle(i.getTitle());
-        if (i.getContributor().get(0) != null) {
-            bk.setContributor(i.getContributor().get(0));
-        }
-        bk.setHoldingsCount(i.getHoldingsCount());
-        bk.setScore(i.getRelevance().getScore());
-        bk.setValue(i.getRelevance().getValue());
-        bk.setTroveUrl(i.getTroveUrl());
-        bk.setIssued(i.getIssued());
-        bk.setHoldingsCount(i.getHoldingsCount());
-        bk.setVersionCount(i.getVersionCount());
-        if (i.getSnippet() != null) {
-            bk.setSnippet(i.getSnippet());
-        }
-        RealmList<Library> llist = new RealmList<>();
-        for (Holding s : i.getHolding()) {
-            Library l = new Library();
-            l.setNuc(s.getNuc());
-            if (s.getUrl() != null) {
-                l.setUrl(s.getUrl().getValue());
-            }
-            llist.add(l);
-        }
-        bk.setLibraries(llist);
-        return bk;
     }
 
     @Override

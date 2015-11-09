@@ -80,4 +80,6 @@
     <string name="version_sublabel_details">Versions</string>
     <string name="buy_sublabel_details">Buy</string>
     <string name="available_label_detail">Avaliable at</string>
+    <string name="title_book_list">Books</string>
+    <string name="title_book_detail">Book Detail</string>
 </resources>

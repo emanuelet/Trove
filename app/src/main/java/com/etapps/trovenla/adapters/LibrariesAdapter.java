@@ -40,7 +40,7 @@ public class LibrariesAdapter extends RealmAdapter<Library, LibrariesAdapter.Lib
     @Override
     public void onBindViewHolder(LibraryHolder holder, int position) {
         Library contact = this.mLibraries.get(position);
-        holder.setTitle(contact.getName());
+        holder.mTitle.setText(contact.getName());
     }
 
     @Override
@@ -82,11 +82,6 @@ public class LibrariesAdapter extends RealmAdapter<Library, LibrariesAdapter.Lib
 
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-        }
-
-        public void setTitle(String name) {
-            if (null == mTitle) return;
-            mTitle.setText(name);
         }
 
         @Override

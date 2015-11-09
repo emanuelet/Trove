@@ -5,36 +5,50 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Work {
 
+    @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("troveUrl")
     @Expose
     private String troveUrl;
+    @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("contributor")
     @Expose
     private List<String> contributor = new ArrayList<String>();
+    @SerializedName("issued")
     @Expose
     private String issued;
+    @SerializedName("type")
     @Expose
     private List<String> type = new ArrayList<String>();
+    @SerializedName("holdingsCount")
     @Expose
-    private Long holdingsCount;
+    private long holdingsCount;
+    @SerializedName("versionCount")
     @Expose
-    private Long versionCount;
+    private long versionCount;
+    @SerializedName("relevance")
     @Expose
     private Relevance relevance;
+    @SerializedName("holding")
+    @Expose
+    private List<Holding> holding = new ArrayList<Holding>();
+    @SerializedName("identifier")
+    @Expose
+    private List<Identifier> identifier = new ArrayList<Identifier>();
+    @SerializedName("snippet")
     @Expose
     private String snippet;
-    @Expose
-    private List<Holding> holding = new ArrayList<>();
-    @Expose
-    private List<Identifier> identifier = new ArrayList<>();
 
     /**
      * 
@@ -167,7 +181,7 @@ public class Work {
      * @return
      *     The holdingsCount
      */
-    public Long getHoldingsCount() {
+    public long getHoldingsCount() {
         return holdingsCount;
     }
 
@@ -176,7 +190,7 @@ public class Work {
      * @param holdingsCount
      *     The holdingsCount
      */
-    public void setHoldingsCount(Long holdingsCount) {
+    public void setHoldingsCount(long holdingsCount) {
         this.holdingsCount = holdingsCount;
     }
 
@@ -185,7 +199,7 @@ public class Work {
      * @return
      *     The versionCount
      */
-    public Long getVersionCount() {
+    public long getVersionCount() {
         return versionCount;
     }
 
@@ -194,7 +208,7 @@ public class Work {
      * @param versionCount
      *     The versionCount
      */
-    public void setVersionCount(Long versionCount) {
+    public void setVersionCount(long versionCount) {
         this.versionCount = versionCount;
     }
 
@@ -214,24 +228,6 @@ public class Work {
      */
     public void setRelevance(Relevance relevance) {
         this.relevance = relevance;
-    }
-
-    /**
-     * 
-     * @return
-     *     The snippet
-     */
-    public String getSnippet() {
-        return snippet;
-    }
-
-    /**
-     * 
-     * @param snippet
-     *     The snippet
-     */
-    public void setSnippet(String snippet) {
-        this.snippet = snippet;
     }
 
     /**
@@ -268,6 +264,24 @@ public class Work {
      */
     public void setIdentifier(List<Identifier> identifier) {
         this.identifier = identifier;
+    }
+
+    /**
+     * 
+     * @return
+     *     The snippet
+     */
+    public String getSnippet() {
+        return snippet;
+    }
+
+    /**
+     * 
+     * @param snippet
+     *     The snippet
+     */
+    public void setSnippet(String snippet) {
+        this.snippet = snippet;
     }
 
 }

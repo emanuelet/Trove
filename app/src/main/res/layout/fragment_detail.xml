@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
@@ -14,6 +15,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/libraries"
         android:layout_width="match_parent"
+        tools:listitem="@layout/list_item_libraries"
         android:layout_height="0dp"
         android:layout_weight="7"/>
 

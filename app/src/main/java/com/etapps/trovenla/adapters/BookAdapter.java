@@ -31,7 +31,6 @@ public class BookAdapter extends RealmAdapter<Book, BookAdapter.BookHolder> {
 
     @Override
     public BookHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //TODO: switch for different view type
         View v = LayoutInflater
                 .from(mContext)
                 .inflate(R.layout.list_item_results, parent, false);
@@ -41,9 +40,9 @@ public class BookAdapter extends RealmAdapter<Book, BookAdapter.BookHolder> {
     @Override
     public void onBindViewHolder(BookHolder holder, int position) {
         Book contact = this.mContacts.get(position);
-        holder.setTitle(contact.getTitle());
-        holder.setYear(contact.getIssued());
-        holder.setAuthor(contact.getContributor());
+        holder.mTitle.setText(contact.getTitle());
+        holder.mYear.setText(contact.getIssued());
+        holder.mAuthor.setText(contact.getContributor());
     }
 
     @Override
@@ -91,26 +90,10 @@ public class BookAdapter extends RealmAdapter<Book, BookAdapter.BookHolder> {
             itemView.setOnClickListener(this);
         }
 
-        public void setTitle(String name) {
-            if (null == mTitle) return;
-            mTitle.setText(name);
-        }
-
-        public void setAuthor(String name) {
-            if (null == mAuthor) return;
-            mAuthor.setText(name);
-        }
-
-        public void setYear(String name) {
-            if (null == mYear) return;
-            mYear.setText(name);
-        }
-
-
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(view, getPosition());
+                mItemClickListener.onItemClick(view, getAdapterPosition());
             }
         }
     }

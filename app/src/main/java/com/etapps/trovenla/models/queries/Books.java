@@ -3,10 +3,12 @@ package com.etapps.trovenla.models.queries;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Books {
 
+    @SerializedName("response")
     @Expose
     private Response response;
 

@@ -3,16 +3,21 @@ package com.etapps.trovenla.models.queries;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Identifier {
 
+    @SerializedName("type")
     @Expose
     private String type;
+    @SerializedName("linktype")
     @Expose
     private String linktype;
+    @SerializedName("linktext")
     @Expose
     private String linktext;
+    @SerializedName("value")
     @Expose
     private String value;
 

@@ -11,4 +11,5 @@ public class Constants {
     public static final String KEY = "dd539bfbq0hec6pq";
     public static final String BOOKS = "book";
     public static final String HOLDINGS = "holdings";
+    public static final String TROVE_KEY = "trove_id";
 }

@@ -46,6 +46,7 @@ public class ResultsFragment extends Fragment {
 
     @Bind(R.id.books)
     RecyclerView mBooks;
+
     private int mPosition = ListView.INVALID_POSITION;
     private Context mContext;
     private BookAdapter adapter;

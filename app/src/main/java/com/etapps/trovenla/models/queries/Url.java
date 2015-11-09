@@ -3,12 +3,15 @@ package com.etapps.trovenla.models.queries;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Url {
 
+    @SerializedName("type")
     @Expose
     private String type;
+    @SerializedName("value")
     @Expose
     private String value;
 

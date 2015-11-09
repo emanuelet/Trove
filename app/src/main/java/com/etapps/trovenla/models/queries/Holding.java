@@ -5,18 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Holding {
 
+    @SerializedName("nuc")
     @Expose
     private String nuc;
+    @SerializedName("contributor")
     @Expose
     private List<String> contributor = new ArrayList<String>();
+//    @SerializedName("callNumber")
+//    @Expose
+//    private List<CallNumber> callNumber = new ArrayList<CallNumber>();
+    @SerializedName("url")
     @Expose
     private Url url;
-    @Expose
-    private List<String> callNumber = new ArrayList<String>();
 
     /**
      * 
@@ -57,6 +62,24 @@ public class Holding {
     /**
      * 
      * @return
+     *     The callNumber
+     */
+//    public List<CallNumber> getCallNumber() {
+//        return callNumber;
+//    }
+//
+//    /**
+//     *
+//     * @param callNumber
+//     *     The callNumber
+//     */
+//    public void setCallNumber(List<CallNumber> callNumber) {
+//        this.callNumber = callNumber;
+//    }
+
+    /**
+     * 
+     * @return
      *     The url
      */
     public Url getUrl() {
@@ -70,24 +93,6 @@ public class Holding {
      */
     public void setUrl(Url url) {
         this.url = url;
-    }
-
-    /**
-     * 
-     * @return
-     *     The callNumber
-     */
-    public List<String> getCallNumber() {
-        return callNumber;
-    }
-
-    /**
-     * 
-     * @param callNumber
-     *     The callNumber
-     */
-    public void setCallNumber(List<String> callNumber) {
-        this.callNumber = callNumber;
     }
 
 }

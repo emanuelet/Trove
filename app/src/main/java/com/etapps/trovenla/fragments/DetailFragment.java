@@ -54,6 +54,7 @@ public class DetailFragment extends Fragment {
 
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String SHARE_HASHTAG = " #Trove";
+
     @Bind(R.id.detail_year_textview)
     TextView mYearView;
     @Bind(R.id.detail_year_textview_sublabel)
@@ -70,6 +71,7 @@ public class DetailFragment extends Fragment {
     View mDv2;
     @Bind(R.id.libraries)
     RecyclerView mLibraries;
+
     private ShareActionProvider mShareActionProvider;
     private String mUrl;
     private String mUrlBuy;
@@ -113,7 +115,7 @@ public class DetailFragment extends Fragment {
                 .equalTo("id", mKeyStr)
                 .findFirst();
 
-        populateView();
+
         return rootView;
     }
 
