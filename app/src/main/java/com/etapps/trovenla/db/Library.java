@@ -1,15 +1,7 @@
 package com.etapps.trovenla.db;
 
-import com.etapps.trovenla.models.Children;
-import com.etapps.trovenla.models.Parent;
-import com.google.gson.annotations.Expose;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
 
 /**
  * Created by emanuele on 15/07/15.
@@ -19,18 +11,19 @@ public class Library extends RealmObject {
     @PrimaryKey
     private String nuc;
     private String name;
-    private String url;
+    private String urlLib;
+    private String urlHolding;
     private String shortname;
     private long totalholdings;
     private String accesspolicy;
     private String algentry;
 
-    public String getUrl() {
-        return url;
+    public String getUrlLib() {
+        return urlLib;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrlLib(String urlLib) {
+        this.urlLib = urlLib;
     }
 
     public String getName() {
@@ -79,5 +72,13 @@ public class Library extends RealmObject {
 
     public void setAlgentry(String algentry) {
         this.algentry = algentry;
+    }
+
+    public String getUrlHolding() {
+        return urlHolding;
+    }
+
+    public void setUrlHolding(String urlHolding) {
+        this.urlHolding = urlHolding;
     }
 }

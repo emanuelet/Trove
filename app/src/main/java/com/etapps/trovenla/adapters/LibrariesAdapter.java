@@ -87,7 +87,7 @@ public class LibrariesAdapter extends RealmAdapter<Library, LibrariesAdapter.Lib
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(view, getPosition());
+                mItemClickListener.onItemClick(view, getAdapterPosition());
             }
         }
     }

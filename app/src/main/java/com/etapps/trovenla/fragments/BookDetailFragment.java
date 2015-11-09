@@ -27,20 +27,12 @@ import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
-import com.etapps.trovenla.models.Libraries;
-import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.utils.Constants;
-import com.etapps.trovenla.utils.Results;
-import com.etapps.trovenla.utils.Utility;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmResults;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * A fragment representing a single Book detail screen.
@@ -63,9 +55,7 @@ public class BookDetailFragment extends Fragment {
 
     private LibrariesAdapter adapter;
     private ShareActionProvider mShareActionProvider;
-    private String mUrlBuy;
     private TroveApi rest;
-
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -117,7 +107,6 @@ public class BookDetailFragment extends Fragment {
     }
 
     private void populateView() {
-        mUrlBuy = book.getUrl() + "?q=+buy=true";
 
         // If onCreateOptionsMenu has already happened, we need to update the share intent now.
         if (mShareActionProvider != null) {
@@ -131,19 +120,23 @@ public class BookDetailFragment extends Fragment {
                 .equalTo("id", mKeyStr)
                 .findFirst().getLibraries();
 
-        adapter = new LibrariesAdapter(mContext, libraries.where().findAll());
+        adapter = new LibrariesAdapter(mContext, libraries.where()
+                .isNotNull("name").findAll());
         mLibraries.setAdapter(adapter);
         adapter.SetOnItemClickListener(new LibrariesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Library item = adapter.getItematPosition(position);
 
-                goToUrl(item.getUrl());
+                goToUrl(item.getUrlHolding());
             }
         });
     }
 
+
+
     private void goToUrl(String url) {
+        // TODO maybe use custom tabs ?
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);

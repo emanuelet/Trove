@@ -1,18 +1,24 @@
 package com.etapps.trovenla.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.etapps.trovenla.R;
+import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.utils.Constants;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.realm.Realm;
 
 /**
  * An activity representing a single Book detail screen. This
@@ -25,21 +31,17 @@ import com.etapps.trovenla.utils.Constants;
  */
 public class BookDetailActivity extends AppCompatActivity {
 
+    private String mUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
+
+        ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -59,12 +61,24 @@ public class BookDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putString(Constants.TROVE_KEY,
                     getIntent().getStringExtra(Constants.TROVE_KEY));
+            Realm realm = Realm.getInstance(getApplicationContext());
+            mUrl = realm.where(Book.class)
+                    .equalTo("id", getIntent().getStringExtra(Constants.TROVE_KEY))
+                    .findFirst().getUrl();
+
             BookDetailFragment fragment = new BookDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.book_detail_container, fragment)
                     .commit();
         }
+    }
+
+    @OnClick(R.id.fab)
+    public void buyBook() {
+        Uri uri = Uri.parse(mUrl + "?q=+buy=true");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     @Override

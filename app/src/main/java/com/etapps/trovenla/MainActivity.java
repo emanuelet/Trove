@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
             rest.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL, new Callback<Libraries>() {
                 @Override
                 public void success(Libraries libraries, Response response) {
-
                     results.addLibraries(libraries);
                 }
 

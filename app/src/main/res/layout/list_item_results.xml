@@ -30,7 +30,7 @@
                 android:maxLines="2"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 tools:text="Title" />
 
         </LinearLayout>

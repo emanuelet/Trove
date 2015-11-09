@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.Trove;
 import com.etapps.trovenla.activities.DetailActivity;
 import com.etapps.trovenla.adapters.LibrariesAdapter;
 import com.etapps.trovenla.db.Book;
@@ -166,7 +165,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Library item = adapter.getItematPosition(position);
-                Uri uri = Uri.parse(item.getUrl());
+                Uri uri = Uri.parse(item.getUrlLib());
                 goToUrl(uri);
             }
         });

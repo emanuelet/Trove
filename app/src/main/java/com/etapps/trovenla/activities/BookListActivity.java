@@ -24,9 +24,11 @@ import com.etapps.trovenla.data.SuggestionProvider;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
+import com.etapps.trovenla.models.Libraries;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.models.queries.Work;
 import com.etapps.trovenla.utils.Constants;
+import com.etapps.trovenla.utils.PrefsUtils;
 import com.etapps.trovenla.utils.Results;
 import com.etapps.trovenla.utils.Utility;
 
@@ -79,14 +81,14 @@ public class BookListActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         rest = TroveRest.getAdapter(mContext, TroveApi.class);
         realm = Realm.getInstance(mContext);
@@ -105,6 +107,21 @@ public class BookListActivity extends AppCompatActivity
 //                    .findFragmentById(R.id.book_list));
         }
 
+        if (PrefsUtils.isFirstStart(mContext)) {
+            rest.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL, new Callback<Libraries>() {
+                @Override
+                public void success(Libraries libraries, Response response) {
+                    results.addLibraries(libraries);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
+            PrefsUtils.firstStart(mContext);
+        }
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
@@ -156,6 +173,7 @@ public class BookListActivity extends AppCompatActivity
 //            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
 //                    SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
 //            suggestions.saveRecentQuery(query, null);
+            // TODO reinstate the suggestion provider
             startSearch(query);
         }
         return false;

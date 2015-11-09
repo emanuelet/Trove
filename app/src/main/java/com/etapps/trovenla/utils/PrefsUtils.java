@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 public class PrefsUtils {
     public static void firstStart(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        settings.edit().putBoolean("firstStart", true).apply();
+        settings.edit().putBoolean("firstStart", false).apply();
     }
 
     public static boolean isFirstStart(Context context) {

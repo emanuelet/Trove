@@ -12,12 +12,12 @@ import retrofit.http.Query;
  * Created by emanuele on 15/07/15.
  */
 public interface TroveApi {
+
     @GET("/contributor")
     void getLibraries(@Query("key") String key,
                       @Query("encoding") String format,
                       @Query("reclevel") String reclevel,
                       Callback<Libraries> callback);
-
     @GET("/contributor/{nuc}")
     void getLibrary(@Path("nuc") String nuc,
                     @Query("key") String key,

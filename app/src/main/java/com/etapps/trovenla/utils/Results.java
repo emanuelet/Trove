@@ -31,7 +31,7 @@ public class Results {
         }
         Log.d("Results", "loaded " + bkList.size());
         realm.beginTransaction();
-        realm.copyToRealm(bkList);
+        realm.copyToRealmOrUpdate(bkList);
         realm.commitTransaction();
     }
 
@@ -53,23 +53,26 @@ public class Results {
             bk.setSnippet(i.getSnippet());
         }
         RealmList<Library> llist = new RealmList<>();
+        realm.beginTransaction();
         for (Holding s : i.getHolding()) {
-            Library stored = realm.where(Library.class)
-                    .equalTo("nuc", s.getNuc())
-                    .findFirst();
-            if (stored!=null) {
-                llist.add(stored);
-            } else {
+            if (s.getNuc() != null) {
+                Library stored = realm.where(Library.class)
+                        .equalTo("nuc", s.getNuc())
+                        .findFirst();
                 Library l = new Library();
-                if (s.getNuc() != null) {
+                if (stored != null) {
+                    l = stored;
+                } else {
                     l.setNuc(s.getNuc());
-                    if (s.getUrl() != null) {
-                        l.setUrl(s.getUrl().getValue());
-                    }
-                    llist.add(l);
+                    // TODO trigger fetch of info for the library
                 }
+                if (s.getUrl() != null) {
+                    l.setUrlHolding(s.getUrl().getValue());
+                }
+                llist.add(l);
             }
         }
+        realm.commitTransaction();
         bk.setLibraries(llist);
         return bk;
     }

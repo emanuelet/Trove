@@ -4,8 +4,10 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.etapps.trovenla.utils.ConfigUtils;
+import com.facebook.stetho.Stetho;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
@@ -27,7 +29,11 @@ public class Trove extends Application {
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
 
         if (BuildConfig.DEBUG) {
-
+            Stetho.initialize(
+                    Stetho.newInitializerBuilder(this)
+                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                            .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                            .build());
         }
     }
 
