@@ -2,6 +2,7 @@ package com.etapps.trovenla.api;
 
 import com.etapps.trovenla.models.Libraries;
 import com.etapps.trovenla.models.articles.FullArticle;
+import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;
 
 import retrofit.Callback;
@@ -31,8 +32,17 @@ public interface TroveApi {
                   @Query("include") String include,
                   Callback<Books> callback);
 
+    @GET("/result")
+    void getNewspapers(@Query("key") String key,
+                  @Query("encoding") String format,
+                  @Query("n") String results,
+                  @Query("q") String query,
+                  @Query("zone") String zone,
+                  @Query("l-category") String category,
+                  Callback<Newspaper> callback);
+
 //    SINGLE RECORDS
-    
+
     @GET("/contributor/{nuc}")
     void getLibrary(@Path("nuc") String nuc,
                     @Query("key") String key,
