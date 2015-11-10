@@ -24,13 +24,13 @@ public interface TroveApi {
                       Callback<Libraries> callback);
 
     @GET("/result")
-    void getBooks(@Query("key") String key,
-                  @Query("encoding") String format,
-                  @Query("n") String results,
-                  @Query("q") String query,
-                  @Query("zone") String zone,
-                  @Query("include") String include,
-                  Callback<Books> callback);
+    void getContent(@Query("key") String key,
+                    @Query("encoding") String format,
+                    @Query("n") String results,
+                    @Query("q") String query,
+                    @Query("zone") String zone,
+                    @Query("include") String include,
+                    Callback<Books> callback);
 
     @GET("/result")
     void getNewspapers(@Query("key") String key,
@@ -40,6 +40,15 @@ public interface TroveApi {
                   @Query("zone") String zone,
                   @Query("l-category") String category,
                   Callback<Newspaper> callback);
+
+    @GET("/result")
+    void getPictures(@Query("key") String key,
+                       @Query("encoding") String format,
+                       @Query("n") String results,
+                       @Query("q") String query,
+                       @Query("zone") String zone,
+                       @Query("l-format") String category,
+                       Callback<Books> callback);
 
 //    SINGLE RECORDS
 

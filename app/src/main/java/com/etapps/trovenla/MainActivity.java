@@ -3,10 +3,8 @@ package com.etapps.trovenla;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -19,14 +17,10 @@ import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.data.SuggestionProvider;
 import com.etapps.trovenla.db.Book;
-import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.fragments.DetailFragment;
 import com.etapps.trovenla.fragments.ResultsFragment;
-import com.etapps.trovenla.models.Contributor;
 import com.etapps.trovenla.models.Libraries;
 import com.etapps.trovenla.models.queries.Books;
-import com.etapps.trovenla.models.queries.Holding;
-import com.etapps.trovenla.models.queries.Work;
 import com.etapps.trovenla.utils.Constants;
 import com.etapps.trovenla.utils.PrefsUtils;
 import com.etapps.trovenla.utils.Results;
@@ -34,7 +28,6 @@ import com.etapps.trovenla.utils.Utility;
 
 import butterknife.ButterKnife;
 import io.realm.Realm;
-import io.realm.RealmList;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -159,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
         realm.beginTransaction();
         realm.clear(Book.class);
         realm.commitTransaction();
-        rest.getBooks(
+        rest.getContent(
                 Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS,
                 new Callback<Books>() {
                     @Override

@@ -5,35 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.SearchView;
 
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
-import com.etapps.trovenla.data.SuggestionProvider;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
 import com.etapps.trovenla.models.Libraries;
 import com.etapps.trovenla.models.queries.Books;
-import com.etapps.trovenla.models.queries.Work;
 import com.etapps.trovenla.utils.Constants;
 import com.etapps.trovenla.utils.PrefsUtils;
 import com.etapps.trovenla.utils.Results;
 import com.etapps.trovenla.utils.Utility;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -186,7 +178,7 @@ public class BookListActivity extends AppCompatActivity
             realm.beginTransaction();
             realm.clear(Book.class);
             realm.commitTransaction();
-            rest.getBooks(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS,
+            rest.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS,
                     new Callback<Books>() {
                         @Override
                         public void success(Books books, Response response) {
