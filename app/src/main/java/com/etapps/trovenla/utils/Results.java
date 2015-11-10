@@ -39,7 +39,7 @@ public class Results {
         Book bk = new Book();
         bk.setId(i.getId());
         bk.setTitle(i.getTitle());
-        if (i.getContributor().get(0) != null) {
+        if (i.getContributor().size() != 0) {
             bk.setContributor(i.getContributor().get(0));
         }
         bk.setHoldingsCount(i.getHoldingsCount());

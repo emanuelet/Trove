@@ -20,6 +20,12 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
+Screenshots
+=======
+
+![Main List](/art/list.png)
+![Book Details](/art/detail.png)
+
 Content
 =======
 
