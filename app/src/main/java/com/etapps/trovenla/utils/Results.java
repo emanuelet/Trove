@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
-import com.etapps.trovenla.models.Contributor;
-import com.etapps.trovenla.models.Libraries;
+import com.etapps.trovenla.models.libraries.Contributor;
+import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.models.queries.Holding;
 import com.etapps.trovenla.models.queries.Work;

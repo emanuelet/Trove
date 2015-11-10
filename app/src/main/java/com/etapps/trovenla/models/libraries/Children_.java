@@ -1,5 +1,5 @@
 
-package com.etapps.trovenla.models;
+package com.etapps.trovenla.models.libraries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,17 +7,17 @@ import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
 @Generated("org.jsonschema2pojo")
-public class Children {
+public class Children_ {
 
     @Expose
-    private List<Contributor_> contributor = new ArrayList<Contributor_>();
+    private List<Contributor__> contributor = new ArrayList<Contributor__>();
 
     /**
      * 
      * @return
      *     The contributor
      */
-    public List<Contributor_> getContributor() {
+    public List<Contributor__> getContributor() {
         return contributor;
     }
 
@@ -26,7 +26,7 @@ public class Children {
      * @param contributor
      *     The contributor
      */
-    public void setContributor(List<Contributor_> contributor) {
+    public void setContributor(List<Contributor__> contributor) {
         this.contributor = contributor;
     }
 

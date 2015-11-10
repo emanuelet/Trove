@@ -19,7 +19,7 @@ import com.etapps.trovenla.data.SuggestionProvider;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.DetailFragment;
 import com.etapps.trovenla.fragments.ResultsFragment;
-import com.etapps.trovenla.models.Libraries;
+import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.utils.Constants;
 import com.etapps.trovenla.utils.PrefsUtils;

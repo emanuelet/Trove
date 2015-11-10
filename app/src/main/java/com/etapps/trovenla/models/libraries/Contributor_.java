@@ -1,5 +1,5 @@
 
-package com.etapps.trovenla.models;
+package com.etapps.trovenla.models.libraries;
 
 import java.util.ArrayList;
 import java.util.List;

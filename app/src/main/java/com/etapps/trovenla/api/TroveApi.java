@@ -1,6 +1,6 @@
 package com.etapps.trovenla.api;
 
-import com.etapps.trovenla.models.Libraries;
+import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.articles.FullArticle;
 import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;

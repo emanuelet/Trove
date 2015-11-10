@@ -9,22 +9,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 
 import com.etapps.trovenla.R;
+import com.etapps.trovenla.adapters.NavSpinnerAdapter;
 import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
-import com.etapps.trovenla.models.Libraries;
+import com.etapps.trovenla.models.Suggestion;
+import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.utils.Constants;
 import com.etapps.trovenla.utils.PrefsUtils;
 import com.etapps.trovenla.utils.Results;
 import com.etapps.trovenla.utils.Utility;
 
+import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -50,6 +60,15 @@ public class BookListActivity extends AppCompatActivity
         implements BookListFragment.Callbacks {
 
     private static final String TAG = "Book List";
+    public static final String BOOKS = "Books";
+    public static final String ARTICLES = "Articles";
+    public static final String PICTURES = "Pictures";
+
+    @Bind(R.id.spinner_nav)
+    Spinner nav;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -69,18 +88,9 @@ public class BookListActivity extends AppCompatActivity
 
         mContext = getApplicationContext();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        ButterKnife.bind(this);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        initToolbar();
 
         rest = TroveRest.getAdapter(mContext, TroveApi.class);
         realm = Realm.getInstance(mContext);
@@ -115,6 +125,35 @@ public class BookListActivity extends AppCompatActivity
             PrefsUtils.firstStart(mContext);
         }
         // TODO: If exposing deep links into your app, handle intents here.
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        ArrayList<String> list = new ArrayList<String>();
+        list.add(BOOKS);
+        list.add(ARTICLES);
+        list.add(PICTURES);
+
+        final NavSpinnerAdapter spinAdapter = new NavSpinnerAdapter(mContext, list);
+
+        nav.setAdapter(spinAdapter);
+
+        nav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                switch (item) {
+                    case BOOKS:
+                        break;
+                    case ARTICLES:
+                        break;
+                    case PICTURES:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -161,11 +200,14 @@ public class BookListActivity extends AppCompatActivity
             startSearch(query);
         }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-//            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-//                    SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
-//            suggestions.saveRecentQuery(query, null);
-            // TODO reinstate the suggestion provider
+            final String query = intent.getStringExtra(SearchManager.QUERY);
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Suggestion s = realm.createObject(Suggestion.class);
+                    s.setQuery(query);
+                }
+            });
             startSearch(query);
         }
         return false;

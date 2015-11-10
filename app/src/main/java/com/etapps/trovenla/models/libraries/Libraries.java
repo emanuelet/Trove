@@ -1,5 +1,5 @@
 
-package com.etapps.trovenla.models;
+package com.etapps.trovenla.models.libraries;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
