@@ -55,10 +55,6 @@
         <provider
             android:name=".data.SuggestionProvider"
             android:authorities=".data.SuggestionProvider" />
-        <provider
-            android:name=".data.BooksProvider"
-            android:authorities="@string/content_authority"
-            android:exported="false" />
         <!-- Points to searchable activity so the whole app can invoke search. -->
         <meta-data
             android:name="android.app.default_searchable"

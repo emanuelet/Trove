@@ -82,7 +82,7 @@ public class DetailFragment extends Fragment {
     private Book book;
     private ActionBar appbar;
 
-    public DetailFragment() {
+    public  DetailFragment() {
         setHasOptionsMenu(true);
     }
 

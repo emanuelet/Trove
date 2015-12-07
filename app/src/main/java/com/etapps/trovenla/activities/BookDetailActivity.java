@@ -64,7 +64,7 @@ public class BookDetailActivity extends AppCompatActivity {
             Realm realm = Realm.getInstance(getApplicationContext());
             mUrl = realm.where(Book.class)
                     .equalTo("id", getIntent().getStringExtra(Constants.TROVE_KEY))
-                    .findFirst().getUrl();
+                    .findFirst().getTroveUrl();
 
             BookDetailFragment fragment = new BookDetailFragment();
             fragment.setArguments(arguments);

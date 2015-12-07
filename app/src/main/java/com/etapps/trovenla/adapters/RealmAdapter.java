@@ -53,7 +53,7 @@ public abstract class RealmAdapter<T extends RealmObject, VH extends RecyclerVie
         };
 
         if (listener != null && realmResults != null) {
-            getRealm(realmResults)
+            realmResults
                     .addChangeListener(listener);
         }
     }
@@ -75,10 +75,10 @@ public abstract class RealmAdapter<T extends RealmObject, VH extends RecyclerVie
         if (listener != null) {
             // Making sure that Adapter is refreshed correctly if new RealmResults come from another Realm
             if (this.realmResults != null) {
-                getRealm(this.realmResults).removeChangeListener(listener);
+                this.realmResults.removeChangeListener(listener);
             }
             if (queryResults != null) {
-                getRealm(queryResults).addChangeListener(listener);
+                queryResults.addChangeListener(listener);
             }
         }
 

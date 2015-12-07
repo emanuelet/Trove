@@ -15,9 +15,6 @@
  */
 package com.etapps.trovenla.activities;
 
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -26,7 +23,6 @@ import android.preference.PreferenceManager;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.utils.Utility;
-import com.etapps.trovenla.data.BookContract;
 
 import java.util.Calendar;
 
@@ -100,9 +96,6 @@ public class SettingsActivity extends PreferenceActivity
         if (!mBindingPreference) {
             if (preference.getKey().equals(getString(R.string.pref_results_key))) {
                 //leave it blank for the moment
-            } else {
-                // notify code that weather may be impacted
-                getContentResolver().notifyChange(BookContract.BooksEntry.CONTENT_URI, null);
             }
         }
 

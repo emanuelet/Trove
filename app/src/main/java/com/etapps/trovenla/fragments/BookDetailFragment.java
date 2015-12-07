@@ -107,7 +107,6 @@ public class BookDetailFragment extends Fragment {
     }
 
     private void populateView() {
-
         // If onCreateOptionsMenu has already happened, we need to update the share intent now.
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareBookLink());
@@ -132,8 +131,6 @@ public class BookDetailFragment extends Fragment {
             }
         });
     }
-
-
 
     private void goToUrl(String url) {
         // TODO maybe use custom tabs ?
