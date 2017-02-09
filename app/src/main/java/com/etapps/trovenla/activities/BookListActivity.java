@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.NavSpinnerAdapter;
