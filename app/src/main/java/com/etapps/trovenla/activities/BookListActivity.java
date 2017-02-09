@@ -140,10 +140,10 @@ public class BookListActivity extends AppCompatActivity
 
         nav.setAdapter(spinAdapter);
 
-        nav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        nav.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String item = adapterView.getItemAtPosition(i).toString();
                 switch (item) {
                     case BOOKS:
                         break;
@@ -152,6 +152,11 @@ public class BookListActivity extends AppCompatActivity
                     case PICTURES:
                         break;
                 }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
