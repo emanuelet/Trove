@@ -5,4 +5,5 @@
 *.xcf
 device*.png
 *.iml
+.idea/
 .idea
