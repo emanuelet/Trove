@@ -75,11 +75,11 @@
     <string name="action_go">Go To Page</string>
     <string name="action_buy">Buy</string>
     <string name="no_results_string">No Results. Retry</string>
-    <string name="borrow_label_details">Avaliable to borrow at</string>
+    <string name="borrow_label_details">Available to borrow at</string>
     <string name="year_sublabel_detail">Year</string>
     <string name="version_sublabel_details">Versions</string>
     <string name="buy_sublabel_details">Buy</string>
-    <string name="available_label_detail">Avaliable at</string>
+    <string name="available_label_detail">Available at</string>
     <string name="title_book_list">Books</string>
     <string name="title_book_detail">Book Detail</string>
 </resources>
