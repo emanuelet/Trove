@@ -19,7 +19,7 @@ repositories {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.etapps.trovenla"
@@ -51,7 +51,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    compile('com.twitter.sdk.android:twitter:1.9.1@aar') {
+    compile('com.twitter.sdk.android:twitter:2.3.1@aar') {
         transitive = true;
     }
     compile 'com.facebook.stetho:stetho:1.2.0'
