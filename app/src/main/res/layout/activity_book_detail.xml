@@ -1,11 +1,11 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.etapps.trovenla.activities.BookDetailActivity"
-    tools:ignore="MergeRootFrame">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true"
+                                                 tools:context="com.etapps.trovenla.activities.BookDetailActivity"
+                                                 tools:ignore="MergeRootFrame">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -30,21 +30,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/book_detail_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:clipToPadding="true"
-        android:fillViewport="true"
-        tools:layout="@layout/fragment_book_detail"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -54,6 +45,28 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_local_grocery_store_white_24dp"
         app:layout_anchor="@+id/app_bar"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:background="@color/white"
+        android:padding="6dp"
+        android:text="@string/libraries"
+        android:elevation="4dp"
+        app:layout_anchor="@+id/app_bar"
+        app:layout_anchorGravity="bottom|start"/>
+
+    <LinearLayout
+        android:id="@+id/book_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:paddingTop="12dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout="@layout/fragment_book_detail"/>
 
 </android.support.design.widget.CoordinatorLayout>
