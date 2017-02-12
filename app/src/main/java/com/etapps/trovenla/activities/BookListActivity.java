@@ -231,6 +231,7 @@ public class BookListActivity extends AppCompatActivity
                 public void onResponse(Call<Books> call, retrofit2.Response<Books> response) {
                     if (response.isSuccessful()) {
                         if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
+                            Timber.d(response.raw().request().url().toString());
                             results.addAll(response.body());
                         } else {
                             Toast.makeText(BookListActivity.this, "The query returned no results", Toast.LENGTH_LONG).show();

@@ -50,6 +50,8 @@ public class BookDetailFragment extends Fragment {
     TextView mTitle;
     @Bind(R.id.detail_author)
     TextView mAuthor;
+    @Bind(R.id.detail_date)
+    TextView mDate;
 
     private LibrariesAdapter adapter;
     private ShareActionProvider mShareActionProvider;
@@ -101,6 +103,7 @@ public class BookDetailFragment extends Fragment {
     private void initObjs() {
         mTitle.setText(book.getTitle());
         mAuthor.setText(book.getContributor());
+        mDate.setText(book.getIssued());
     }
 
     private void populateView() {
