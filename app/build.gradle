@@ -27,6 +27,7 @@ android {
         targetSdkVersion 25
         versionCode 19
         versionName "1.8.5"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {
@@ -44,7 +45,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    provided 'org.glassfish:javax.annotation:10.0-b28'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
@@ -64,4 +64,6 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.android.support:support-vector-drawable:25.1.1'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 }
