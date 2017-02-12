@@ -1,11 +1,9 @@
 package com.etapps.trovenla.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,13 +15,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.activities.BookDetailActivity;
 import com.etapps.trovenla.activities.BookListActivity;
 import com.etapps.trovenla.adapters.LibrariesAdapter;
-import com.etapps.trovenla.api.TroveApi;
-import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.utils.Constants;
@@ -49,6 +46,10 @@ public class BookDetailFragment extends Fragment {
 
     @Bind(R.id.libraries)
     RecyclerView mLibraries;
+    @Bind(R.id.detail_title)
+    TextView mTitle;
+    @Bind(R.id.detail_author)
+    TextView mAuthor;
 
     private LibrariesAdapter adapter;
     private ShareActionProvider mShareActionProvider;
@@ -91,9 +92,15 @@ public class BookDetailFragment extends Fragment {
             populateView();
 
             initList(mKeyStr);
+            initObjs();
         }
 
         return rootView;
+    }
+
+    private void initObjs() {
+        mTitle.setText(book.getTitle());
+        mAuthor.setText(book.getContributor());
     }
 
     private void populateView() {
