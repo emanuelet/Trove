@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.NavSpinnerAdapter;
@@ -186,9 +187,7 @@ public class BookListActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.action_search) {
-//            if (libFetched) {
             searchView.requestFocus();
-//            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -210,7 +209,7 @@ public class BookListActivity extends AppCompatActivity
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    Suggestion s = realm.createObject(Suggestion.class);
+                    Suggestion s = new Suggestion();
                     s.setQuery(query);
                 }
             });
@@ -231,15 +230,21 @@ public class BookListActivity extends AppCompatActivity
                 @Override
                 public void onResponse(Call<Books> call, retrofit2.Response<Books> response) {
                     if (response.isSuccessful()) {
-                        results.addAll(response.body());
+                        if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
+                            results.addAll(response.body());
+                        } else {
+                            Toast.makeText(BookListActivity.this, "The query returned no results", Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         Timber.e(response.message());
                     }
+                    isFetching = false;
                 }
 
                 @Override
                 public void onFailure(Call<Books> call, Throwable t) {
                     Timber.e(t);
+                    isFetching = false;
                 }
             });
         }
