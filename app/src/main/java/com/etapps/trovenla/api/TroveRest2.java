@@ -3,6 +3,7 @@ package com.etapps.trovenla.api;
 import com.etapps.trovenla.utils.Constants;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by emanuele on 15/07/15.
@@ -15,6 +16,7 @@ public class TroveRest2 {
 
             sharedInstance = new Retrofit.Builder()
                     .baseUrl(Constants.API_ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
 
