@@ -13,8 +13,8 @@ import android.widget.SearchView;
 
 import com.etapps.trovenla.activities.DetailActivity;
 import com.etapps.trovenla.activities.SettingsActivity;
-import com.etapps.trovenla.api.TroveApi;
-import com.etapps.trovenla.api.TroveRest;
+import com.etapps.trovenla.api.TroveApi2;
+import com.etapps.trovenla.api.TroveRest2;
 import com.etapps.trovenla.data.SuggestionProvider;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.DetailFragment;
@@ -28,21 +28,19 @@ import com.etapps.trovenla.utils.Utility;
 
 import butterknife.ButterKnife;
 import io.realm.Realm;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import timber.log.Timber;
 
 
 public class MainActivity extends AppCompatActivity implements ResultsFragment.Callback {
     public static boolean libFetched = false;
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane;
     private SearchView searchView;
     private Context mContext;
-    private TroveApi rest;
     private Realm realm;
     private Results results;
+    private TroveApi2 api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
         handleIntent(getIntent());
 
         ButterKnife.bind(this);
-        rest = TroveRest.getAdapter(mContext, TroveApi.class);
+        api = TroveRest2.getAdapter(TroveApi2.class);
         realm = Realm.getInstance(mContext);
         results = new Results(realm);
 
@@ -77,15 +75,20 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
                 .findFragmentById(R.id.fragment_forecast));
 
         if (PrefsUtils.isFirstStart(mContext)) {
-            rest.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL, new Callback<Libraries>() {
+            Call<Libraries> call = api.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL);
+            call.enqueue(new retrofit2.Callback<Libraries>() {
                 @Override
-                public void success(Libraries libraries, Response response) {
-                    results.addLibraries(libraries);
+                public void onResponse(Call<Libraries> call, retrofit2.Response<Libraries> response) {
+                    if (response.isSuccessful()) {
+                        results.addLibraries(response.body());
+                    } else {
+                        Timber.e(response.message());
+                    }
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-
+                public void onFailure(Call<Libraries> call, Throwable t) {
+                    Timber.e(t);
                 }
             });
 
@@ -152,19 +155,22 @@ public class MainActivity extends AppCompatActivity implements ResultsFragment.C
         realm.beginTransaction();
         realm.clear(Book.class);
         realm.commitTransaction();
-        rest.getContent(
-                Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS,
-                new Callback<Books>() {
-                    @Override
-                    public void success(Books books, Response response) {
-                        results.addAll(books);
-                    }
+        Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS);
+        call.enqueue(new retrofit2.Callback<Books>() {
+            @Override
+            public void onResponse(Call<Books> call, retrofit2.Response<Books> response) {
+                if (response.isSuccessful()) {
+                    results.addAll(response.body());
+                } else {
+                    Timber.e(response.message());
+                }
+            }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
+            @Override
+            public void onFailure(Call<Books> call, Throwable t) {
+                Timber.e(t);
+            }
+        });
     }
 
     @Override
