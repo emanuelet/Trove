@@ -16,8 +16,8 @@ import android.widget.Spinner;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.NavSpinnerAdapter;
-import com.etapps.trovenla.api.TroveApi;
-import com.etapps.trovenla.api.TroveRest;
+import com.etapps.trovenla.api.TroveApi2;
+import com.etapps.trovenla.api.TroveRest2;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
@@ -34,9 +34,8 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import timber.log.Timber;
 
 /**
  * An activity representing a list of Results. This activity
@@ -57,7 +56,6 @@ import retrofit.client.Response;
 public class BookListActivity extends AppCompatActivity
         implements BookListFragment.Callbacks {
 
-    private static final String TAG = "Book List";
     public static final String BOOKS = "Books";
     public static final String ARTICLES = "Articles";
     public static final String PICTURES = "Pictures";
@@ -74,10 +72,10 @@ public class BookListActivity extends AppCompatActivity
     private boolean mTwoPane;
     private SearchView searchView;
     private Realm realm;
-    private TroveApi rest;
     private Context mContext;
     private boolean isFetching;
     private Results results;
+    private TroveApi2 api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +88,7 @@ public class BookListActivity extends AppCompatActivity
 
         initToolbar();
 
-        rest = TroveRest.getAdapter(mContext, TroveApi.class);
+        api = TroveRest2.getAdapter(TroveApi2.class);
         realm = Realm.getInstance(mContext);
         results = new Results(realm);
 
@@ -108,15 +106,20 @@ public class BookListActivity extends AppCompatActivity
         }
 
         if (PrefsUtils.isFirstStart(mContext)) {
-            rest.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL, new Callback<Libraries>() {
+            Call<Libraries> call = api.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL);
+            call.enqueue(new retrofit2.Callback<Libraries>() {
                 @Override
-                public void success(Libraries libraries, Response response) {
-                    results.addLibraries(libraries);
+                public void onResponse(Call<Libraries> call, retrofit2.Response<Libraries> response) {
+                    if (response.isSuccessful()) {
+                        results.addLibraries(response.body());
+                    } else {
+                        Timber.e(response.message());
+                    }
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-
+                public void onFailure(Call<Libraries> call, Throwable t) {
+                    Timber.e(t);
                 }
             });
 
@@ -223,19 +226,22 @@ public class BookListActivity extends AppCompatActivity
             realm.beginTransaction();
             realm.clear(Book.class);
             realm.commitTransaction();
-            rest.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS,
-                    new Callback<Books>() {
-                        @Override
-                        public void success(Books books, Response response) {
-                            results.addAll(books);
-                            isFetching = false;
-                        }
+            Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS);
+            call.enqueue(new retrofit2.Callback<Books>() {
+                @Override
+                public void onResponse(Call<Books> call, retrofit2.Response<Books> response) {
+                    if (response.isSuccessful()) {
+                        results.addAll(response.body());
+                    } else {
+                        Timber.e(response.message());
+                    }
+                }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            isFetching = false;
-                        }
-                    });
+                @Override
+                public void onFailure(Call<Books> call, Throwable t) {
+                    Timber.e(t);
+                }
+            });
         }
     }
 

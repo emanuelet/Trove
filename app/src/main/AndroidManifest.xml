@@ -1,74 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.etapps.trovenla" >
+<manifest package="com.etapps.trovenla"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:allowBackup="true"
         android:name=".Trove"
+        android:allowBackup="true"
         android:configChanges="orientation|keyboardHidden|screenSize"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".activities.BookListActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+                android:resource="@xml/searchable"/>
         </activity>
         <activity
             android:name=".activities.DetailActivity"
-            android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.etapps.trovenla.MainActivity" />
+            android:label="@string/title_activity_detail">
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/SettingsTheme" >
+            android:parentActivityName=".activities.BookListActivity"
+            android:theme="@style/SettingsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.etapps.trovenla.MainActivity" />
+                android:value="com.etapps.trovenla.activities.BookListActivity"/>
         </activity>
 
         <provider
             android:name=".data.SuggestionProvider"
-            android:authorities=".data.SuggestionProvider" />
+            android:authorities=".data.SuggestionProvider"/>
         <!-- Points to searchable activity so the whole app can invoke search. -->
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".MainActivity" />
+            android:value=".MainActivity"/>
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="cf748500329716efa39a0579d2e87fc1f961f223" />
+            android:value="cf748500329716efa39a0579d2e87fc1f961f223"/>
+
         <activity
             android:name=".activities.BookDetailActivity"
             android:label="@string/title_book_detail"
             android:parentActivityName=".activities.BookListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.etapps.trovenla.activities.BookListActivity" />
+                android:value="com.etapps.trovenla.activities.BookListActivity"/>
         </activity>
     </application>
 

@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         tools:text="Books"
         android:textSize="19sp"
-        android:layout_margin="12dp"
-                />
+        android:layout_margin="12dp" />
 
 </RelativeLayout>

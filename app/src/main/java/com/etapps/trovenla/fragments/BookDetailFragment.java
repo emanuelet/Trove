@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.activities.BookDetailActivity;
 import com.etapps.trovenla.activities.BookListActivity;
-import com.etapps.trovenla.activities.DetailActivity;
 import com.etapps.trovenla.adapters.LibrariesAdapter;
 import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
@@ -41,8 +40,6 @@ import io.realm.RealmList;
  * on handsets.
  */
 public class BookDetailFragment extends Fragment {
-
-    private static final String LOG_TAG = BookDetailFragment.class.getSimpleName();
     private static final String SHARE_HASHTAG = " #Trove";
 
     private Context mContext;
@@ -55,7 +52,6 @@ public class BookDetailFragment extends Fragment {
 
     private LibrariesAdapter adapter;
     private ShareActionProvider mShareActionProvider;
-    private TroveApi rest;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -70,22 +66,16 @@ public class BookDetailFragment extends Fragment {
 
         mContext = getActivity();
         realm = Realm.getInstance(mContext);
-        rest = TroveRest.getAdapter(mContext, TroveApi.class);
 
         if (getArguments().containsKey(Constants.TROVE_KEY)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mKeyStr = getArguments().getString(DetailActivity.TROVE_KEY);
+            mKeyStr = getArguments().getString(Constants.TROVE_KEY);
 
             book = realm.where(Book.class)
                     .equalTo("id", mKeyStr)
                     .findFirst();
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(book.getTitle());
-            }
         }
     }
 

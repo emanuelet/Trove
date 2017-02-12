@@ -39,6 +39,7 @@ import com.etapps.trovenla.activities.DetailActivity;
 import com.etapps.trovenla.adapters.LibrariesAdapter;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
+import com.etapps.trovenla.utils.Constants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -104,7 +105,7 @@ public class DetailFragment extends Fragment {
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mKeyStr = arguments.getString(DetailActivity.TROVE_KEY);
+            mKeyStr = arguments.getString(Constants.TROVE_KEY);
         }
 
         rootView = inflater.inflate(R.layout.fragment_detail, container, false);
