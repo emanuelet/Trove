@@ -21,11 +21,16 @@ public class Trove extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
+
+        // Initialize Realm
+        Realm.init(this);
+
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm.setDefaultConfiguration(realmConfiguration);
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(ConfigUtils.getUrl("TWITTER_KEY", this), ConfigUtils.getUrl("TWITTER_SECRET", this));
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
 
@@ -45,7 +50,6 @@ public class Trove extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        Realm realm = Realm.getDefaultInstance();
-        realm.close();
+        Realm.getDefaultInstance().close();
     }
 }

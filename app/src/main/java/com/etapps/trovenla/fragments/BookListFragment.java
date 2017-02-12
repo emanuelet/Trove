@@ -72,7 +72,7 @@ public class BookListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
-        realm = Realm.getInstance(mContext);
+        realm = Realm.getDefaultInstance();
     }
 
     @Nullable

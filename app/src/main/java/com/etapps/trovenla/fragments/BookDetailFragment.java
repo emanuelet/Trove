@@ -65,7 +65,7 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
-        realm = Realm.getInstance(mContext);
+        realm = Realm.getDefaultInstance();
 
         if (getArguments().containsKey(Constants.TROVE_KEY)) {
             // Load the dummy content specified by the fragment

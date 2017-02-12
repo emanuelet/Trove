@@ -61,7 +61,7 @@ public class ResultsFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
         mContext = getActivity();
-        realm = Realm.getInstance(mContext);
+        realm = Realm.getDefaultInstance();
     }
 
     @Override

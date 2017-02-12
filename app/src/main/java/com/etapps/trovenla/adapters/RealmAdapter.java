@@ -47,7 +47,7 @@ public abstract class RealmAdapter<T extends RealmObject, VH extends RecyclerVie
         this.inflater = LayoutInflater.from(context);
         this.listener = (!automaticUpdate) ? null : new RealmChangeListener() {
             @Override
-            public void onChange() {
+            public void onChange(Object element) {
                 notifyDataSetChanged();
             }
         };

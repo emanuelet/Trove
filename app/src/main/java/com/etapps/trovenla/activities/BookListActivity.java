@@ -90,7 +90,7 @@ public class BookListActivity extends AppCompatActivity
         initToolbar();
 
         api = TroveRest2.getAdapter(TroveApi2.class);
-        realm = Realm.getInstance(mContext);
+        realm = Realm.getDefaultInstance();
         results = new Results(realm);
 
         if (findViewById(R.id.book_detail_container) != null) {
@@ -221,7 +221,7 @@ public class BookListActivity extends AppCompatActivity
             //I first clear the book results table
             isFetching = true;
             realm.beginTransaction();
-            realm.clear(Book.class);
+            realm.delete(Book.class);
             realm.commitTransaction();
             Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS);
             call.enqueue(new retrofit2.Callback<Books>() {

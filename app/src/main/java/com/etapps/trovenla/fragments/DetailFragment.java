@@ -96,7 +96,7 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
-        realm = Realm.getInstance(mContext);
+        realm = Realm.getDefaultInstance();
     }
 
     @Override

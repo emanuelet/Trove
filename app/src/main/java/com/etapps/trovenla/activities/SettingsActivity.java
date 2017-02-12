@@ -17,10 +17,19 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.etapps.trovenla.R;
+import com.etapps.trovenla.api.TroveApi2;
+import com.etapps.trovenla.api.TroveRest2;
+import com.etapps.trovenla.models.libraries.Libraries;
+import com.etapps.trovenla.utils.Constants;
+import com.etapps.trovenla.utils.Results;
 import com.etapps.trovenla.utils.Utility;
 
 import java.util.Calendar;
 import java.util.List;
+
+import io.realm.Realm;
+import retrofit2.Call;
+import timber.log.Timber;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -166,7 +175,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 
-//                    new FetchLibrariesTask(this).execute();
+                    TroveApi2 api = TroveRest2.getAdapter(TroveApi2.class);
+
+                    Call<Libraries> call = api.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL);
+                    call.enqueue(new retrofit2.Callback<Libraries>() {
+                        @Override
+                        public void onResponse(Call<Libraries> call, retrofit2.Response<Libraries> response) {
+                            if (response.isSuccessful()) {
+                                Results results = new Results(Realm.getDefaultInstance());
+                                results.addLibraries(response.body());
+                            } else {
+                                Timber.e(response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Libraries> call, Throwable t) {
+                            Timber.e(t);
+                        }
+                    });
                     return true;
                 }
             });
