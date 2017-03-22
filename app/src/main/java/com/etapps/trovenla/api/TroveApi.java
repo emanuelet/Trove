@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 /**
  * Created by emanuele on 15/07/15.
  */
-public interface TroveApi2 {
+public interface TroveApi {
 
 //    QUERIES
 

@@ -17,8 +17,8 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.api.TroveApi2;
-import com.etapps.trovenla.api.TroveRest2;
+import com.etapps.trovenla.api.TroveApi;
+import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.utils.Constants;
 import com.etapps.trovenla.utils.Results;
@@ -175,7 +175,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 
-                    TroveApi2 api = TroveRest2.getAdapter(TroveApi2.class);
+                    TroveApi api = TroveRest.getAdapter(TroveApi.class);
 
                     Call<Libraries> call = api.getLibraries(Constants.KEY, Constants.FORMAT, Constants.RECLEVEL);
                     call.enqueue(new retrofit2.Callback<Libraries>() {

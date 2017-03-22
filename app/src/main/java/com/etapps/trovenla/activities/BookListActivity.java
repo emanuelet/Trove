@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.NavSpinnerAdapter;
-import com.etapps.trovenla.api.TroveApi2;
-import com.etapps.trovenla.api.TroveRest2;
+import com.etapps.trovenla.api.TroveApi;
+import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
@@ -76,7 +76,7 @@ public class BookListActivity extends AppCompatActivity
     private Context mContext;
     private boolean isFetching;
     private Results results;
-    private TroveApi2 api;
+    private TroveApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class BookListActivity extends AppCompatActivity
 
         initToolbar();
 
-        api = TroveRest2.getAdapter(TroveApi2.class);
+        api = TroveRest.getAdapter(TroveApi.class);
         realm = Realm.getDefaultInstance();
         results = new Results(realm);
 

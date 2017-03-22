@@ -8,14 +8,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by emanuele on 15/07/15.
  */
-public class TroveRest2 {
+public class OpenLibraryRest {
     private static Retrofit sharedInstance = null;
 
     public static <S> S getAdapter(Class<S> serviceClass) {
         if (sharedInstance == null) {
 
             sharedInstance = new Retrofit.Builder()
-                    .baseUrl(Constants.API_ENDPOINT)
+                    .baseUrl(Constants.OPEN_LIBRARY_API)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
