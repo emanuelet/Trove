@@ -22,7 +22,7 @@ public class ConfigUtils {
         Resources resources = mContext.getResources();
         AssetManager assetManager = resources.getAssets();
 
-// Read from the /assets directory
+        // Read from the /assets directory
         try {
             inputStream = assetManager.open("config.properties");
             properties.load(inputStream);
