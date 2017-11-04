@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId "com.etapps.trovenla"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 20
         versionName "1.9.5"
@@ -64,7 +64,8 @@ dependencies {
     compile 'com.android.support:design:27.0.0'
     compile 'com.android.support:recyclerview-v7:27.0.0'
     compile 'com.google.android.gms:play-services-ads:11.4.2'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.jakewharton.timber:timber:4.6.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'

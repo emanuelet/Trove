@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.db.Library;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.RealmResults;
 
@@ -74,7 +74,7 @@ public class LibrariesAdapter extends RealmAdapter<Library, LibrariesAdapter.Lib
     }
 
     public class LibraryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @Bind(R.id.list_item_library_name)
+        @BindView(R.id.list_item_library_name)
         TextView mTitle;
 
         public LibraryHolder(View itemView) {

@@ -32,7 +32,7 @@ import com.etapps.trovenla.utils.Utility;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import retrofit2.Call;
@@ -61,9 +61,9 @@ public class BookListActivity extends AppCompatActivity
     public static final String ARTICLES = "Articles";
     public static final String PICTURES = "Pictures";
 
-    @Bind(R.id.spinner_nav)
+    @BindView(R.id.spinner_nav)
     Spinner nav;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     /**

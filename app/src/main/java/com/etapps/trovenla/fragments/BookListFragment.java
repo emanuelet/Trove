@@ -15,7 +15,7 @@ import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.BookAdapter;
 import com.etapps.trovenla.db.Book;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -45,7 +45,7 @@ public class BookListFragment extends Fragment {
         public void onItemSelected(String id) {
         }
     };
-    @Bind(R.id.books)
+    @BindView(R.id.books)
     RecyclerView mBooks;
     /**
      * The fragment's current callback object, which is notified of list item

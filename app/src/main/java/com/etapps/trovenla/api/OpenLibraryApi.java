@@ -1,6 +1,6 @@
 package com.etapps.trovenla.api;
 
-import com.etapps.trovenla.models.ol.Book;
+//import com.etapps.trovenla.models.ol.Book;
 
 import java.util.Map;
 
@@ -16,8 +16,8 @@ public interface OpenLibraryApi {
 
     //https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=data&format=json
 
-    @GET("/books")
-    Call<Map<String, Book>> getBook(@Query("bibkeys") String key,
-                                    @Query("jscmd") String type,
-                                    @Query("format") String format);
+//    @GET("/books")
+//    Call<Map<String, Book>> getBook(@Query("bibkeys") String key,
+//                                    @Query("jscmd") String type,
+//                                    @Query("format") String format);
 }

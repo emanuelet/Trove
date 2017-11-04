@@ -41,7 +41,7 @@ import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.utils.Constants;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
@@ -55,21 +55,21 @@ public class DetailFragment extends Fragment {
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String SHARE_HASHTAG = " #Trove";
 
-    @Bind(R.id.detail_year_textview)
+    @BindView(R.id.detail_year_textview)
     TextView mYearView;
-    @Bind(R.id.detail_year_textview_sublabel)
+    @BindView(R.id.detail_year_textview_sublabel)
     TextView mYearViewSub;
-    @Bind(R.id.detail_versions_textview)
+    @BindView(R.id.detail_versions_textview)
     TextView mVersionsView;
-    @Bind(R.id.detail_versions_textview_sublabel)
+    @BindView(R.id.detail_versions_textview_sublabel)
     TextView mVersionsViewSub;
-    @Bind(R.id.detail_borrow_libraries_header)
+    @BindView(R.id.detail_borrow_libraries_header)
     TextView mBorrowHeaderView;
-    @Bind(R.id.dv1)
+    @BindView(R.id.dv1)
     View mDv1;
-    @Bind(R.id.dv2)
+    @BindView(R.id.dv2)
     View mDv2;
-    @Bind(R.id.libraries)
+    @BindView(R.id.libraries)
     RecyclerView mLibraries;
 
     private ShareActionProvider mShareActionProvider;

@@ -33,7 +33,7 @@ import com.etapps.trovenla.Trove;
 import com.etapps.trovenla.adapters.BookAdapter;
 import com.etapps.trovenla.db.Book;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -44,7 +44,7 @@ import io.realm.RealmResults;
 public class ResultsFragment extends Fragment {
     private static final String SELECTED_KEY = "selected_position";
 
-    @Bind(R.id.books)
+    @BindView(R.id.books)
     RecyclerView mBooks;
 
     private int mPosition = ListView.INVALID_POSITION;

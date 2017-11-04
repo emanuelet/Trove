@@ -25,7 +25,7 @@ import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.utils.Constants;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -44,13 +44,13 @@ public class BookDetailFragment extends Fragment {
     private String mKeyStr;
     private Book book;
 
-    @Bind(R.id.libraries)
+    @BindView(R.id.libraries)
     RecyclerView mLibraries;
-    @Bind(R.id.detail_title)
+    @BindView(R.id.detail_title)
     TextView mTitle;
-    @Bind(R.id.detail_author)
+    @BindView(R.id.detail_author)
     TextView mAuthor;
-    @Bind(R.id.detail_date)
+    @BindView(R.id.detail_date)
     TextView mDate;
 
     private LibrariesAdapter adapter;
