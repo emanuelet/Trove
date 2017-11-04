@@ -14,6 +14,7 @@ import com.etapps.trovenla.models.queries.Work;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import timber.log.Timber;
 
 /**
  * Created by Ian Ryan on 11/9/2015.
@@ -31,7 +32,7 @@ public class Results {
         for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
             bkList.add(add(i));
         }
-        Log.d("Results", "loaded " + bkList.size());
+        Timber.d("loaded %s", bkList.size());
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(bkList);
         realm.commitTransaction();
@@ -91,7 +92,7 @@ public class Results {
             lib.setAccesspolicy(l.getAccesspolicy());
             libList.add(lib);
         }
-        Log.d("Results", "loaded " + libList.size());
+        Timber.d("loaded %s", libList.size());
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(libList);
         realm.commitTransaction();

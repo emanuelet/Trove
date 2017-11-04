@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -65,6 +66,8 @@ public class BookListActivity extends AppCompatActivity
     Spinner nav;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.loading)
+    ProgressBar loading;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -167,12 +170,10 @@ public class BookListActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-            SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
-            searchView.setIconifiedByDefault(false);
-        }
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
+        searchView.setIconifiedByDefault(false);
         return true;
     }
 
@@ -222,6 +223,7 @@ public class BookListActivity extends AppCompatActivity
         if (!isFetching) {
             //I first clear the book results table
             isFetching = true;
+            loading.setVisibility(View.VISIBLE);
             realm.beginTransaction();
             realm.delete(Book.class);
             realm.commitTransaction();
@@ -239,12 +241,14 @@ public class BookListActivity extends AppCompatActivity
                     } else {
                         Timber.e(response.message());
                     }
+                    loading.setVisibility(View.GONE);
                     isFetching = false;
                 }
 
                 @Override
                 public void onFailure(Call<Books> call, Throwable t) {
                     Timber.e(t);
+                    loading.setVisibility(View.GONE);
                     isFetching = false;
                 }
             });

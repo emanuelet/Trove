@@ -5,11 +5,21 @@
     android:orientation="vertical"
     tools:context="com.etapps.trovenla.fragments.ResultsFragment">
 
+    <ProgressBar
+        android:id="@+id/loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:gravity="center" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/books"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbarStyle="outsideOverlay"
         tools:listitem="@layout/list_item_results"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical">
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
