@@ -55,7 +55,7 @@
             android:value=".MainActivity"/>
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="cf748500329716efa39a0579d2e87fc1f961f223"/>
+            android:value="5ea1484b4364ece9b5624cdce75ebe42a2cbe0e5"/>
 
         <activity
             android:name=".activities.BookDetailActivity"
