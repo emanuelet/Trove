@@ -9,6 +9,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.activities.BookDetailActivity;
@@ -29,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
+import timber.log.Timber;
 
 /**
  * A fragment representing a single Book detail screen.
@@ -134,9 +137,14 @@ public class BookDetailFragment extends Fragment {
 
     private void goToUrl(String url) {
         // TODO maybe use custom tabs ?
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+        Timber.d(url);
+        if (TextUtils.isEmpty(url)) {
+            Toast.makeText(mContext, "The url is incorrect", Toast.LENGTH_SHORT).show();
+        } else {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
     }
 
     @Override
