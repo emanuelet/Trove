@@ -11,6 +11,7 @@ import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import timber.log.Timber;
 
 /**
  * Created by emanuele on 12/04/15.
@@ -34,6 +35,8 @@ public class Trove extends Application {
         Fabric.with(this, new Crashlytics());
 
         if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+
             Stetho.initialize(
                     Stetho.newInitializerBuilder(this)
                             .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
