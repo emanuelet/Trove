@@ -58,7 +58,7 @@
     <string name="content_authority">com.etapps.trovenla</string>
     <string name="menu_search">Search</string>
     <string name="search_label">Search</string>
-    <string name="search_hint">Search for Books</string>
+    <string name="search_hint">Search for …</string>
     <string name="books_data">content://com.etapps.trovenla.data.SuggestionProvider/</string>
     <string name="settings_description">Books on Trove.com.au</string>
     <string name="about_pref">Version</string>
