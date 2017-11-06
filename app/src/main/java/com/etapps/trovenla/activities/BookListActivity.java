@@ -23,6 +23,7 @@ import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
 import com.etapps.trovenla.fragments.NewspapersListFragment;
+import com.etapps.trovenla.fragments.PicturesListFragment;
 import com.etapps.trovenla.models.Suggestion;
 import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.newspapers.Newspaper;
@@ -137,7 +138,7 @@ public class BookListActivity extends AppCompatActivity
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new BookListFragment());
         adapter.addFragment(new NewspapersListFragment());
-//        adapter.addFragment(new BookListFragment());
+        adapter.addFragment(new PicturesListFragment());
         viewPager.setAdapter(adapter);
     }
 
@@ -158,9 +159,10 @@ public class BookListActivity extends AppCompatActivity
                                 viewPager.setCurrentItem(1);
                                 searchType = Constants.NEWSPAPERS;
                                 break;
-//                            case R.id.action_pictures:
-//                                viewPager.setCurrentItem(2);
-//                                break;
+                            case R.id.action_pictures:
+                                viewPager.setCurrentItem(2);
+                                searchType = Constants.PICTURES;
+                                break;
                         }
                         return true;
                     }
@@ -288,8 +290,37 @@ public class BookListActivity extends AppCompatActivity
                         }
                     });
                     break;
-            }
+                case Constants.PICTURES:
+                    Call<Books> call3 = api.getPictures(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.NEWSPAPER, Constants.ARTICLE);
+                    call3.enqueue(new Callback<Books>() {
+                        @Override
+                        public void onResponse(Call<Books> call, Response<Books> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getResponse().getZone().get(0).getRecords().getArticle() != null) {
+                                    Timber.d(response.raw().request().url().toString());
+                                    dbTranslator.addNewspapers(response.body());
+                                } else {
+                                    Toast.makeText(BookListActivity.this, "The query returned no dbTranslator", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Timber.e(response.message());
+                            }
+                            loading.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.VISIBLE);
+                            isFetching = false;
+                        }
 
+                        @Override
+                        public void onFailure(Call<Books> call, Throwable t) {
+                            Timber.e(t);
+                            loading.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.VISIBLE);
+                            Toast.makeText(BookListActivity.this, "We encountered an error", Toast.LENGTH_SHORT).show();
+                            isFetching = false;
+                        }
+                    });
+                    break;
+            }
         }
     }
 

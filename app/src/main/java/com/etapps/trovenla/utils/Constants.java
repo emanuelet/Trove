@@ -19,4 +19,5 @@ public class Constants {
     public static final String NEWSPAPERS = "newspapers";
     public static final String NEWSPAPER = "newspaper";
     public static final String ARTICLE = "Article";
+    public static final String PICTURES = "pictures";
 }
