@@ -51,6 +51,7 @@ android {
 
 ext {
     supportVersion = '27.0.0'
+    playServices = '11.4.2'
 }
 
 dependencies {
@@ -70,12 +71,14 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:customtabs:$supportVersion"
     compile "com.android.support:support-vector-drawable:$supportVersion"
-    compile 'com.google.android.gms:play-services-ads:11.4.2'
+//    compile 'com.google.android.gms:play-services-ads:11.4.2'
+    compile "com.google.android.gms:play-services-gcm:$playServices"
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.jakewharton.timber:timber:4.6.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'com.evernote:android-job:1.2.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 }

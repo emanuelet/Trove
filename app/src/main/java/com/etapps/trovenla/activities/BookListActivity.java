@@ -3,10 +3,8 @@ package com.etapps.trovenla.activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +20,6 @@ import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.ViewPagerAdapter;
 import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
-import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
 import com.etapps.trovenla.fragments.NewspapersListFragment;
@@ -31,8 +28,8 @@ import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.utils.Constants;
+import com.etapps.trovenla.utils.DbTranslator;
 import com.etapps.trovenla.utils.PrefsUtils;
-import com.etapps.trovenla.utils.Results;
 import com.etapps.trovenla.utils.Utility;
 
 import butterknife.BindView;
@@ -44,7 +41,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 /**
- * An activity representing a list of Results. This activity
+ * An activity representing a list of DbTranslator. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
  * lead to a {@link BookDetailActivity} representing
@@ -80,7 +77,7 @@ public class BookListActivity extends AppCompatActivity
     private Realm realm;
     private Context mContext;
     private boolean isFetching;
-    private Results results;
+    private DbTranslator dbTranslator;
     private TroveApi api;
     private String searchType = Constants.BOOKS;
 
@@ -97,7 +94,7 @@ public class BookListActivity extends AppCompatActivity
 
         api = TroveRest.getAdapter(TroveApi.class);
         realm = Realm.getDefaultInstance();
-        results = new Results(realm);
+        dbTranslator = new DbTranslator(realm);
 
         if (findViewById(R.id.book_detail_container) != null) {
             // The detail container view will be present only in the
@@ -118,7 +115,8 @@ public class BookListActivity extends AppCompatActivity
                 @Override
                 public void onResponse(Call<Libraries> call, retrofit2.Response<Libraries> response) {
                     if (response.isSuccessful()) {
-                        results.addLibraries(response.body());
+                        dbTranslator.addLibraries(response.body());
+                        PrefsUtils.firstStart(mContext);
                     } else {
                         Timber.e(response.message());
                     }
@@ -129,8 +127,6 @@ public class BookListActivity extends AppCompatActivity
                     Timber.e(t);
                 }
             });
-
-            PrefsUtils.firstStart(mContext);
         }
         // TODO: If exposing deep links into your app, handle intents here.
 
@@ -227,9 +223,10 @@ public class BookListActivity extends AppCompatActivity
 
     private void startSearch(String query) {
         if (!isFetching) {
-            //I first clear the book results table
+            //I first clear the book dbTranslator table
             isFetching = true;
             loading.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.GONE);
             switch (searchType) {
                 case Constants.BOOKS:
                     Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOK, Constants.HOLDINGS);
@@ -239,14 +236,15 @@ public class BookListActivity extends AppCompatActivity
                             if (response.isSuccessful()) {
                                 if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
                                     Timber.d(response.raw().request().url().toString());
-                                    results.addBooks(response.body());
+                                    dbTranslator.addBooks(response.body());
                                 } else {
-                                    Toast.makeText(BookListActivity.this, "The query returned no results", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(BookListActivity.this, "The query returned no dbTranslator", Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 Timber.e(response.message());
                             }
                             loading.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.VISIBLE);
                             isFetching = false;
                         }
 
@@ -254,6 +252,7 @@ public class BookListActivity extends AppCompatActivity
                         public void onFailure(Call<Books> call, Throwable t) {
                             Timber.e(t);
                             loading.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.VISIBLE);
                             Toast.makeText(BookListActivity.this, "We encountered an error", Toast.LENGTH_SHORT).show();
                             isFetching = false;
                         }
@@ -267,14 +266,15 @@ public class BookListActivity extends AppCompatActivity
                             if (response.isSuccessful()) {
                                 if (response.body().getResponse().getZone().get(0).getRecords().getArticle() != null) {
                                     Timber.d(response.raw().request().url().toString());
-                                    results.addNewspapers(response.body());
+                                    dbTranslator.addNewspapers(response.body());
                                 } else {
-                                    Toast.makeText(BookListActivity.this, "The query returned no results", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(BookListActivity.this, "The query returned no dbTranslator", Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 Timber.e(response.message());
                             }
                             loading.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.VISIBLE);
                             isFetching = false;
                         }
 
@@ -282,6 +282,7 @@ public class BookListActivity extends AppCompatActivity
                         public void onFailure(Call<Newspaper> call, Throwable t) {
                             Timber.e(t);
                             loading.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.VISIBLE);
                             Toast.makeText(BookListActivity.this, "We encountered an error", Toast.LENGTH_SHORT).show();
                             isFetching = false;
                         }

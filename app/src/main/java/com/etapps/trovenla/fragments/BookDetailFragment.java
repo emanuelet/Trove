@@ -137,7 +137,6 @@ public class BookDetailFragment extends Fragment {
     }
 
     private void goToUrl(String url) {
-        // TODO maybe use custom tabs ?
         Timber.d(url);
         if (TextUtils.isEmpty(url)) {
             Toast.makeText(mContext, "The url is incorrect", Toast.LENGTH_SHORT).show();

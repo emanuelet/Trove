@@ -3,6 +3,7 @@ package com.etapps.trovenla.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -73,9 +74,9 @@ public class BookDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void buyBook() {
-        Uri uri = Uri.parse(mUrl + "?q=+buy=true");
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(mUrl + "?q=+buy=true"));
     }
 
     @Override

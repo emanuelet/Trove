@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.etapps.trovenla.utils.ConfigUtils;
+import com.etapps.trovenla.utils.TroveJobCreator;
+import com.evernote.android.job.JobManager;
 import com.facebook.stetho.Stetho;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
@@ -42,6 +44,8 @@ public class Trove extends Application {
                             .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
                             .build());
         }
+
+        JobManager.create(this).addJobCreator(new TroveJobCreator());
     }
 
     public Realm getRealm() {

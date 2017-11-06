@@ -21,7 +21,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
- * A list fragment representing a list of Results. This fragment
+ * A list fragment representing a list of DbTranslator. This fragment
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
  * currently being viewed in a {@link BookDetailFragment}.

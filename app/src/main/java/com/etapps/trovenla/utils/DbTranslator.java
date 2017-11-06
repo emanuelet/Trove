@@ -1,8 +1,11 @@
 package com.etapps.trovenla.utils;
 
+import android.text.TextUtils;
+
 import com.etapps.trovenla.db.ArticleDb;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
+import com.etapps.trovenla.jobs.FetchLibraryJob;
 import com.etapps.trovenla.models.libraries.Contributor;
 import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.newspapers.Article;
@@ -18,11 +21,11 @@ import timber.log.Timber;
 /**
  * Created by Ian Ryan on 11/9/2015.
  */
-public class Results {
+public class DbTranslator {
 
     private static Realm realm;
 
-    public Results(Realm mrealm) {
+    public DbTranslator(Realm mrealm) {
         realm = mrealm;
     }
 
@@ -74,16 +77,19 @@ public class Results {
         RealmList<Library> llist = new RealmList<>();
         realm.beginTransaction();
         for (Holding s : i.getHolding()) {
-            if (s.getNuc() != null) {
+            String nuc = s.getNuc();
+            if (!TextUtils.isEmpty(nuc)) {
                 Library stored = realm.where(Library.class)
-                        .equalTo("nuc", s.getNuc())
+                        .equalTo("nuc", nuc)
                         .findFirst();
                 Library l = new Library();
                 if (stored != null) {
                     l = stored;
                 } else {
-                    l.setNuc(s.getNuc());
+                    l.setNuc(nuc);
+                    Timber.d(nuc);
                     // TODO trigger fetch of info for the library
+                    FetchLibraryJob.scheduleJob(nuc);
                 }
                 if (s.getUrl() != null) {
                     l.setUrlHolding(s.getUrl().getValue());
