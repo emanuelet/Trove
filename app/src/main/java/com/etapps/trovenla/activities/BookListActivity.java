@@ -154,11 +154,11 @@ public class BookListActivity extends AppCompatActivity
                         switch (item.getItemId()) {
                             case R.id.action_books:
                                 viewPager.setCurrentItem(0);
-                                searchType = getString(R.string.title_book_list);
+                                searchType = Constants.BOOKS;
                                 break;
                             case R.id.action_newspapers:
                                 viewPager.setCurrentItem(1);
-                                searchType = getString(R.string.newspapers);
+                                searchType = Constants.NEWSPAPERS;
                                 break;
 //                            case R.id.action_pictures:
 //                                viewPager.setCurrentItem(2);
@@ -260,7 +260,7 @@ public class BookListActivity extends AppCompatActivity
                     });
                     break;
                 case Constants.NEWSPAPERS:
-                    Call<Newspaper> call2 = api.getNewspapers(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.NEWSPAPER, Constants.HOLDINGS);
+                    Call<Newspaper> call2 = api.getNewspapers(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.NEWSPAPER, Constants.ARTICLE);
                     call2.enqueue(new Callback<Newspaper>() {
                         @Override
                         public void onResponse(Call<Newspaper> call, Response<Newspaper> response) {
