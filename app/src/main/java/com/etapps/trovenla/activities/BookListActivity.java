@@ -3,40 +3,42 @@ package com.etapps.trovenla.activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.adapters.NavSpinnerAdapter;
+import com.etapps.trovenla.adapters.ViewPagerAdapter;
 import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
+import com.etapps.trovenla.fragments.NewspapersListFragment;
 import com.etapps.trovenla.models.Suggestion;
 import com.etapps.trovenla.models.libraries.Libraries;
+import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.utils.Constants;
 import com.etapps.trovenla.utils.PrefsUtils;
 import com.etapps.trovenla.utils.Results;
 import com.etapps.trovenla.utils.Utility;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 /**
@@ -56,14 +58,12 @@ import timber.log.Timber;
  * to listen for item selections.
  */
 public class BookListActivity extends AppCompatActivity
-        implements BookListFragment.Callbacks {
+        implements BookListFragment.Callbacks, NewspapersListFragment.Callbacks {
 
-    public static final String BOOKS = "Books";
-    public static final String ARTICLES = "Articles";
-    public static final String PICTURES = "Pictures";
-
-    @BindView(R.id.spinner_nav)
-    Spinner nav;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigationView;
+    @BindView(R.id.pager)
+    ViewPager viewPager;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.loading)
@@ -80,6 +80,7 @@ public class BookListActivity extends AppCompatActivity
     private boolean isFetching;
     private Results results;
     private TroveApi api;
+    private String searchType = Constants.BOOKS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,40 +131,43 @@ public class BookListActivity extends AppCompatActivity
             PrefsUtils.firstStart(mContext);
         }
         // TODO: If exposing deep links into your app, handle intents here.
+
+        setupViewPager(viewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new BookListFragment());
+        adapter.addFragment(new NewspapersListFragment());
+//        adapter.addFragment(new BookListFragment());
+        viewPager.setAdapter(adapter);
     }
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        ArrayList<String> list = new ArrayList<String>();
-        list.add(BOOKS);
-        list.add(ARTICLES);
-        list.add(PICTURES);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_books:
+                                viewPager.setCurrentItem(0);
+                                searchType = getString(R.string.title_book_list);
+                                break;
+                            case R.id.action_newspapers:
+                                viewPager.setCurrentItem(1);
+                                searchType = getString(R.string.newspapers);
+                                break;
+//                            case R.id.action_pictures:
+//                                viewPager.setCurrentItem(2);
+//                                break;
+                        }
+                        return true;
+                    }
+                });
 
-        final NavSpinnerAdapter spinAdapter = new NavSpinnerAdapter(mContext, list);
-
-        nav.setAdapter(spinAdapter);
-
-        nav.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String item = adapterView.getItemAtPosition(i).toString();
-                switch (item) {
-                    case BOOKS:
-                        break;
-                    case ARTICLES:
-                        break;
-                    case PICTURES:
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     @Override
@@ -224,34 +228,66 @@ public class BookListActivity extends AppCompatActivity
             //I first clear the book results table
             isFetching = true;
             loading.setVisibility(View.VISIBLE);
-            realm.beginTransaction();
-            realm.delete(Book.class);
-            realm.commitTransaction();
-            Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOKS, Constants.HOLDINGS);
-            call.enqueue(new retrofit2.Callback<Books>() {
-                @Override
-                public void onResponse(Call<Books> call, retrofit2.Response<Books> response) {
-                    if (response.isSuccessful()) {
-                        if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
-                            Timber.d(response.raw().request().url().toString());
-                            results.addAll(response.body());
-                        } else {
-                            Toast.makeText(BookListActivity.this, "The query returned no results", Toast.LENGTH_LONG).show();
+            switch (searchType) {
+                case Constants.BOOKS:
+                    realm.beginTransaction();
+                    realm.delete(Book.class);
+                    realm.commitTransaction();
+                    Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOK, Constants.HOLDINGS);
+                    call.enqueue(new retrofit2.Callback<Books>() {
+                        @Override
+                        public void onResponse(Call<Books> call, retrofit2.Response<Books> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
+                                    Timber.d(response.raw().request().url().toString());
+                                    results.addBooks(response.body());
+                                } else {
+                                    Toast.makeText(BookListActivity.this, "The query returned no results", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Timber.e(response.message());
+                            }
+                            loading.setVisibility(View.GONE);
+                            isFetching = false;
                         }
-                    } else {
-                        Timber.e(response.message());
-                    }
-                    loading.setVisibility(View.GONE);
-                    isFetching = false;
-                }
 
-                @Override
-                public void onFailure(Call<Books> call, Throwable t) {
-                    Timber.e(t);
-                    loading.setVisibility(View.GONE);
-                    isFetching = false;
-                }
-            });
+                        @Override
+                        public void onFailure(Call<Books> call, Throwable t) {
+                            Timber.e(t);
+                            loading.setVisibility(View.GONE);
+                            isFetching = false;
+                        }
+                    });
+                    break;
+                case Constants.NEWSPAPERS:
+                    Call<Newspaper> call2 = api.getNewspapers(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.NEWSPAPER, Constants.HOLDINGS);
+                    call2.enqueue(new Callback<Newspaper>() {
+                        @Override
+                        public void onResponse(Call<Newspaper> call, Response<Newspaper> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getResponse().getZone().get(0).getRecords().getArticle() != null) {
+                                    Timber.d(response.raw().request().url().toString());
+                                    results.addNewspapers(response.body());
+                                } else {
+                                    Toast.makeText(BookListActivity.this, "The query returned no results", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Timber.e(response.message());
+                            }
+                            loading.setVisibility(View.GONE);
+                            isFetching = false;
+                        }
+
+                        @Override
+                        public void onFailure(Call<Newspaper> call, Throwable t) {
+                            Timber.e(t);
+                            loading.setVisibility(View.GONE);
+                            isFetching = false;
+                        }
+                    });
+                    break;
+            }
+
         }
     }
 
@@ -280,5 +316,12 @@ public class BookListActivity extends AppCompatActivity
             detailIntent.putExtra(Constants.TROVE_KEY, id);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public void onArticleSelected(String id) {
+//        Intent detailIntent = new Intent(this, BookDetailActivity.class);
+//        detailIntent.putExtra(Constants.TROVE_KEY, id);
+//        startActivity(detailIntent);
     }
 }

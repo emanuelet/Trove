@@ -1,13 +1,12 @@
 package com.etapps.trovenla.utils;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import com.etapps.trovenla.activities.BookListActivity;
+import com.etapps.trovenla.db.ArticleDb;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.models.libraries.Contributor;
 import com.etapps.trovenla.models.libraries.Libraries;
+import com.etapps.trovenla.models.newspapers.Article;
+import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.models.queries.Holding;
 import com.etapps.trovenla.models.queries.Work;
@@ -27,10 +26,10 @@ public class Results {
         realm = mrealm;
     }
 
-    public void addAll(Books books) {
+    public void addBooks(Books books) {
         RealmList<Book> bkList = new RealmList<>();
         for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
-            bkList.add(add(i));
+            bkList.add(addBook(i));
         }
         Timber.d("loaded %s", bkList.size());
         realm.beginTransaction();
@@ -38,7 +37,18 @@ public class Results {
         realm.commitTransaction();
     }
 
-    public static Book add(Work i) {
+    public void addNewspapers(Newspaper books) {
+        RealmList<ArticleDb> bkList = new RealmList<>();
+        for (Article i : books.getResponse().getZone().get(0).getRecords().getArticle()) {
+            bkList.add(addArticle(i));
+        }
+        Timber.d("loaded %s", bkList.size());
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(bkList);
+        realm.commitTransaction();
+    }
+
+    private static Book addBook(Work i) {
         Book bk = new Book();
         bk.setId(i.getId());
         bk.setTitle(i.getTitle());
@@ -77,6 +87,24 @@ public class Results {
         }
         realm.commitTransaction();
         bk.setLibraries(llist);
+        return bk;
+    }
+
+    private static ArticleDb addArticle(Article i) {
+        ArticleDb bk = new ArticleDb();
+        bk.setId(i.getId());
+        bk.setUrl(i.getUrl());
+        bk.setHeading(i.getHeading());
+        bk.setCategory(i.getCategory());
+        bk.setDate(i.getDate());
+        bk.setPage(i.getPage());
+        bk.setPageSequence(i.getPageSequence());
+        bk.setTitle(i.getTitle().getValue());
+        bk.setScore(i.getRelevance().getScore());
+        bk.setValue(i.getRelevance().getValue());
+        bk.setSnippet(i.getSnippet());
+        bk.setEdition(i.getEdition());
+        bk.setTroveUrl(i.getTroveUrl());
         return bk;
     }
 

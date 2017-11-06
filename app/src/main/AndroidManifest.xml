@@ -34,10 +34,6 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".activities.DetailActivity"
-            android:label="@string/title_activity_detail">
-        </activity>
-        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".activities.BookListActivity">
