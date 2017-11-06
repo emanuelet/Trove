@@ -1,8 +1,10 @@
 package com.etapps.trovenla.fragments;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -88,7 +90,11 @@ public class NewspapersListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 ArticleDb item = adapter.getItematPosition(position);
-                mCallbacks.onArticleSelected(item.getId());
+//                mCallbacks.onArticleSelected(item.getId());
+
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(getContext(), Uri.parse(item.getTroveUrl()));
             }
         });
     }
