@@ -12,7 +12,11 @@ public class Constants {
     public static final String DATA = "data";
     public static final String RECLEVEL = "full";
     public static final String KEY = "dd539bfbq0hec6pq";
-    public static final String BOOKS = "book";
+    public static final String BOOK = "book";
+    public static final String BOOKS = "books";
     public static final String HOLDINGS = "holdings";
     public static final String TROVE_KEY = "trove_id";
+    public static final String NEWSPAPERS = "newspapers";
+    public static final String NEWSPAPER = "newspaper";
+    public static final String ARTICLE = "Article";
 }

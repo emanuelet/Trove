@@ -21,7 +21,7 @@ import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
 import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.utils.Constants;
-import com.etapps.trovenla.utils.Results;
+import com.etapps.trovenla.utils.DbTranslator;
 import com.etapps.trovenla.utils.Utility;
 
 import java.util.Calendar;
@@ -182,8 +182,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         @Override
                         public void onResponse(Call<Libraries> call, retrofit2.Response<Libraries> response) {
                             if (response.isSuccessful()) {
-                                Results results = new Results(Realm.getDefaultInstance());
-                                results.addLibraries(response.body());
+                                DbTranslator dbTranslator = new DbTranslator(Realm.getDefaultInstance());
+                                dbTranslator.addLibraries(response.body());
                             } else {
                                 Timber.e(response.message());
                             }

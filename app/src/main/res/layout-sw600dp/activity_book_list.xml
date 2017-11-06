@@ -11,7 +11,7 @@
     tools:context="com.etapps.trovenla.activities.BookListActivity">
 
     <!--
-    This layout is a two-pane layout for the Results
+    This layout is a two-pane layout for DbTranslatorults
     master/detail flow.
     
     -->

@@ -1,18 +1,21 @@
 package com.etapps.trovenla.fragments;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.etapps.trovenla.R;
+import com.etapps.trovenla.adapters.ArticleAdapter;
 import com.etapps.trovenla.adapters.BookAdapter;
+import com.etapps.trovenla.db.ArticleDb;
 import com.etapps.trovenla.db.Book;
 
 import butterknife.BindView;
@@ -29,18 +32,18 @@ import io.realm.RealmResults;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class BookListFragment extends Fragment {
+public class NewspapersListFragment extends Fragment {
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onArticleSelected(String id) {
         }
     };
     @BindView(R.id.books)
-    RecyclerView mBooks;
+    RecyclerView mArticles;
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -48,13 +51,13 @@ public class BookListFragment extends Fragment {
     private Callbacks mCallbacks = sDummyCallbacks;
     private Activity mContext;
     private Realm realm;
-    private BookAdapter adapter;
+    private ArticleAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BookListFragment() {
+    public NewspapersListFragment() {
     }
 
     @Override
@@ -78,16 +81,20 @@ public class BookListFragment extends Fragment {
     }
 
     private void initList() {
-        mBooks.setLayoutManager(new LinearLayoutManager(mContext));
-        RealmResults<Book> books = realm.where(Book.class).findAll();
-        adapter = new BookAdapter(mContext, books);
-        mBooks.setAdapter(adapter);
-        mBooks.setHasFixedSize(true);
-        adapter.SetOnItemClickListener(new BookAdapter.OnItemClickListener() {
+        mArticles.setLayoutManager(new LinearLayoutManager(mContext));
+        RealmResults<ArticleDb> articles = realm.where(ArticleDb.class).findAll();
+        adapter = new ArticleAdapter(mContext, articles);
+        mArticles.setAdapter(adapter);
+        mArticles.setHasFixedSize(true);
+        adapter.SetOnItemClickListener(new ArticleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Book item = adapter.getItematPosition(position);
-                mCallbacks.onItemSelected(item.getId());
+                ArticleDb item = adapter.getItematPosition(position);
+//                mCallbacks.onArticleSelected(item.getId());
+
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(getContext(), Uri.parse(item.getTroveUrl()));
             }
         });
     }
@@ -121,6 +128,6 @@ public class BookListFragment extends Fragment {
         /**
          * Callback for when an item has been selected.
          */
-        void onItemSelected(String id);
+        void onArticleSelected(String id);
     }
 }

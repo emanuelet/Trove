@@ -2,6 +2,7 @@ package com.etapps.trovenla.api;
 
 import com.etapps.trovenla.models.articles.FullArticle;
 import com.etapps.trovenla.models.libraries.Libraries;
+import com.etapps.trovenla.models.library.Library;
 import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;
 
@@ -49,10 +50,10 @@ public interface TroveApi {
 //    SINGLE RECORDS
 
     @GET("/contributor/{nuc}")
-    Call<Libraries> getLibrary(@Path("nuc") String nuc,
-                               @Query("key") String key,
-                               @Query("encoding") String format,
-                               @Query("reclevel") String reclevel);
+    Call<Library> getLibrary(@Path("nuc") String nuc,
+                             @Query("key") String key,
+                             @Query("encoding") String format,
+                             @Query("reclevel") String reclevel);
 
     @GET("/newspaper/{id}")
     Call<FullArticle> getArticle(@Path("id") String id,

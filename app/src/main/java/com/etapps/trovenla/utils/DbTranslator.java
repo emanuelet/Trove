@@ -1,13 +1,15 @@
 package com.etapps.trovenla.utils;
 
-import android.util.Log;
-import android.widget.Toast;
+import android.text.TextUtils;
 
-import com.etapps.trovenla.activities.BookListActivity;
+import com.etapps.trovenla.db.ArticleDb;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
+import com.etapps.trovenla.jobs.FetchLibraryJob;
 import com.etapps.trovenla.models.libraries.Contributor;
 import com.etapps.trovenla.models.libraries.Libraries;
+import com.etapps.trovenla.models.newspapers.Article;
+import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.models.queries.Holding;
 import com.etapps.trovenla.models.queries.Work;
@@ -19,18 +21,21 @@ import timber.log.Timber;
 /**
  * Created by Ian Ryan on 11/9/2015.
  */
-public class Results {
+public class DbTranslator {
 
     private static Realm realm;
 
-    public Results(Realm mrealm) {
+    public DbTranslator(Realm mrealm) {
         realm = mrealm;
     }
 
-    public void addAll(Books books) {
+    public void addBooks(Books books) {
+        realm.beginTransaction();
+        realm.delete(Book.class);
+        realm.commitTransaction();
         RealmList<Book> bkList = new RealmList<>();
         for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
-            bkList.add(add(i));
+            bkList.add(addBook(i));
         }
         Timber.d("loaded %s", bkList.size());
         realm.beginTransaction();
@@ -38,7 +43,21 @@ public class Results {
         realm.commitTransaction();
     }
 
-    public static Book add(Work i) {
+    public void addNewspapers(Newspaper books) {
+        realm.beginTransaction();
+        realm.delete(ArticleDb.class);
+        realm.commitTransaction();
+        RealmList<ArticleDb> bkList = new RealmList<>();
+        for (Article i : books.getResponse().getZone().get(0).getRecords().getArticle()) {
+            bkList.add(addArticle(i));
+        }
+        Timber.d("loaded %s", bkList.size());
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(bkList);
+        realm.commitTransaction();
+    }
+
+    private static Book addBook(Work i) {
         Book bk = new Book();
         bk.setId(i.getId());
         bk.setTitle(i.getTitle());
@@ -58,16 +77,19 @@ public class Results {
         RealmList<Library> llist = new RealmList<>();
         realm.beginTransaction();
         for (Holding s : i.getHolding()) {
-            if (s.getNuc() != null) {
+            String nuc = s.getNuc();
+            if (!TextUtils.isEmpty(nuc)) {
                 Library stored = realm.where(Library.class)
-                        .equalTo("nuc", s.getNuc())
+                        .equalTo("nuc", nuc)
                         .findFirst();
                 Library l = new Library();
                 if (stored != null) {
                     l = stored;
                 } else {
-                    l.setNuc(s.getNuc());
+                    l.setNuc(nuc);
+                    Timber.d(nuc);
                     // TODO trigger fetch of info for the library
+                    FetchLibraryJob.scheduleJob(nuc);
                 }
                 if (s.getUrl() != null) {
                     l.setUrlHolding(s.getUrl().getValue());
@@ -77,6 +99,23 @@ public class Results {
         }
         realm.commitTransaction();
         bk.setLibraries(llist);
+        return bk;
+    }
+
+    private static ArticleDb addArticle(Article i) {
+        ArticleDb bk = new ArticleDb();
+        bk.setId(i.getId());
+        bk.setUrl(i.getUrl());
+        bk.setHeading(i.getHeading());
+        bk.setCategory(i.getCategory());
+        bk.setDate(i.getDate());
+        bk.setPage(i.getPage());
+        bk.setTitle(i.getTitle().getValue());
+        bk.setScore(i.getRelevance().getScore());
+        bk.setValue(i.getRelevance().getValue());
+        bk.setSnippet(i.getSnippet());
+        bk.setEdition(i.getEdition());
+        bk.setTroveUrl(i.getTroveUrl());
         return bk;
     }
 

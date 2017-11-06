@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_books"
+        android:enabled="true"
+        android:icon="@drawable/ic_book_black_24dp"
+        android:title="@string/title_book_list"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_newspapers"
+        android:enabled="true"
+        android:icon="@drawable/ic_import_contacts_black_24dp"
+        android:title="@string/newspapers"
+        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_pictures"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_image_black_24dp"-->
+        <!--android:title="@string/pictures"-->
+        <!--app:showAsAction="ifRoom" />-->
+</menu>
