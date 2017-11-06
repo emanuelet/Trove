@@ -13,10 +13,10 @@
         android:icon="@drawable/ic_import_contacts_black_24dp"
         android:title="@string/newspapers"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_pictures"
-        android:enabled="true"
-        android:icon="@drawable/ic_image_black_24dp"
-        android:title="@string/pictures"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_pictures"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_image_black_24dp"-->
+        <!--android:title="@string/pictures"-->
+        <!--app:showAsAction="ifRoom" />-->
 </menu>

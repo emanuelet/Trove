@@ -29,9 +29,6 @@ public class Article {
     @SerializedName("page")
     @Expose
     private long page;
-    @SerializedName("pageSequence")
-    @Expose
-    private long pageSequence;
     @SerializedName("relevance")
     @Expose
     private Relevance relevance;
@@ -171,23 +168,6 @@ public class Article {
         this.page = page;
     }
 
-    /**
-     * 
-     * @return
-     *     The pageSequence
-     */
-    public long getPageSequence() {
-        return pageSequence;
-    }
-
-    /**
-     * 
-     * @param pageSequence
-     *     The pageSequence
-     */
-    public void setPageSequence(long pageSequence) {
-        this.pageSequence = pageSequence;
-    }
 
     /**
      * 

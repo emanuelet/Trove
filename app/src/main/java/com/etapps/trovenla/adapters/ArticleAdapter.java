@@ -80,7 +80,7 @@ public class ArticleAdapter extends RealmAdapter<ArticleDb, ArticleAdapter.BookH
         @BindView(R.id.list_item_year_textview)
         TextView mYear;
 
-        public BookHolder(View itemView) {
+        BookHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);

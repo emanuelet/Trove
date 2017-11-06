@@ -3,8 +3,10 @@ package com.etapps.trovenla.activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -230,9 +232,6 @@ public class BookListActivity extends AppCompatActivity
             loading.setVisibility(View.VISIBLE);
             switch (searchType) {
                 case Constants.BOOKS:
-                    realm.beginTransaction();
-                    realm.delete(Book.class);
-                    realm.commitTransaction();
                     Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOK, Constants.HOLDINGS);
                     call.enqueue(new retrofit2.Callback<Books>() {
                         @Override
@@ -255,6 +254,7 @@ public class BookListActivity extends AppCompatActivity
                         public void onFailure(Call<Books> call, Throwable t) {
                             Timber.e(t);
                             loading.setVisibility(View.GONE);
+                            Toast.makeText(BookListActivity.this, "We encountered an error", Toast.LENGTH_SHORT).show();
                             isFetching = false;
                         }
                     });
@@ -282,6 +282,7 @@ public class BookListActivity extends AppCompatActivity
                         public void onFailure(Call<Newspaper> call, Throwable t) {
                             Timber.e(t);
                             loading.setVisibility(View.GONE);
+                            Toast.makeText(BookListActivity.this, "We encountered an error", Toast.LENGTH_SHORT).show();
                             isFetching = false;
                         }
                     });
@@ -323,5 +324,6 @@ public class BookListActivity extends AppCompatActivity
 //        Intent detailIntent = new Intent(this, BookDetailActivity.class);
 //        detailIntent.putExtra(Constants.TROVE_KEY, id);
 //        startActivity(detailIntent);
+
     }
 }

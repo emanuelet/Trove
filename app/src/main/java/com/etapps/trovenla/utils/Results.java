@@ -27,6 +27,9 @@ public class Results {
     }
 
     public void addBooks(Books books) {
+        realm.beginTransaction();
+        realm.delete(Book.class);
+        realm.commitTransaction();
         RealmList<Book> bkList = new RealmList<>();
         for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
             bkList.add(addBook(i));
@@ -38,6 +41,9 @@ public class Results {
     }
 
     public void addNewspapers(Newspaper books) {
+        realm.beginTransaction();
+        realm.delete(ArticleDb.class);
+        realm.commitTransaction();
         RealmList<ArticleDb> bkList = new RealmList<>();
         for (Article i : books.getResponse().getZone().get(0).getRecords().getArticle()) {
             bkList.add(addArticle(i));
@@ -98,7 +104,6 @@ public class Results {
         bk.setCategory(i.getCategory());
         bk.setDate(i.getDate());
         bk.setPage(i.getPage());
-        bk.setPageSequence(i.getPageSequence());
         bk.setTitle(i.getTitle().getValue());
         bk.setScore(i.getRelevance().getScore());
         bk.setValue(i.getRelevance().getValue());

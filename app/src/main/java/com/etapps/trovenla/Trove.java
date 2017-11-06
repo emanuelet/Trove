@@ -31,7 +31,6 @@ public class Trove extends Application {
 
         Realm.setDefaultConfiguration(realmConfiguration);
 
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(ConfigUtils.getUrl("TWITTER_KEY", this), ConfigUtils.getUrl("TWITTER_SECRET", this));
         Fabric.with(this, new Crashlytics());
 
         if (BuildConfig.DEBUG) {
