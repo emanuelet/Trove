@@ -1,5 +1,6 @@
 package com.etapps.trovenla.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.db.Picture;
 
@@ -38,10 +41,20 @@ public class PicturesAdapter extends RealmAdapter<Picture, PicturesAdapter.Pictu
         return new PictureHolder(v);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(PictureHolder holder, int position) {
         Picture contact = this.mLibraries.get(position);
-        holder.mTitle.setText(contact.getContributor());
+        holder.mTitle.setText(contact.getTitle());
+        holder.mAuthor.setText(contact.getContributor());
+
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.placeholder);
+
+        Glide.with(mContext)
+                .setDefaultRequestOptions(requestOptions)
+                .load(contact.getThumbnail())
+                .into(holder.mImage);
     }
 
     @Override
@@ -75,8 +88,10 @@ public class PicturesAdapter extends RealmAdapter<Picture, PicturesAdapter.Pictu
         ImageView mImage;
         @BindView(R.id.list_item_title)
         TextView mTitle;
+        @BindView(R.id.list_item_author)
+        TextView mAuthor;
 
-        public PictureHolder(View itemView) {
+        PictureHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);

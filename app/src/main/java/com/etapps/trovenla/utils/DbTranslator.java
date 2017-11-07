@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.etapps.trovenla.db.ArticleDb;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
+import com.etapps.trovenla.db.Picture;
 import com.etapps.trovenla.jobs.FetchLibraryJob;
 import com.etapps.trovenla.models.libraries.Contributor;
 import com.etapps.trovenla.models.libraries.Libraries;
@@ -12,6 +13,7 @@ import com.etapps.trovenla.models.newspapers.Article;
 import com.etapps.trovenla.models.newspapers.Newspaper;
 import com.etapps.trovenla.models.queries.Books;
 import com.etapps.trovenla.models.queries.Holding;
+import com.etapps.trovenla.models.queries.Identifier;
 import com.etapps.trovenla.models.queries.Work;
 
 import io.realm.Realm;
@@ -57,6 +59,20 @@ public class DbTranslator {
         realm.commitTransaction();
     }
 
+    public void addPictures(Books books) {
+        realm.beginTransaction();
+        realm.delete(Picture.class);
+        realm.commitTransaction();
+        RealmList<Picture> bkList = new RealmList<>();
+        for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
+            bkList.add(addPicture(i));
+        }
+        Timber.d("loaded %s", bkList.size());
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(bkList);
+        realm.commitTransaction();
+    }
+
     private static Book addBook(Work i) {
         Book bk = new Book();
         bk.setId(i.getId());
@@ -87,8 +103,6 @@ public class DbTranslator {
                     l = stored;
                 } else {
                     l.setNuc(nuc);
-                    Timber.d(nuc);
-                    // TODO trigger fetch of info for the library
                     FetchLibraryJob.scheduleJob(nuc);
                 }
                 if (s.getUrl() != null) {
@@ -99,6 +113,34 @@ public class DbTranslator {
         }
         realm.commitTransaction();
         bk.setLibraries(llist);
+        return bk;
+    }
+
+    private static Picture addPicture(Work i) {
+        Picture bk = new Picture();
+        bk.setId(i.getId());
+        bk.setTitle(i.getTitle());
+        if (i.getContributor().size() != 0) {
+            bk.setContributor(i.getContributor().get(0));
+        }
+        bk.setHoldingsCount(i.getHoldingsCount());
+        bk.setScore(i.getRelevance().getScore());
+        bk.setValue(i.getRelevance().getValue());
+        bk.setTroveUrl(i.getTroveUrl());
+        bk.setIssued(i.getIssued());
+        bk.setHoldingsCount(i.getHoldingsCount());
+        bk.setVersionCount(i.getVersionCount());
+        if (i.getSnippet() != null) {
+            bk.setSnippet(i.getSnippet());
+        }
+        for (Identifier s : i.getIdentifier()) {
+            if (s.getLinktype().equals("thumbnail")) {
+                bk.setThumbnail(s.getValue());
+            }
+            if (s.getLinktype().equals("fulltext")) {
+                bk.setOriginalLink(s.getValue());
+            }
+        }
         return bk;
     }
 

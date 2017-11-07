@@ -58,7 +58,7 @@ import timber.log.Timber;
  * to listen for item selections.
  */
 public class BookListActivity extends AppCompatActivity
-        implements BookListFragment.Callbacks, NewspapersListFragment.Callbacks {
+        implements BookListFragment.Callbacks, NewspapersListFragment.Callbacks, PicturesListFragment.Callbacks {
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
@@ -291,14 +291,14 @@ public class BookListActivity extends AppCompatActivity
                     });
                     break;
                 case Constants.PICTURES:
-                    Call<Books> call3 = api.getPictures(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.NEWSPAPER, Constants.ARTICLE);
+                    Call<Books> call3 = api.getPictures(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.PICTURE, Constants.PHOTOGRAPH);
                     call3.enqueue(new Callback<Books>() {
                         @Override
                         public void onResponse(Call<Books> call, Response<Books> response) {
                             if (response.isSuccessful()) {
-                                if (response.body().getResponse().getZone().get(0).getRecords().getArticle() != null) {
+                                if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
                                     Timber.d(response.raw().request().url().toString());
-                                    dbTranslator.addNewspapers(response.body());
+                                    dbTranslator.addPictures(response.body());
                                 } else {
                                     Toast.makeText(BookListActivity.this, "The query returned no dbTranslator", Toast.LENGTH_LONG).show();
                                 }
@@ -356,6 +356,11 @@ public class BookListActivity extends AppCompatActivity
 //        Intent detailIntent = new Intent(this, BookDetailActivity.class);
 //        detailIntent.putExtra(Constants.TROVE_KEY, id);
 //        startActivity(detailIntent);
+
+    }
+
+    @Override
+    public void onPictureSelected(String id) {
 
     }
 }

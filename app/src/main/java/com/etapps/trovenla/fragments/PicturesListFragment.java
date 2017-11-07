@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +37,7 @@ public class PicturesListFragment extends Fragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onArticleSelected(String id) {
+        public void onPictureSelected(String id) {
         }
     };
     @BindView(R.id.books)
@@ -79,7 +79,7 @@ public class PicturesListFragment extends Fragment {
     }
 
     private void initList() {
-        mArticles.setLayoutManager(new LinearLayoutManager(mContext));
+        mArticles.setLayoutManager(new GridLayoutManager(mContext, 2));
         RealmResults<Picture> articles = realm.where(Picture.class).findAll();
         adapter = new PicturesAdapter(mContext, articles);
         mArticles.setAdapter(adapter);
@@ -125,6 +125,6 @@ public class PicturesListFragment extends Fragment {
         /**
          * Callback for when an item has been selected.
          */
-        void onArticleSelected(String id);
+        void onPictureSelected(String id);
     }
 }

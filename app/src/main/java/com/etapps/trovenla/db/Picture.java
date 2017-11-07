@@ -1,6 +1,5 @@
 package com.etapps.trovenla.db;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -21,6 +20,8 @@ public class Picture extends RealmObject {
     private String score;
     private String value;
     private String snippet;
+    private String thumbnail;
+    private String originalLink;
 
 
     public String getId() {
@@ -155,5 +156,21 @@ public class Picture extends RealmObject {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getOriginalLink() {
+        return originalLink;
+    }
+
+    public void setOriginalLink(String originalLink) {
+        this.originalLink = originalLink;
     }
 }
