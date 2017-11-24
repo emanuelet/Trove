@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "311021307751",
+    "firebase_url": "https://trove-d19a4.firebaseio.com",
+    "project_id": "trove-d19a4",
+    "storage_bucket": "trove-d19a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311021307751:android:1d92d74dfdac1ad0",
+        "android_client_info": {
+          "package_name": "com.etapps.trovenla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311021307751-ishean8e49e8cpmqdnhn1bnl6r1que2r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-dgHjWBBlHafRasSO2E_FTDk6cAg9i4I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311021307751:android:33013b6ead1471c4",
+        "android_client_info": {
+          "package_name": "com.etapps.trovenla.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311021307751-ishean8e49e8cpmqdnhn1bnl6r1que2r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-dgHjWBBlHafRasSO2E_FTDk6cAg9i4I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
