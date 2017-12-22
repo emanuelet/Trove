@@ -31,6 +31,7 @@ import io.realm.Realm;
 public class BookDetailActivity extends AppCompatActivity {
 
     private String mUrl;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -85,6 +86,9 @@ public class BookDetailActivity extends AppCompatActivity {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(mUrl + "?q=+buy=true"));
+        Bundle params = new Bundle();
+        params.putString("url", mUrl);
+        mFirebaseAnalytics.logEvent("buy_book", params);
     }
 
     @Override
