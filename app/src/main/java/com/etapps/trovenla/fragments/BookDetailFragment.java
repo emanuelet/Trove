@@ -27,6 +27,7 @@ import com.etapps.trovenla.adapters.LibrariesAdapter;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.utils.Constants;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +60,7 @@ public class BookDetailFragment extends Fragment {
 
     private LibrariesAdapter adapter;
     private ShareActionProvider mShareActionProvider;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -72,6 +74,7 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mContext);
         realm = Realm.getDefaultInstance();
 
         if (getArguments().containsKey(Constants.TROVE_KEY)) {
@@ -143,7 +146,12 @@ public class BookDetailFragment extends Fragment {
         } else {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.launchUrl(getContext(), Uri.parse(url));
+            customTabsIntent.launchUrl(mContext, Uri.parse(url));
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, book.getTitle());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "library-book");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, url);
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
         }
     }
 
