@@ -13,6 +13,7 @@ import com.etapps.trovenla.R;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.utils.Constants;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,6 +39,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,9 +63,14 @@ public class BookDetailActivity extends AppCompatActivity {
             arguments.putString(Constants.TROVE_KEY,
                     getIntent().getStringExtra(Constants.TROVE_KEY));
             Realm realm = Realm.getDefaultInstance();
-            mUrl = realm.where(Book.class)
+            Book mBook = realm.where(Book.class)
                     .equalTo("id", getIntent().getStringExtra(Constants.TROVE_KEY))
-                    .findFirst().getTroveUrl();
+                    .findFirst();
+            mUrl = mBook.getTroveUrl();
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Constants.TROVE_KEY);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mBook.getTitle());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
 
             BookDetailFragment fragment = new BookDetailFragment();
             fragment.setArguments(arguments);

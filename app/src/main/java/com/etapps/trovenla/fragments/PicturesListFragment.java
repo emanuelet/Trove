@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.PicturesAdapter;
 import com.etapps.trovenla.db.Picture;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +48,7 @@ public class PicturesListFragment extends Fragment {
      * clicks.
      */
     private Callbacks mCallbacks = sDummyCallbacks;
+    private FirebaseAnalytics mFirebaseAnalytics;
     private Activity mContext;
     private Realm realm;
     private PicturesAdapter adapter;
@@ -63,6 +65,7 @@ public class PicturesListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mContext);
         realm = Realm.getDefaultInstance();
     }
 
@@ -92,6 +95,12 @@ public class PicturesListFragment extends Fragment {
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 CustomTabsIntent customTabsIntent = builder.build();
                 customTabsIntent.launchUrl(getContext(), Uri.parse(item.getTroveUrl()));
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "pcitrue");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
             }
         });
     }

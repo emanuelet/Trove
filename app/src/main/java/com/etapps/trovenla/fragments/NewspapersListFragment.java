@@ -17,6 +17,8 @@ import com.etapps.trovenla.adapters.ArticleAdapter;
 import com.etapps.trovenla.adapters.BookAdapter;
 import com.etapps.trovenla.db.ArticleDb;
 import com.etapps.trovenla.db.Book;
+import com.etapps.trovenla.utils.Constants;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +51,8 @@ public class NewspapersListFragment extends Fragment {
      * clicks.
      */
     private Callbacks mCallbacks = sDummyCallbacks;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
     private Activity mContext;
     private Realm realm;
     private ArticleAdapter adapter;
@@ -65,6 +69,8 @@ public class NewspapersListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mContext);
         realm = Realm.getDefaultInstance();
     }
 
@@ -94,7 +100,13 @@ public class NewspapersListFragment extends Fragment {
 
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(getContext(), Uri.parse(item.getTroveUrl()));
+                customTabsIntent.launchUrl(mContext, Uri.parse(item.getTroveUrl()));
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "newspaper-article");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
             }
         });
     }

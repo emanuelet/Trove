@@ -98,6 +98,9 @@ public class BookListActivity extends AppCompatActivity
         api = TroveRest.getAdapter(TroveApi.class);
         realm = Realm.getDefaultInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN,null);
+        mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
+
         dbTranslator = new DbTranslator(realm);
 
         if (findViewById(R.id.book_detail_container) != null) {
@@ -324,6 +327,9 @@ public class BookListActivity extends AppCompatActivity
                     });
                     break;
             }
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.SEARCH_TERM, query);
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle);
         }
     }
 
