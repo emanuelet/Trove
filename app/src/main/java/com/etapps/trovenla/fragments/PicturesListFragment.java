@@ -98,7 +98,7 @@ public class PicturesListFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
-                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "pcitrue");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "picture");
                 bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
             }

@@ -69,7 +69,7 @@ public class BookDetailActivity extends AppCompatActivity {
                     .findFirst();
             mUrl = mBook.getTroveUrl();
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Constants.TROVE_KEY);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mBook.getId());
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mBook.getTitle());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
 
