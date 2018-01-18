@@ -18,6 +18,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import timber.log.Timber;
 
 /**
  * An activity representing a single Book detail screen. This
@@ -105,6 +106,7 @@ public class BookDetailActivity extends AppCompatActivity {
             NavUtils.navigateUpTo(this, new Intent(this, BookListActivity.class));
             return true;
         }
+        Timber.d("menu "+id);
         return super.onOptionsItemSelected(item);
     }
 }

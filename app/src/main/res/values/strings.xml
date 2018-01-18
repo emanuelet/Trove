@@ -82,6 +82,7 @@
     <string name="available_label_detail">Available at</string>
     <string name="title_book_list">Books</string>
     <string name="title_book_detail">Book Detail</string>
+    <string name="title_news_article">Newspaper Article</string>
     <string name="libraries">Where to Borrow</string>
 
     <string name="title_activity_prefs">Settings</string>
@@ -89,4 +90,11 @@
     <string name="pictures">Pictures</string>
     <string name="pref_header_general">General</string>
     <string name="slash">/</string>
+    <string name="ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas massa non lacus rhoncus, eu ornare velit imperdiet. Nam quis dolor vel enim placerat consectetur a at orci. Curabitur neque quam, laoreet eu lacus vel, sagittis feugiat purus. Sed rhoncus lacinia libero. Suspendisse varius, magna at ornare porta, tortor nunc lobortis leo, eu iaculis est mi et tortor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut consectetur congue neque eget elementum. Sed viverra libero at massa viverra gravida. Sed sollicitudin magna vitae viverra aliquam.
+
+Duis in lacus fringilla, consequat sapien et, molestie ex. Donec et diam nec mi fermentum maximus. Mauris finibus auctor elit sed lobortis. Phasellus vitae dapibus risus. Phasellus lacinia ex ut rhoncus semper. Mauris suscipit, velit et malesuada laoreet, velit dolor tincidunt ante, ac mattis arcu augue placerat velit. Curabitur vel diam erat. Mauris vestibulum vestibulum dui in rutrum. Duis pretium posuere mi, a efficitur ipsum porta sed. Sed tincidunt eros id massa placerat rhoncus. Praesent elementum, ante laoreet feugiat rhoncus, massa enim venenatis arcu, at mattis libero magna et purus. Maecenas eu vestibulum ligula. Nullam iaculis pretium arcu, id sodales nibh volutpat quis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam sem felis, varius eget nibh ac, mollis gravida libero. Phasellus ac mattis orci.
+
+Nam quis lorem non nunc semper imperdiet eget id tellus. Donec vehicula diam quis lacus gravida, in fermentum risus rhoncus. Aliquam erat volutpat. Nunc quis malesuada neque, nec maximus justo. Donec pulvinar nibh sit amet dui sagittis ultrices. Suspendisse ultrices, justo iaculis egestas suscipit, libero odio ullamcorper lacus, a dapibus arcu lectus a erat. Proin vel eros faucibus, feugiat sem vitae, tempus erat. Aliquam consectetur ipsum accumsan, finibus mi et, feugiat nisi. Nam est dui, mollis quis luctus at, feugiat ut leo. Maecenas sit amet risus sit amet turpis ullamcorper iaculis sit amet ut arcu. Donec nec accumsan risus. Nulla molestie non neque ac cursus. Proin nisi turpis, viverra vel leo ac, faucibus consequat leo.</string>
+    <string name="action_launch">Launch URL</string>
+    <string name="action_pdf">Download PDF</string>
 </resources>

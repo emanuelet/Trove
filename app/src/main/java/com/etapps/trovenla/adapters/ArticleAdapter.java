@@ -21,12 +21,12 @@ public class ArticleAdapter extends RealmAdapter<ArticleDb, ArticleAdapter.BookH
 
     private final Context mContext;
     OnItemClickListener mItemClickListener;
-    private RealmResults<ArticleDb> mContacts;
+    private RealmResults<ArticleDb> mArticles;
 
     public ArticleAdapter(Context context, RealmResults<ArticleDb> contacts) {
         super(context, contacts, true);
         this.mContext = context;
-        this.mContacts = contacts;
+        this.mArticles = contacts;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ArticleAdapter extends RealmAdapter<ArticleDb, ArticleAdapter.BookH
 
     @Override
     public void onBindViewHolder(BookHolder holder, int position) {
-        ArticleDb contact = this.mContacts.get(position);
+        ArticleDb contact = this.mArticles.get(position);
         holder.mTitle.setText(contact.getHeading());
         holder.mYear.setText(contact.getDate());
         holder.mAuthor.setText(contact.getTitle());
@@ -47,15 +47,15 @@ public class ArticleAdapter extends RealmAdapter<ArticleDb, ArticleAdapter.BookH
 
     @Override
     public int getItemCount() {
-        return mContacts.size();
+        return mArticles.size();
     }
 
     public void clear() {
-        mContacts.clear();
+        mArticles.clear();
     }
 
     public ArticleDb getItematPosition(int position) {
-        return mContacts.get(position);
+        return mArticles.get(position);
     }
 
     @Override

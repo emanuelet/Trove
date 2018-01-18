@@ -92,6 +92,7 @@ public class BookDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_book_detail, container, false);
 
         ButterKnife.bind(this, rootView);
@@ -156,6 +157,15 @@ public class BookDetailFragment extends Fragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_go) {
+            goToUrl(book.getTroveUrl());
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.detailfragment, menu);
@@ -167,7 +177,7 @@ public class BookDetailFragment extends Fragment {
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
         // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (book.getUrl() != null) {
+        if (book.getTroveUrl() != null) {
             mShareActionProvider.setShareIntent(shareBookLink());
         }
     }
@@ -176,7 +186,7 @@ public class BookDetailFragment extends Fragment {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, book.getUrl() + SHARE_HASHTAG);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, book.getTroveUrl() + SHARE_HASHTAG);
         return shareIntent;
     }
 }

@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.etapps.trovenla.activities.BookDetailActivity">
+    tools:context="com.etapps.trovenla.activities.NewspapersArticleActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/detail_toolbar"
+        android:id="@+id/article_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -23,15 +23,6 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <include layout="@layout/fragment_book_detail" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_local_grocery_store_white_24dp"
-            app:layout_anchorGravity="bottom|end" />
+        <include layout="@layout/fragment_news_article" />
     </FrameLayout>
 </LinearLayout>

@@ -98,7 +98,7 @@ public class BookListActivity extends AppCompatActivity
         api = TroveRest.getAdapter(TroveApi.class);
         realm = Realm.getDefaultInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN,null);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
         mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
 
         dbTranslator = new DbTranslator(realm);
@@ -362,10 +362,9 @@ public class BookListActivity extends AppCompatActivity
 
     @Override
     public void onArticleSelected(String id) {
-//        Intent detailIntent = new Intent(this, BookDetailActivity.class);
-//        detailIntent.putExtra(Constants.TROVE_KEY, id);
-//        startActivity(detailIntent);
-
+        Intent detailIntent = new Intent(this, NewspapersArticleActivity.class);
+        detailIntent.putExtra(Constants.TROVE_KEY, id);
+        startActivity(detailIntent);
     }
 
     @Override

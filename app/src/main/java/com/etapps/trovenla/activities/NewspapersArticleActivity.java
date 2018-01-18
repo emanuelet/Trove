@@ -1,9 +1,7 @@
 package com.etapps.trovenla.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +9,13 @@ import android.view.MenuItem;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.db.Book;
-import com.etapps.trovenla.fragments.BookDetailFragment;
+import com.etapps.trovenla.fragments.NewspapersArticleFragment;
 import com.etapps.trovenla.utils.Constants;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.realm.Realm;
+import timber.log.Timber;
 
 /**
  * An activity representing a single Book detail screen. This
@@ -26,23 +24,18 @@ import io.realm.Realm;
  * in a {@link BookListActivity}.
  * <p/>
  * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link BookDetailFragment}.
+ * more than a {@link NewspapersArticleFragment}.
  */
-public class BookDetailActivity extends AppCompatActivity {
-
-    private String mUrl;
-    private FirebaseAnalytics mFirebaseAnalytics;
+public class NewspapersArticleActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_detail);
+        setContentView(R.layout.activity_news_article);
 
         ButterKnife.bind(this);
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.article_toolbar);
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -63,32 +56,13 @@ public class BookDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putString(Constants.TROVE_KEY,
                     getIntent().getStringExtra(Constants.TROVE_KEY));
-            Realm realm = Realm.getDefaultInstance();
-            Book mBook = realm.where(Book.class)
-                    .equalTo("id", getIntent().getStringExtra(Constants.TROVE_KEY))
-                    .findFirst();
-            mUrl = mBook.getTroveUrl();
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mBook.getId());
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mBook.getTitle());
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
 
-            BookDetailFragment fragment = new BookDetailFragment();
+            NewspapersArticleFragment fragment = new NewspapersArticleFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.book_detail_container, fragment)
                     .commit();
         }
-    }
-
-    @OnClick(R.id.fab)
-    public void buyBook() {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(mUrl + "?q=+buy=true"));
-        Bundle params = new Bundle();
-        params.putString("url", mUrl);
-        mFirebaseAnalytics.logEvent("buy_book", params);
     }
 
     @Override

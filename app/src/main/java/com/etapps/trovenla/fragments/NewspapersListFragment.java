@@ -94,21 +94,21 @@ public class NewspapersListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 ArticleDb item = adapter.getItematPosition(position);
-//                mCallbacks.onArticleSelected(item.getId());
-                if (!item.getTroveUrl().equals("")) {
-                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                    CustomTabsIntent customTabsIntent = builder.build();
-                    customTabsIntent.launchUrl(mContext, Uri.parse(item.getTroveUrl()));
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "newspaper-article");
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
-                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
-                } else {
-                    Timber.i("%s has no url", item.getTitle());
-                    //TODO give error feedback
-                }
+                mCallbacks.onArticleSelected(item.getId());
+//                if (!item.getTroveUrl().equals("")) {
+//                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+//                    CustomTabsIntent customTabsIntent = builder.build();
+//                    customTabsIntent.launchUrl(mContext, Uri.parse(item.getTroveUrl()));
+//
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
+//                    bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "newspaper-article");
+//                    bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
+//                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+//                } else {
+//                    Timber.i("%s has no url", item.getTitle());
+//                    //TODO give error feedback
+//                }
             }
         });
     }

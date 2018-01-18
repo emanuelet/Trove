@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,52 +21,45 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.activities.BookDetailActivity;
-import com.etapps.trovenla.activities.BookListActivity;
-import com.etapps.trovenla.adapters.LibrariesAdapter;
-import com.etapps.trovenla.db.Book;
-import com.etapps.trovenla.db.Library;
+import com.etapps.trovenla.api.TroveApi;
+import com.etapps.trovenla.api.TroveRest;
+import com.etapps.trovenla.models.articles.Article;
+import com.etapps.trovenla.models.articles.FullArticle;
 import com.etapps.trovenla.utils.Constants;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
-import io.realm.RealmList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
-/**
- * A fragment representing a single Book detail screen.
- * This fragment is either contained in a {@link BookListActivity}
- * in two-pane mode (on tablets) or a {@link BookDetailActivity}
- * on handsets.
- */
-public class BookDetailFragment extends Fragment {
+public class NewspapersArticleFragment extends Fragment {
     private static final String SHARE_HASHTAG = " #Trove";
 
     private Context mContext;
-    private Realm realm;
     private String mKeyStr;
-    private Book book;
 
-    @BindView(R.id.libraries)
-    RecyclerView mLibraries;
-    @BindView(R.id.detail_title)
+    @BindView(R.id.title)
     TextView mTitle;
-    @BindView(R.id.detail_author)
-    TextView mAuthor;
-    @BindView(R.id.detail_date)
+    @BindView(R.id.newspaper)
+    TextView mNewspaper;
+    @BindView(R.id.date)
     TextView mDate;
+    @BindView(R.id.editText)
+    TextView mText;
 
-    private LibrariesAdapter adapter;
     private ShareActionProvider mShareActionProvider;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private TroveApi api;
+    private Article article;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BookDetailFragment() {
+    public NewspapersArticleFragment() {
     }
 
     @Override
@@ -74,8 +67,8 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
+        api = TroveRest.getAdapter(TroveApi.class);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mContext);
-        realm = Realm.getDefaultInstance();
 
         if (getArguments().containsKey(Constants.TROVE_KEY)) {
             // Load the dummy content specified by the fragment
@@ -83,34 +76,50 @@ public class BookDetailFragment extends Fragment {
             // to load content from a content provider.
             mKeyStr = getArguments().getString(Constants.TROVE_KEY);
 
-            book = realm.where(Book.class)
-                    .equalTo("id", mKeyStr)
-                    .findFirst();
+            Call<FullArticle> call = api.getArticle(mKeyStr, Constants.KEY, Constants.FORMAT, Constants.INCLUDE, Constants.RECLEVEL);
+            call.enqueue(new Callback<FullArticle>() {
+                @Override
+                public void onResponse(Call<FullArticle> call, Response<FullArticle> response) {
+                    if (response.isSuccessful()) {
+                        article = response.body().getArticle();
+                        initObjs();
+                        populateView();
+                    } else {
+                        Timber.e(response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FullArticle> call, Throwable t) {
+                    Timber.e(t);
+                }
+            });
+
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_book_detail, container, false);
+        setHasOptionsMenu(true);
+        View rootView = inflater.inflate(R.layout.fragment_news_article, container, false);
 
         ButterKnife.bind(this, rootView);
-
-        // Show the dummy content as text in a TextView.
-        if (mKeyStr != null) {
-            populateView();
-
-            initList(mKeyStr);
-            initObjs();
-        }
 
         return rootView;
     }
 
     private void initObjs() {
-        mTitle.setText(book.getTitle());
-        mAuthor.setText(book.getContributor());
-        mDate.setText(book.getIssued());
+        mTitle.setText(article.getHeading());
+        mText.setText(Html.fromHtml(article.getArticleText()));
+        mNewspaper.setText(article.getTitle().getValue());
+        mDate.setText(article.getDate());
+        mText.setMovementMethod(LinkMovementMethod.getInstance());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, article.getId());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, article.getTitle().getValue());
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
     private void populateView() {
@@ -118,25 +127,6 @@ public class BookDetailFragment extends Fragment {
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareBookLink());
         }
-    }
-
-    private void initList(String mKeyStr) {
-        mLibraries.setLayoutManager(new LinearLayoutManager(mContext));
-        RealmList<Library> libraries = realm.where(Book.class)
-                .equalTo("id", mKeyStr)
-                .findFirst().getLibraries();
-
-        adapter = new LibrariesAdapter(mContext, libraries.where()
-                .isNotNull("name").findAll());
-        mLibraries.setAdapter(adapter);
-        adapter.SetOnItemClickListener(new LibrariesAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Library item = adapter.getItematPosition(position);
-
-                goToUrl(item.getUrlHolding());
-            }
-        });
     }
 
     private void goToUrl(String url) {
@@ -148,8 +138,8 @@ public class BookDetailFragment extends Fragment {
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.launchUrl(mContext, Uri.parse(url));
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, book.getTitle());
-            bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "library-book");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, article.getHeading());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "newspaper-article");
             bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, url);
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
         }
@@ -158,25 +148,32 @@ public class BookDetailFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.detailfragment, menu);
+        inflater.inflate(R.menu.articlefragment, menu);
 
         // Retrieve the share menu item
         MenuItem menuItem = menu.findItem(R.id.action_share);
 
         // Get the provider and hold onto it to set/change the share intent.
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+    }
 
-        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (book.getUrl() != null) {
-            mShareActionProvider.setShareIntent(shareBookLink());
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_launch) {
+            goToUrl(article.getTroveUrl());
         }
+        if (id == R.id.action_pdf) {
+            goToUrl(article.getPdf());
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private Intent shareBookLink() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, book.getUrl() + SHARE_HASHTAG);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, article.getUrl() + SHARE_HASHTAG);
         return shareIntent;
     }
 }
