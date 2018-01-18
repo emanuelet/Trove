@@ -13,6 +13,7 @@ import com.etapps.trovenla.R;
 import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.utils.Constants;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,6 +31,7 @@ import io.realm.Realm;
 public class BookDetailActivity extends AppCompatActivity {
 
     private String mUrl;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class BookDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book_detail);
 
         ButterKnife.bind(this);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -60,9 +64,14 @@ public class BookDetailActivity extends AppCompatActivity {
             arguments.putString(Constants.TROVE_KEY,
                     getIntent().getStringExtra(Constants.TROVE_KEY));
             Realm realm = Realm.getDefaultInstance();
-            mUrl = realm.where(Book.class)
+            Book mBook = realm.where(Book.class)
                     .equalTo("id", getIntent().getStringExtra(Constants.TROVE_KEY))
-                    .findFirst().getTroveUrl();
+                    .findFirst();
+            mUrl = mBook.getTroveUrl();
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mBook.getId());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mBook.getTitle());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
 
             BookDetailFragment fragment = new BookDetailFragment();
             fragment.setArguments(arguments);
@@ -77,6 +86,9 @@ public class BookDetailActivity extends AppCompatActivity {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(mUrl + "?q=+buy=true"));
+        Bundle params = new Bundle();
+        params.putString("url", mUrl);
+        mFirebaseAnalytics.logEvent("buy_book", params);
     }
 
     @Override

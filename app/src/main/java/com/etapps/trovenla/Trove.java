@@ -7,6 +7,7 @@ import com.etapps.trovenla.utils.ConfigUtils;
 import com.etapps.trovenla.utils.TroveJobCreator;
 import com.evernote.android.job.JobManager;
 import com.facebook.stetho.Stetho;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
@@ -30,6 +31,10 @@ public class Trove extends Application {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
+
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.setMinimumSessionDuration(3000);
+        mFirebaseAnalytics.setSessionTimeoutDuration(600000);
 
         Realm.setDefaultConfiguration(realmConfiguration);
 

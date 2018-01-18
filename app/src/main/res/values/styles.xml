@@ -12,7 +12,7 @@
         <!-- The rest of your attributes -->
     </style>
 
-    <style name="SettingsTheme" parent="Theme.AppCompat">
+    <style name="SettingsTheme" parent="Theme.AppCompat.Light">
 
         <!-- Set AppCompat’s color theming attrs -->
         <item name="colorPrimary">@color/primary</item>

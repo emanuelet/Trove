@@ -32,6 +32,7 @@ import com.etapps.trovenla.utils.Constants;
 import com.etapps.trovenla.utils.DbTranslator;
 import com.etapps.trovenla.utils.PrefsUtils;
 import com.etapps.trovenla.utils.Utility;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +74,7 @@ public class BookListActivity extends AppCompatActivity
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
+    private FirebaseAnalytics mFirebaseAnalytics;
     private boolean mTwoPane;
     private SearchView searchView;
     private Realm realm;
@@ -95,6 +97,10 @@ public class BookListActivity extends AppCompatActivity
 
         api = TroveRest.getAdapter(TroveApi.class);
         realm = Realm.getDefaultInstance();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN,null);
+        mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
+
         dbTranslator = new DbTranslator(realm);
 
         if (findViewById(R.id.book_detail_container) != null) {
@@ -321,6 +327,9 @@ public class BookListActivity extends AppCompatActivity
                     });
                     break;
             }
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.SEARCH_TERM, query);
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle);
         }
     }
 

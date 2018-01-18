@@ -14,14 +14,14 @@ import android.view.ViewGroup;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.ArticleAdapter;
-import com.etapps.trovenla.adapters.BookAdapter;
 import com.etapps.trovenla.db.ArticleDb;
-import com.etapps.trovenla.db.Book;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import timber.log.Timber;
 
 /**
  * A list fragment representing a list of DbTranslator. This fragment
@@ -49,6 +49,8 @@ public class NewspapersListFragment extends Fragment {
      * clicks.
      */
     private Callbacks mCallbacks = sDummyCallbacks;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
     private Activity mContext;
     private Realm realm;
     private ArticleAdapter adapter;
@@ -65,6 +67,8 @@ public class NewspapersListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mContext);
         realm = Realm.getDefaultInstance();
     }
 
@@ -91,10 +95,20 @@ public class NewspapersListFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 ArticleDb item = adapter.getItematPosition(position);
 //                mCallbacks.onArticleSelected(item.getId());
+                if (!item.getTroveUrl().equals("")) {
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    customTabsIntent.launchUrl(mContext, Uri.parse(item.getTroveUrl()));
 
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(getContext(), Uri.parse(item.getTroveUrl()));
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "newspaper-article");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+                } else {
+                    Timber.i("%s has no url", item.getTitle());
+                    //TODO give error feedback
+                }
             }
         });
     }
