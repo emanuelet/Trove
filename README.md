@@ -4,8 +4,9 @@ The app let's you search on the books, pictures and newspaper articles database 
 
 ### Screenshots
 
-![Main List](/art/list.png | width=50)
-![Book Details](/art/detail.png | width=50)
+![Main List](/art/list_small.png)
+![Book Details](/art/detail_small.png)
+![Newspapers Article](/art/newspapers_small.png)
 
 ### Content
 
