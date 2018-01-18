@@ -63,7 +63,8 @@ public class FetchLibraryJob extends Job {
         extras.putString(EXTRA_ID, nuc);
 
         new JobRequest.Builder(FetchLibraryJob.TAG)
-                .setExecutionWindow(1_000L, 20_000L)
+                .setExecutionWindow(5_000L, 40_000L)
+                .setBackoffCriteria(5_000L, JobRequest.BackoffPolicy.EXPONENTIAL)
                 .setExtras(extras)
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .build()
