@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.db.ArticleDb;
-import com.etapps.trovenla.db.Book;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
