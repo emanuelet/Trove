@@ -72,7 +72,7 @@ public class BookAdapter extends RealmAdapter<Book, BookAdapter.BookHolder> {
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        void onItemClick(View view, int position);
     }
 
     public class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
