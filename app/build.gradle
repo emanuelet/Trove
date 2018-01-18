@@ -82,6 +82,6 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-    compile 'com.evernote:android-job:1.2.1'
+    compile 'com.evernote:android-job:1.2.2'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 }
