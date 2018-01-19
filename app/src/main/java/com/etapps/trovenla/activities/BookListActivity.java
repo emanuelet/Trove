@@ -246,7 +246,7 @@ public class BookListActivity extends AppCompatActivity
                                     Timber.d(response.raw().request().url().toString());
                                     dbTranslator.addBooks(response.body());
                                 } else {
-                                    Toast.makeText(BookListActivity.this, "The query returned no dbTranslator", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(BookListActivity.this, "The query returned no results.", Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 Timber.e(response.message());
@@ -276,7 +276,7 @@ public class BookListActivity extends AppCompatActivity
                                     Timber.d(response.raw().request().url().toString());
                                     dbTranslator.addNewspapers(response.body());
                                 } else {
-                                    Toast.makeText(BookListActivity.this, "The query returned no dbTranslator", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(BookListActivity.this, "The query returned no results.", Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 Timber.e(response.message());
@@ -306,7 +306,7 @@ public class BookListActivity extends AppCompatActivity
                                     Timber.d(response.raw().request().url().toString());
                                     dbTranslator.addPictures(response.body());
                                 } else {
-                                    Toast.makeText(BookListActivity.this, "The query returned no dbTranslator", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(BookListActivity.this, "The query returned no results.", Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 Timber.e(response.message());
