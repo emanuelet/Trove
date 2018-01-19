@@ -11,6 +11,7 @@ public class Constants {
     public static final String FORMAT = "json";
     public static final String DATA = "data";
     public static final String RECLEVEL = "full";
+    public static final String INCLUDE = "articletext";
     public static final String KEY = "dd539bfbq0hec6pq";
     public static final String BOOK = "book";
     public static final String BOOKS = "books";

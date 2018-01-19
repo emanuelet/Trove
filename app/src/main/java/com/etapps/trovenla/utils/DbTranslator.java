@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.etapps.trovenla.db.ArticleDb;
 import com.etapps.trovenla.db.Book;
+import com.etapps.trovenla.db.FullArticle;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.db.Picture;
 import com.etapps.trovenla.jobs.FetchLibraryJob;
@@ -157,6 +158,19 @@ public class DbTranslator {
         bk.setValue(i.getRelevance().getValue());
         bk.setSnippet(i.getSnippet());
         bk.setEdition(i.getEdition());
+        bk.setTroveUrl(i.getTroveUrl());
+        return bk;
+    }
+
+    private static FullArticle addFullArticle(Article i) {
+        FullArticle bk = new FullArticle();
+        bk.setId(i.getId());
+        bk.setUrl(i.getUrl());
+        bk.setHeading(i.getHeading());
+        bk.setCategory(i.getCategory());
+        bk.setDate(i.getDate());
+        bk.setPage(i.getPage());
+        bk.setTitle(i.getTitle().getValue());
         bk.setTroveUrl(i.getTroveUrl());
         return bk;
     }

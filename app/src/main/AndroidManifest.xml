@@ -62,6 +62,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.etapps.trovenla.activities.BookListActivity" />
         </activity>
+        <activity
+            android:name=".activities.NewspapersArticleActivity"
+            android:label="@string/title_news_article"
+            android:parentActivityName=".activities.BookListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.etapps.trovenla.activities.BookListActivity" />
+        </activity>
     </application>
 
 </manifest>
