@@ -17,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +41,9 @@ public class NewspapersArticleFragment extends Fragment {
     private static final String SHARE_HASHTAG = " #Trove";
 
     private Context mContext;
-    private String mKeyStr;
 
+    @BindView(R.id.loadingLayout)
+    LinearLayout mLoadingLayout;
     @BindView(R.id.title)
     TextView mTitle;
     @BindView(R.id.newspaper)
@@ -52,7 +55,6 @@ public class NewspapersArticleFragment extends Fragment {
 
     private ShareActionProvider mShareActionProvider;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private TroveApi api;
     private Article article;
 
     /**
@@ -67,14 +69,14 @@ public class NewspapersArticleFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
-        api = TroveRest.getAdapter(TroveApi.class);
+        TroveApi api = TroveRest.getAdapter(TroveApi.class);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mContext);
 
         if (getArguments().containsKey(Constants.TROVE_KEY)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mKeyStr = getArguments().getString(Constants.TROVE_KEY);
+            String mKeyStr = getArguments().getString(Constants.TROVE_KEY);
 
             Call<FullArticle> call = api.getArticle(mKeyStr, Constants.KEY, Constants.FORMAT, Constants.INCLUDE, Constants.RECLEVEL);
             call.enqueue(new Callback<FullArticle>() {
@@ -87,10 +89,12 @@ public class NewspapersArticleFragment extends Fragment {
                     } else {
                         Timber.e(response.message());
                     }
+                    mLoadingLayout.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onFailure(Call<FullArticle> call, Throwable t) {
+                    mLoadingLayout.setVisibility(View.GONE);
                     Timber.e(t);
                 }
             });
@@ -165,6 +169,16 @@ public class NewspapersArticleFragment extends Fragment {
         }
         if (id == R.id.action_pdf) {
             goToUrl(article.getPdf());
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse(article.getPdf());
+            intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, article.getId());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, article.getPdf());
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "pdf");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         }
         return super.onOptionsItemSelected(item);
     }

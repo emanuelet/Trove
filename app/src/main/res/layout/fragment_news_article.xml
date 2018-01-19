@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             tools:text="Divine Comedy" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -31,7 +32,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                tools:text="Dante Alighieri"/>
+                tools:text="Dante Alighieri" />
 
             <TextView
                 android:id="@+id/date"
@@ -39,17 +40,39 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="end"
-                tools:text="1654"/>
+                tools:text="1654" />
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/editText"
+    <LinearLayout
+        android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:fontFamily="sans-serif"
-        android:textSize="16sp"
-        android:lineSpacingExtra="4dp"
-        tools:text="@string/ipsum" />
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="4dp"
+            android:padding="16dp"
+            android:textSize="16sp"
+            tools:text="@string/ipsum" />
+
+    </ScrollView>
+
+
 </LinearLayout>
