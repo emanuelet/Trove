@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -116,7 +115,9 @@ public class NewspapersArticleFragment extends Fragment {
 
     private void initObjs() {
         mTitle.setText(article.getHeading());
-        mText.setText(Html.fromHtml(article.getArticleText()));
+        if (article.getArticleText() != null) {
+            mText.setText(Html.fromHtml(article.getArticleText()));
+        }
         mNewspaper.setText(article.getTitle().getValue());
         mDate.setText(article.getDate());
         mText.setMovementMethod(LinkMovementMethod.getInstance());
