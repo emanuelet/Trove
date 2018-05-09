@@ -165,6 +165,7 @@ public class NewspapersArticleFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (article == null) return false;
         if (id == R.id.action_launch) {
             goToUrl(article.getTroveUrl());
         }
