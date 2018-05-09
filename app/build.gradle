@@ -29,8 +29,8 @@ android {
         applicationId "com.etapps.trovenla"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 25
-        versionName "2.2.0"
+        versionCode 26
+        versionName "2.3.0"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
