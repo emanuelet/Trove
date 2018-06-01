@@ -16,19 +16,20 @@ import com.etapps.trovenla.db.Picture;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 /**
  * Created by emanuele on 15/07/15.
  */
-public class PicturesAdapter extends RealmAdapter<Picture, PicturesAdapter.PictureHolder> {
+public class PicturesAdapter extends RealmRecyclerViewAdapter<Picture, PicturesAdapter.PictureHolder> {
 
     private final Context mContext;
     OnItemClickListener mItemClickListener;
     private RealmResults<Picture> mLibraries;
 
     public PicturesAdapter(Context context, RealmResults<Picture> contacts) {
-        super(context, contacts, true);
+        super(contacts, true, true);
         this.mContext = context;
         this.mLibraries = contacts;
     }

@@ -12,19 +12,20 @@ import com.etapps.trovenla.db.Book;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 /**
  * Created by emanuele on 15/07/15.
  */
-public class BookAdapter extends RealmAdapter<Book, BookAdapter.BookHolder> {
+public class BookAdapter extends RealmRecyclerViewAdapter<Book, BookAdapter.BookHolder> {
 
     private final Context mContext;
     OnItemClickListener mItemClickListener;
     private RealmResults<Book> mContacts;
 
     public BookAdapter(Context context, RealmResults<Book> contacts) {
-        super(context, contacts, true);
+        super(contacts, true, true);
         this.mContext = context;
         this.mContacts = contacts;
     }
