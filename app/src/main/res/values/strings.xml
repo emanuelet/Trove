@@ -97,4 +97,6 @@ Duis in lacus fringilla, consequat sapien et, molestie ex. Donec et diam nec mi 
 Nam quis lorem non nunc semper imperdiet eget id tellus. Donec vehicula diam quis lacus gravida, in fermentum risus rhoncus. Aliquam erat volutpat. Nunc quis malesuada neque, nec maximus justo. Donec pulvinar nibh sit amet dui sagittis ultrices. Suspendisse ultrices, justo iaculis egestas suscipit, libero odio ullamcorper lacus, a dapibus arcu lectus a erat. Proin vel eros faucibus, feugiat sem vitae, tempus erat. Aliquam consectetur ipsum accumsan, finibus mi et, feugiat nisi. Nam est dui, mollis quis luctus at, feugiat ut leo. Maecenas sit amet risus sit amet turpis ullamcorper iaculis sit amet ut arcu. Donec nec accumsan risus. Nulla molestie non neque ac cursus. Proin nisi turpis, viverra vel leo ac, faucibus consequat leo.</string>
     <string name="action_launch">Launch URL</string>
     <string name="action_pdf">Download PDF</string>
+    <string name="action_font_up">Increase Font Size</string>
+    <string name="action_font_down">Derease Font Size</string>
 </resources>

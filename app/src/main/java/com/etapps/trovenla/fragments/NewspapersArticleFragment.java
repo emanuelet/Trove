@@ -55,6 +55,7 @@ public class NewspapersArticleFragment extends Fragment {
     private ShareActionProvider mShareActionProvider;
     private FirebaseAnalytics mFirebaseAnalytics;
     private Article article;
+    private int TEXT_SIZE = 16;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -168,6 +169,14 @@ public class NewspapersArticleFragment extends Fragment {
         if (article == null) return false;
         if (id == R.id.action_launch) {
             goToUrl(article.getTroveUrl());
+        }
+        if (id == R.id.action_font_up) {
+            TEXT_SIZE += 1;
+            mText.setTextSize(TEXT_SIZE);
+        }
+        if (id == R.id.action_font_down) {
+            TEXT_SIZE -= 1;
+            mText.setTextSize(TEXT_SIZE);
         }
         if (id == R.id.action_pdf) {
             goToUrl(article.getPdf());

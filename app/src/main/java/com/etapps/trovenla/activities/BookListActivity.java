@@ -153,25 +153,22 @@ public class BookListActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_books:
-                                viewPager.setCurrentItem(0);
-                                searchType = Constants.BOOKS;
-                                break;
-                            case R.id.action_newspapers:
-                                viewPager.setCurrentItem(1);
-                                searchType = Constants.NEWSPAPERS;
-                                break;
-                            case R.id.action_pictures:
-                                viewPager.setCurrentItem(2);
-                                searchType = Constants.PICTURES;
-                                break;
-                        }
-                        return true;
+                item -> {
+                    switch (item.getItemId()) {
+                        case R.id.action_books:
+                            viewPager.setCurrentItem(0);
+                            searchType = Constants.BOOKS;
+                            break;
+                        case R.id.action_newspapers:
+                            viewPager.setCurrentItem(1);
+                            searchType = Constants.NEWSPAPERS;
+                            break;
+                        case R.id.action_pictures:
+                            viewPager.setCurrentItem(2);
+                            searchType = Constants.PICTURES;
+                            break;
                     }
+                    return true;
                 });
 
     }
