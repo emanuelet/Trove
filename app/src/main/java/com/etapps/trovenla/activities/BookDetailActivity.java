@@ -33,6 +33,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private String mUrl;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private BookDetailActivity mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        mContext= this;
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
@@ -48,6 +51,19 @@ public class BookDetailActivity extends AppCompatActivity {
 
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Bundle arguments = new Bundle();
+        arguments.putString(Constants.TROVE_KEY,
+                getIntent().getStringExtra(Constants.TROVE_KEY));
+        Realm realm = Realm.getDefaultInstance();
+        Book mBook = realm.where(Book.class)
+                .equalTo("id", getIntent().getStringExtra(Constants.TROVE_KEY))
+                .findFirst();
+        mUrl = mBook.getTroveUrl();
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mBook.getId());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mBook.getTitle());
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -61,19 +77,6 @@ public class BookDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(Constants.TROVE_KEY,
-                    getIntent().getStringExtra(Constants.TROVE_KEY));
-            Realm realm = Realm.getDefaultInstance();
-            Book mBook = realm.where(Book.class)
-                    .equalTo("id", getIntent().getStringExtra(Constants.TROVE_KEY))
-                    .findFirst();
-            mUrl = mBook.getTroveUrl();
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mBook.getId());
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mBook.getTitle());
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
-
             BookDetailFragment fragment = new BookDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -86,7 +89,7 @@ public class BookDetailActivity extends AppCompatActivity {
     public void buyBook() {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(mUrl + "?q=+buy=true"));
+        customTabsIntent.launchUrl(mContext, Uri.parse(mUrl + "?q=+buy=true"));
         Bundle params = new Bundle();
         params.putString("url", mUrl);
         mFirebaseAnalytics.logEvent("buy_book", params);
