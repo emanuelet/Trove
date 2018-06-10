@@ -179,17 +179,20 @@ public class NewspapersArticleFragment extends Fragment {
             mText.setTextSize(TEXT_SIZE);
         }
         if (id == R.id.action_pdf) {
-            goToUrl(article.getPdf());
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            Uri uri = Uri.parse(article.getPdf());
-            intent.setDataAndType(uri, "application/pdf");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(intent);
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, article.getId());
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, article.getPdf());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "pdf");
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            if (TextUtils.isEmpty(article.getPdf())) {
+                Toast.makeText(mContext, "No url found for the pdf", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse(article.getPdf());
+                intent.setDataAndType(uri, "application/pdf");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, article.getId());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, article.getPdf());
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "pdf");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
