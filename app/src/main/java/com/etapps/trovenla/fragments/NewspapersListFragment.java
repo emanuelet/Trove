@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.ArticleAdapter;
@@ -37,13 +38,12 @@ public class NewspapersListFragment extends Fragment {
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onArticleSelected(String id) {
-        }
+    private static Callbacks sDummyCallbacks = id -> {
     };
     @BindView(R.id.books)
     RecyclerView mArticles;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -87,16 +87,20 @@ public class NewspapersListFragment extends Fragment {
     private void initList() {
         mArticles.setLayoutManager(new LinearLayoutManager(mContext));
         RealmResults<ArticleDb> articles = realm.where(ArticleDb.class).findAll();
-        adapter = new ArticleAdapter(mContext, articles);
-        mArticles.setAdapter(adapter);
-        mArticles.setHasFixedSize(true);
-        adapter.SetOnItemClickListener(new ArticleAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+        if (articles.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+            mArticles.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            mArticles.setVisibility(View.VISIBLE);
+            adapter = new ArticleAdapter(mContext, articles);
+            mArticles.setAdapter(adapter);
+            mArticles.setHasFixedSize(true);
+            adapter.SetOnItemClickListener((view, position) -> {
                 ArticleDb item = adapter.getItematPosition(position);
                 mCallbacks.onArticleSelected(item.getId());
-            }
-        });
+            });
+        }
     }
 
     @Override

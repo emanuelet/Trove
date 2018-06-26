@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.BookAdapter;
@@ -34,13 +34,12 @@ public class BookListFragment extends Fragment {
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(String id) {
-        }
+    private static Callbacks sDummyCallbacks = id -> {
     };
     @BindView(R.id.books)
     RecyclerView mBooks;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -80,16 +79,20 @@ public class BookListFragment extends Fragment {
     private void initList() {
         mBooks.setLayoutManager(new LinearLayoutManager(mContext));
         RealmResults<Book> books = realm.where(Book.class).findAll();
-        adapter = new BookAdapter(mContext, books);
-        mBooks.setAdapter(adapter);
-        mBooks.setHasFixedSize(true);
-        adapter.SetOnItemClickListener(new BookAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+        if (books.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+            mBooks.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            mBooks.setVisibility(View.VISIBLE);
+            adapter = new BookAdapter(mContext, books);
+            mBooks.setAdapter(adapter);
+            mBooks.setHasFixedSize(true);
+            adapter.SetOnItemClickListener((view, position) -> {
                 Book item = adapter.getItematPosition(position);
                 mCallbacks.onItemSelected(item.getId());
-            }
-        });
+            });
+        }
     }
 
     @Override

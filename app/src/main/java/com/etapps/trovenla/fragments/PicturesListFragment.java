@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.PicturesAdapter;
@@ -36,13 +37,12 @@ public class PicturesListFragment extends Fragment {
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onPictureSelected(String id) {
-        }
+    private static Callbacks sDummyCallbacks = id -> {
     };
     @BindView(R.id.books)
     RecyclerView mArticles;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -84,25 +84,29 @@ public class PicturesListFragment extends Fragment {
     private void initList() {
         mArticles.setLayoutManager(new GridLayoutManager(mContext, 2));
         RealmResults<Picture> articles = realm.where(Picture.class).findAll();
-        adapter = new PicturesAdapter(mContext, articles);
-        mArticles.setAdapter(adapter);
-        mArticles.setHasFixedSize(true);
-        adapter.SetOnItemClickListener(new PicturesAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+        if (articles.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+            mArticles.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            mArticles.setVisibility(View.VISIBLE);
+            adapter = new PicturesAdapter(mContext, articles);
+            mArticles.setAdapter(adapter);
+            mArticles.setHasFixedSize(true);
+            adapter.SetOnItemClickListener((view, position) -> {
                 Picture item = adapter.getItematPosition(position);
 
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(getContext(), Uri.parse(item.getTroveUrl()));
+                customTabsIntent.launchUrl(mContext, Uri.parse(item.getTroveUrl()));
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
                 bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "picture");
                 bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
-            }
-        });
+            });
+        }
     }
 
     @Override

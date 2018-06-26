@@ -99,4 +99,5 @@ Nam quis lorem non nunc semper imperdiet eget id tellus. Donec vehicula diam qui
     <string name="action_pdf">Download PDF</string>
     <string name="action_font_up">Increase Font Size</string>
     <string name="action_font_down">Derease Font Size</string>
+    <string name="intro_text">Start a search to explore the Trove database</string>
 </resources>
