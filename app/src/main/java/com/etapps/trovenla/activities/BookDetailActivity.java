@@ -42,7 +42,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mContext= this;
+        mContext = this;
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -109,7 +109,7 @@ public class BookDetailActivity extends AppCompatActivity {
             NavUtils.navigateUpTo(this, new Intent(this, BookListActivity.class));
             return true;
         }
-        Timber.d("menu "+id);
+        Timber.d("menu " + id);
         return super.onOptionsItemSelected(item);
     }
 }
