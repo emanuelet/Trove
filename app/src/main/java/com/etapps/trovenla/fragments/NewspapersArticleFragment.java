@@ -1,5 +1,6 @@
 package com.etapps.trovenla.fragments;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -186,7 +187,16 @@ public class NewspapersArticleFragment extends Fragment {
                 Uri uri = Uri.parse(article.getPdf());
                 intent.setDataAndType(uri, "application/pdf");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
+                try {
+                    mContext.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Timber.e(e);
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    uri = Uri.parse(article.getPdf());
+                    intent.setDataAndType(uri, "application/pdf");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, article.getId());
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, article.getPdf());
