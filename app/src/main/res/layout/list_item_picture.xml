@@ -10,9 +10,9 @@
         android:id="@+id/list_item_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="140dp"
         android:layout_gravity="center"
-        tools:src="@drawable/placeholder"/>
-
+        tools:src="@drawable/ic_camera_black_24dp"/>
 
     <LinearLayout
         android:layout_width="fill_parent"

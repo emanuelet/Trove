@@ -25,7 +25,7 @@ import io.realm.RealmResults;
 public class PicturesAdapter extends RealmRecyclerViewAdapter<Picture, PicturesAdapter.PictureHolder> {
 
     private final Context mContext;
-    OnItemClickListener mItemClickListener;
+    private OnItemClickListener mItemClickListener;
     private RealmResults<Picture> mLibraries;
 
     public PicturesAdapter(Context context, RealmResults<Picture> contacts) {
@@ -50,7 +50,7 @@ public class PicturesAdapter extends RealmRecyclerViewAdapter<Picture, PicturesA
         holder.mAuthor.setText(contact.getContributor());
 
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.placeholder);
+        requestOptions.placeholder(R.drawable.ic_camera_black_24dp);
 
         Glide.with(mContext)
                 .setDefaultRequestOptions(requestOptions)
