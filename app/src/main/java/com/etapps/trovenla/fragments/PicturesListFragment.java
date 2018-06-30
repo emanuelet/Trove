@@ -32,7 +32,7 @@ import io.realm.RealmResults;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class PicturesListFragment extends Fragment {
+public class PicturesListFragment extends BaseFragment {
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
@@ -48,10 +48,10 @@ public class PicturesListFragment extends Fragment {
      * clicks.
      */
     private Callbacks mCallbacks = sDummyCallbacks;
-    private FirebaseAnalytics mFirebaseAnalytics;
     private Activity mContext;
     private Realm realm;
     private PicturesAdapter adapter;
+    private RealmResults<Picture> pictures;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -65,25 +65,22 @@ public class PicturesListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mContext);
         realm = Realm.getDefaultInstance();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        ButterKnife.bind(this, rootView);
-
+    protected void initialize() {
         initList();
+    }
 
-        return rootView;
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.fragment_main;
     }
 
     private void initList() {
         mArticles.setLayoutManager(new GridLayoutManager(mContext, 2));
-        RealmResults<Picture> pictures = realm.where(Picture.class).findAll();
+        pictures = realm.where(Picture.class).findAll();
         pictures.addChangeListener(this::checkResults);
         checkResults(pictures);
     }
@@ -109,7 +106,7 @@ public class PicturesListFragment extends Fragment {
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
                 bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "picture");
                 bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+                getAnalitycs().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
             });
         }
     }

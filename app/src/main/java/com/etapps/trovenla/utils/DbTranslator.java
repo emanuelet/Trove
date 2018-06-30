@@ -179,10 +179,10 @@ public class DbTranslator {
         RealmList<Library> libList = new RealmList<>();
         for (Contributor l : libraries.getResponse().getContributor()) {
             addLibrary(libList, l);
-            if (l.getChildren().getContributor().size() != 0) {
+            if (l.getChildren() != null && l.getChildren().getContributor().size() != 0) {
                 for (Contributor c : l.getChildren().getContributor()) {
                     addLibrary(libList, c);
-                    if (c.getChildren().getContributor().size() != 0) {
+                    if (c.getChildren() != null && c.getChildren().getContributor().size() != 0) {
                         for (Contributor sc : l.getChildren().getContributor()) {
                             addLibrary(libList, sc);
                         }

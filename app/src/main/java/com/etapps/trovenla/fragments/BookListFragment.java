@@ -2,13 +2,9 @@ package com.etapps.trovenla.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.etapps.trovenla.R;
@@ -16,7 +12,6 @@ import com.etapps.trovenla.adapters.BookAdapter;
 import com.etapps.trovenla.db.Book;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -29,7 +24,7 @@ import io.realm.RealmResults;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class BookListFragment extends Fragment {
+public class BookListFragment extends BaseFragment {
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
@@ -48,6 +43,7 @@ public class BookListFragment extends Fragment {
     private Activity mContext;
     private Realm realm;
     private BookAdapter adapter;
+    private RealmResults<Book> books;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -64,22 +60,20 @@ public class BookListFragment extends Fragment {
         realm = Realm.getDefaultInstance();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        ButterKnife.bind(this, rootView);
-
+    protected void initialize() {
         initList();
+    }
 
-        return rootView;
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.fragment_main;
     }
 
     private void initList() {
         mBooks.setLayoutManager(new LinearLayoutManager(mContext));
-        RealmResults<Book> books = realm.where(Book.class).findAll();
-        books.addChangeListener(this::checkResults);
+        books = realm.where(Book.class).findAll();
+        books.addChangeListener(books -> checkResults(books));
         checkResults(books);
     }
 
