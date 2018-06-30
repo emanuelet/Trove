@@ -21,13 +21,13 @@ import io.realm.RealmResults;
 public class ArticleAdapter extends RealmRecyclerViewAdapter<ArticleDb, ArticleAdapter.BookHolder> {
 
     private final Context mContext;
-    OnItemClickListener mItemClickListener;
+    private OnItemClickListener mItemClickListener;
     private RealmResults<ArticleDb> mArticles;
 
-    public ArticleAdapter(Context context, RealmResults<ArticleDb> contacts) {
-        super(contacts, true, true);
+    public ArticleAdapter(Context context, RealmResults<ArticleDb> articles) {
+        super(articles, true, true);
         this.mContext = context;
-        this.mArticles = contacts;
+        this.mArticles = articles;
     }
 
     @Override
@@ -40,10 +40,16 @@ public class ArticleAdapter extends RealmRecyclerViewAdapter<ArticleDb, ArticleA
 
     @Override
     public void onBindViewHolder(BookHolder holder, int position) {
-        ArticleDb contact = this.mArticles.get(position);
-        holder.mTitle.setText(contact.getHeading());
-        holder.mYear.setText(contact.getDate());
-        holder.mAuthor.setText(contact.getTitle());
+        ArticleDb article = this.mArticles.get(position);
+        holder.mTitle.setText(article.getHeading());
+        holder.mYear.setText(article.getDate());
+        if (!article.getCategory().equals("Article")) {
+            holder.mCategory.setVisibility(View.VISIBLE);
+            holder.mCategory.setText(article.getCategory());
+        } else {
+            holder.mCategory.setVisibility(View.GONE);
+        }
+        holder.mAuthor.setText(article.getTitle());
     }
 
     @Override
@@ -77,6 +83,8 @@ public class ArticleAdapter extends RealmRecyclerViewAdapter<ArticleDb, ArticleA
         TextView mTitle;
         @BindView(R.id.list_item_author_textview)
         TextView mAuthor;
+        @BindView(R.id.list_item_category_textview)
+        TextView mCategory;
         @BindView(R.id.list_item_year_textview)
         TextView mYear;
 
