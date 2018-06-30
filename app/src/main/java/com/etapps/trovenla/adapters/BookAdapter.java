@@ -22,12 +22,12 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book, BookAdapter.Book
 
     private final Context mContext;
     private OnItemClickListener mItemClickListener;
-    private RealmResults<Book> mContacts;
+    private RealmResults<Book> mBooks;
 
     public BookAdapter(Context context, RealmResults<Book> books) {
         super(books, true, true);
         this.mContext = context;
-        this.mContacts = books;
+        this.mBooks = books;
     }
 
     @Override
@@ -40,32 +40,20 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book, BookAdapter.Book
 
     @Override
     public void onBindViewHolder(BookHolder holder, int position) {
-        Book book = this.mContacts.get(position);
+        Book book = this.mBooks.get(position);
         holder.mTitle.setText(book.getTitle());
         holder.mYear.setText(book.getIssued());
+        holder.mHoldings.setText(String.valueOf(book.getHoldingsCount()));
         holder.mAuthor.setText(book.getContributor());
     }
 
     @Override
     public int getItemCount() {
-        return mContacts.size();
-    }
-
-    public void addAll(RealmResults<Book> books) {
-        mContacts.addAll(books);
-    }
-
-    public void clear() {
-        mContacts.clear();
+        return mBooks.size();
     }
 
     public Book getItematPosition(int position) {
-        return mContacts.get(position);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return 0;
+        return mBooks.get(position);
     }
 
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
@@ -81,10 +69,12 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book, BookAdapter.Book
         TextView mTitle;
         @BindView(R.id.list_item_author_textview)
         TextView mAuthor;
+        @BindView(R.id.list_item_holdings_textview)
+        TextView mHoldings;
         @BindView(R.id.list_item_year_textview)
         TextView mYear;
 
-        public BookHolder(View itemView) {
+        BookHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
