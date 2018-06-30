@@ -7,6 +7,7 @@ import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.FullArticle;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.db.Picture;
+import com.etapps.trovenla.jobs.FetchLibraryJob;
 import com.etapps.trovenla.models.libraries.Contributor;
 import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.newspapers.Article;
@@ -104,7 +105,7 @@ public class DbTranslator {
                 } else {
                     l.setNuc(nuc);
                     Timber.d("to download " + nuc);
-//                    FetchLibraryJob.scheduleJob(nuc);
+                    FetchLibraryJob.scheduleJob(nuc);
                 }
                 if (s.getUrl() != null) {
                     l.setUrlHolding(s.getUrl().getValue());
