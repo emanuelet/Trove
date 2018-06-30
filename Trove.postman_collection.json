@@ -1,0 +1,174 @@
+{
+	"info": {
+		"_postman_id": "42089710-ab17-4c43-94ce-07dcdc46c99e",
+		"name": "Trove",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Search Newspapers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.trove.nla.gov.au/result?q=herald&encoding=json&n=20&key={{api_key}}&zone=newspaper",
+					"protocol": "http",
+					"host": [
+						"api",
+						"trove",
+						"nla",
+						"gov",
+						"au"
+					],
+					"path": [
+						"result"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "herald"
+						},
+						{
+							"key": "encoding",
+							"value": "json"
+						},
+						{
+							"key": "n",
+							"value": "20"
+						},
+						{
+							"key": "key",
+							"value": "{{api_key}}"
+						},
+						{
+							"key": "zone",
+							"value": "newspaper"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Books",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.trove.nla.gov.au/result?q=king arthur&zone=book&encoding=json&n=20&key={{api_key}}",
+					"protocol": "http",
+					"host": [
+						"api",
+						"trove",
+						"nla",
+						"gov",
+						"au"
+					],
+					"path": [
+						"result"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "king arthur"
+						},
+						{
+							"key": "zone",
+							"value": "book"
+						},
+						{
+							"key": "encoding",
+							"value": "json"
+						},
+						{
+							"key": "n",
+							"value": "20"
+						},
+						{
+							"key": "key",
+							"value": "{{api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Libraries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.trove.nla.gov.au/contributor?encoding=json&reclevel=full&key={{api_key}}",
+					"protocol": "http",
+					"host": [
+						"api",
+						"trove",
+						"nla",
+						"gov",
+						"au"
+					],
+					"path": [
+						"contributor"
+					],
+					"query": [
+						{
+							"key": "encoding",
+							"value": "json"
+						},
+						{
+							"key": "reclevel",
+							"value": "full"
+						},
+						{
+							"key": "key",
+							"value": "{{api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Library",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://api.trove.nla.gov.au/contributor/ANL?encoding=json&reclevel=full&key={{api_key}}",
+					"protocol": "http",
+					"host": [
+						"api",
+						"trove",
+						"nla",
+						"gov",
+						"au"
+					],
+					"path": [
+						"contributor",
+						"ANL"
+					],
+					"query": [
+						{
+							"key": "encoding",
+							"value": "json"
+						},
+						{
+							"key": "reclevel",
+							"value": "full"
+						},
+						{
+							"key": "key",
+							"value": "{{api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
