@@ -84,22 +84,25 @@ public class NewspapersListFragment extends Fragment {
     private void initList() {
         mArticles.setLayoutManager(new LinearLayoutManager(mContext));
         RealmResults<ArticleDb> articles = realm.where(ArticleDb.class).findAll();
-        articles.addChangeListener(articleDbs -> {
-            if (articleDbs.isEmpty()) {
-                emptyView.setVisibility(View.VISIBLE);
-                mArticles.setVisibility(View.GONE);
-            } else {
-                emptyView.setVisibility(View.GONE);
-                mArticles.setVisibility(View.VISIBLE);
-                adapter = new ArticleAdapter(mContext, articleDbs);
-                mArticles.setAdapter(adapter);
-                mArticles.setHasFixedSize(true);
-                adapter.SetOnItemClickListener((view, position) -> {
-                    ArticleDb item = adapter.getItematPosition(position);
-                    mCallbacks.onArticleSelected(item.getId());
-                });
-            }
-        });
+        articles.addChangeListener(this::checkResults);
+        checkResults(articles);
+    }
+
+    private void checkResults(RealmResults<ArticleDb> articleDbs) {
+        if (articleDbs.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+            mArticles.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            mArticles.setVisibility(View.VISIBLE);
+            adapter = new ArticleAdapter(mContext, articleDbs);
+            mArticles.setAdapter(adapter);
+            mArticles.setHasFixedSize(true);
+            adapter.SetOnItemClickListener((view, position) -> {
+                ArticleDb item = adapter.getItematPosition(position);
+                mCallbacks.onArticleSelected(item.getId());
+            });
+        }
     }
 
     @Override
