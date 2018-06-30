@@ -32,6 +32,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -152,6 +153,18 @@ public class NewspapersArticleFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.increaseFont)
+    void increaseFont() {
+        TEXT_SIZE += 1;
+        mText.setTextSize(TEXT_SIZE);
+    }
+
+    @OnClick(R.id.decreaseFont)
+    void decreaseFont() {
+        TEXT_SIZE -= 1;
+        mText.setTextSize(TEXT_SIZE);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -170,14 +183,6 @@ public class NewspapersArticleFragment extends Fragment {
         if (article == null) return false;
         if (id == R.id.action_launch) {
             goToUrl(article.getTroveUrl());
-        }
-        if (id == R.id.action_font_up) {
-            TEXT_SIZE += 1;
-            mText.setTextSize(TEXT_SIZE);
-        }
-        if (id == R.id.action_font_down) {
-            TEXT_SIZE -= 1;
-            mText.setTextSize(TEXT_SIZE);
         }
         if (id == R.id.action_pdf) {
             if (TextUtils.isEmpty(article.getPdf())) {

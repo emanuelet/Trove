@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +15,10 @@
         android:layout_height="wrap_content"
         android:background="@color/back_detail"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingBottom="0dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp">
 
         <TextView
             android:id="@+id/title"
@@ -42,13 +46,42 @@
                 android:gravity="end"
                 tools:text="1654" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/increaseFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:background="?android:attr/selectableItemBackground"
+                android:foregroundGravity="top|right"
+                android:padding="12dp"
+                android:tint="@color/grey_700"
+                app:srcCompat="@drawable/ic_add_circle_outline_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/decreaseFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:background="?android:attr/selectableItemBackground"
+                android:foregroundGravity="top|right"
+                android:padding="12dp"
+                android:tint="@color/secondary_text"
+                app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/loading"
