@@ -7,7 +7,6 @@ import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.FullArticle;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.db.Picture;
-import com.etapps.trovenla.jobs.FetchLibraryJob;
 import com.etapps.trovenla.models.libraries.Contributor;
 import com.etapps.trovenla.models.libraries.Libraries;
 import com.etapps.trovenla.models.newspapers.Article;
@@ -104,7 +103,8 @@ public class DbTranslator {
                     l = stored;
                 } else {
                     l.setNuc(nuc);
-                    FetchLibraryJob.scheduleJob(nuc);
+                    Timber.d("to download " + nuc);
+//                    FetchLibraryJob.scheduleJob(nuc);
                 }
                 if (s.getUrl() != null) {
                     l.setUrlHolding(s.getUrl().getValue());
@@ -178,18 +178,32 @@ public class DbTranslator {
     public void addLibraries(Libraries libraries) {
         RealmList<Library> libList = new RealmList<>();
         for (Contributor l : libraries.getResponse().getContributor()) {
-            Library lib = new Library();
-            lib.setNuc(l.getId());
-            lib.setName(l.getName());
-            lib.setAlgentry(l.getAlgentry());
-            lib.setTotalholdings(l.getTotalholdings());
-            lib.setShortname(l.getShortname());
-            lib.setAccesspolicy(l.getAccesspolicy());
-            libList.add(lib);
+            addLibrary(libList, l);
+            if (l.getChildren().getContributor().size() != 0) {
+                for (Contributor c : l.getChildren().getContributor()) {
+                    addLibrary(libList, c);
+                    if (c.getChildren().getContributor().size() != 0) {
+                        for (Contributor sc : l.getChildren().getContributor()) {
+                            addLibrary(libList, sc);
+                        }
+                    }
+                }
+            }
         }
         Timber.d("loaded %s", libList.size());
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(libList);
         realm.commitTransaction();
+    }
+
+    private void addLibrary(RealmList<Library> libList, Contributor l) {
+        Library lib = new Library();
+        lib.setNuc(l.getId());
+        lib.setName(l.getName());
+        lib.setAlgentry(l.getAlgentry());
+        lib.setTotalholdings(l.getTotalholdings());
+        lib.setShortname(l.getShortname());
+        lib.setAccesspolicy(l.getAccesspolicy());
+        libList.add(lib);
     }
 }

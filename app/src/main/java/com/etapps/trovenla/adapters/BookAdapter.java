@@ -21,13 +21,13 @@ import io.realm.RealmResults;
 public class BookAdapter extends RealmRecyclerViewAdapter<Book, BookAdapter.BookHolder> {
 
     private final Context mContext;
-    OnItemClickListener mItemClickListener;
+    private OnItemClickListener mItemClickListener;
     private RealmResults<Book> mContacts;
 
-    public BookAdapter(Context context, RealmResults<Book> contacts) {
-        super(contacts, true, true);
+    public BookAdapter(Context context, RealmResults<Book> books) {
+        super(books, true, true);
         this.mContext = context;
-        this.mContacts = contacts;
+        this.mContacts = books;
     }
 
     @Override
@@ -40,10 +40,10 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book, BookAdapter.Book
 
     @Override
     public void onBindViewHolder(BookHolder holder, int position) {
-        Book contact = this.mContacts.get(position);
-        holder.mTitle.setText(contact.getTitle());
-        holder.mYear.setText(contact.getIssued());
-        holder.mAuthor.setText(contact.getContributor());
+        Book book = this.mContacts.get(position);
+        holder.mTitle.setText(book.getTitle());
+        holder.mYear.setText(book.getIssued());
+        holder.mAuthor.setText(book.getContributor());
     }
 
     @Override
@@ -51,8 +51,8 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book, BookAdapter.Book
         return mContacts.size();
     }
 
-    public void addAll(RealmResults<Book> contacts) {
-        mContacts.addAll(contacts);
+    public void addAll(RealmResults<Book> books) {
+        mContacts.addAll(books);
     }
 
     public void clear() {

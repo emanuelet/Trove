@@ -170,7 +170,6 @@ public class BookListActivity extends AppCompatActivity
                     }
                     return true;
                 });
-
     }
 
     @Override
@@ -214,12 +213,9 @@ public class BookListActivity extends AppCompatActivity
         }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = intent.getStringExtra(SearchManager.QUERY);
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    Suggestion s = new Suggestion();
-                    s.setQuery(query);
-                }
+            realm.executeTransaction(realm -> {
+                Suggestion s = new Suggestion();
+                s.setQuery(query);
             });
             startSearch(query);
         }

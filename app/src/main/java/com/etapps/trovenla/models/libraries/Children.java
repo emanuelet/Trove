@@ -10,14 +10,14 @@ import com.google.gson.annotations.Expose;
 public class Children {
 
     @Expose
-    private List<Contributor_> contributor = new ArrayList<Contributor_>();
+    private List<Contributor> contributor = new ArrayList<Contributor>();
 
     /**
      * 
      * @return
      *     The contributor
      */
-    public List<Contributor_> getContributor() {
+    public List<Contributor> getContributor() {
         return contributor;
     }
 
@@ -26,7 +26,7 @@ public class Children {
      * @param contributor
      *     The contributor
      */
-    public void setContributor(List<Contributor_> contributor) {
+    public void setContributor(List<Contributor> contributor) {
         this.contributor = contributor;
     }
 

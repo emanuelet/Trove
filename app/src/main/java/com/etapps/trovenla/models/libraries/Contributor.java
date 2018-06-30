@@ -26,6 +26,8 @@ public class Contributor {
     @Expose
     private String algentry;
     @Expose
+    private String homepage;
+    @Expose
     private Parent parent;
     @Expose
     private Children children;
@@ -172,6 +174,24 @@ public class Contributor {
      */
     public void setAlgentry(String algentry) {
         this.algentry = algentry;
+    }
+
+    /**
+     *
+     * @return
+     *     The homepage
+     */
+    public String getHomepage() {
+        return homepage;
+    }
+
+    /**
+     *
+     * @param homepage
+     *     The homepage
+     */
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
     }
 
     /**
