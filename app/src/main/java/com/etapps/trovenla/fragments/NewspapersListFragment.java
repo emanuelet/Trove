@@ -1,10 +1,8 @@
 package com.etapps.trovenla.fragments;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +20,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import timber.log.Timber;
 
 /**
  * A list fragment representing a list of DbTranslator. This fragment
@@ -87,20 +84,22 @@ public class NewspapersListFragment extends Fragment {
     private void initList() {
         mArticles.setLayoutManager(new LinearLayoutManager(mContext));
         RealmResults<ArticleDb> articles = realm.where(ArticleDb.class).findAll();
-        if (articles.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-            mArticles.setVisibility(View.GONE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-            mArticles.setVisibility(View.VISIBLE);
-            adapter = new ArticleAdapter(mContext, articles);
-            mArticles.setAdapter(adapter);
-            mArticles.setHasFixedSize(true);
-            adapter.SetOnItemClickListener((view, position) -> {
-                ArticleDb item = adapter.getItematPosition(position);
-                mCallbacks.onArticleSelected(item.getId());
-            });
-        }
+        articles.addChangeListener(articleDbs -> {
+            if (articleDbs.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                mArticles.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                mArticles.setVisibility(View.VISIBLE);
+                adapter = new ArticleAdapter(mContext, articleDbs);
+                mArticles.setAdapter(adapter);
+                mArticles.setHasFixedSize(true);
+                adapter.SetOnItemClickListener((view, position) -> {
+                    ArticleDb item = adapter.getItematPosition(position);
+                    mCallbacks.onArticleSelected(item.getId());
+                });
+            }
+        });
     }
 
     @Override

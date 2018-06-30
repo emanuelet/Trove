@@ -83,30 +83,32 @@ public class PicturesListFragment extends Fragment {
 
     private void initList() {
         mArticles.setLayoutManager(new GridLayoutManager(mContext, 2));
-        RealmResults<Picture> articles = realm.where(Picture.class).findAll();
-        if (articles.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-            mArticles.setVisibility(View.GONE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-            mArticles.setVisibility(View.VISIBLE);
-            adapter = new PicturesAdapter(mContext, articles);
-            mArticles.setAdapter(adapter);
-            mArticles.setHasFixedSize(true);
-            adapter.SetOnItemClickListener((view, position) -> {
-                Picture item = adapter.getItematPosition(position);
+        RealmResults<Picture> pictures = realm.where(Picture.class).findAll();
+        pictures.addChangeListener(pictureDbs -> {
+            if (pictureDbs.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                mArticles.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                mArticles.setVisibility(View.VISIBLE);
+                adapter = new PicturesAdapter(mContext, pictureDbs);
+                mArticles.setAdapter(adapter);
+                mArticles.setHasFixedSize(true);
+                adapter.SetOnItemClickListener((view, position) -> {
+                    Picture item = adapter.getItematPosition(position);
 
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(mContext, Uri.parse(item.getTroveUrl()));
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    customTabsIntent.launchUrl(mContext, Uri.parse(item.getTroveUrl()));
 
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
-                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "picture");
-                bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
-            });
-        }
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, item.getTitle());
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "picture");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_LOCATION_ID, item.getTroveUrl());
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+                });
+            }
+        });
     }
 
     @Override

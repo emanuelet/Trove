@@ -79,20 +79,22 @@ public class BookListFragment extends Fragment {
     private void initList() {
         mBooks.setLayoutManager(new LinearLayoutManager(mContext));
         RealmResults<Book> books = realm.where(Book.class).findAll();
-        if (books.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-            mBooks.setVisibility(View.GONE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-            mBooks.setVisibility(View.VISIBLE);
-            adapter = new BookAdapter(mContext, books);
-            mBooks.setAdapter(adapter);
-            mBooks.setHasFixedSize(true);
-            adapter.SetOnItemClickListener((view, position) -> {
-                Book item = adapter.getItematPosition(position);
-                mCallbacks.onItemSelected(item.getId());
-            });
-        }
+        books.addChangeListener(bookDbs -> {
+            if (bookDbs.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                mBooks.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                mBooks.setVisibility(View.VISIBLE);
+                adapter = new BookAdapter(mContext, bookDbs);
+                mBooks.setAdapter(adapter);
+                mBooks.setHasFixedSize(true);
+                adapter.SetOnItemClickListener((view, position) -> {
+                    Book item = adapter.getItematPosition(position);
+                    mCallbacks.onItemSelected(item.getId());
+                });
+            }
+        });
     }
 
     @Override
