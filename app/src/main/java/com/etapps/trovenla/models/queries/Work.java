@@ -1,7 +1,16 @@
 
 package com.etapps.trovenla.models.queries;
 
+import java.lang.reflect.Type;
+import java.util.Iterator;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,13 +27,13 @@ public class Work {
     private String troveUrl;
     @SerializedName("title")
     @Expose
-    private long title;
+    private String title;
     @SerializedName("contributor")
     @Expose
     private List<String> contributor = null;
     @SerializedName("issued")
     @Expose
-    private long issued;
+    private String issued;
     @SerializedName("type")
     @Expose
     private List<String> type = null;
@@ -37,9 +46,7 @@ public class Work {
     @SerializedName("relevance")
     @Expose
     private Relevance relevance;
-    @SerializedName("snippet")
-    @Expose
-    private List<String> snippet = null;
+    private String mSnippet;
     @SerializedName("holding")
     @Expose
     private List<Holding> holding = null;
@@ -86,15 +93,15 @@ public class Work {
         return this;
     }
 
-    public long getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(long title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public Work withTitle(long title) {
+    public Work withTitle(String title) {
         this.title = title;
         return this;
     }
@@ -112,15 +119,15 @@ public class Work {
         return this;
     }
 
-    public long getIssued() {
+    public String getIssued() {
         return issued;
     }
 
-    public void setIssued(long issued) {
+    public void setIssued(String issued) {
         this.issued = issued;
     }
 
-    public Work withIssued(long issued) {
+    public Work withIssued(String issued) {
         this.issued = issued;
         return this;
     }
@@ -177,16 +184,16 @@ public class Work {
         return this;
     }
 
-    public List<String> getSnippet() {
-        return snippet;
+    public String getSnippet() {
+        return mSnippet;
     }
 
-    public void setSnippet(List<String> snippet) {
-        this.snippet = snippet;
+    public void setSnippet(String snippet) {
+        this.mSnippet = snippet;
     }
 
-    public Work withSnippet(List<String> snippet) {
-        this.snippet = snippet;
+    public Work withSnippet(String snippet) {
+        this.mSnippet = snippet;
         return this;
     }
 
@@ -214,6 +221,32 @@ public class Work {
     public Work withIdentifier(List<Identifier> identifier) {
         this.identifier = identifier;
         return this;
+    }
+
+    public static class WorkDeserializer implements JsonDeserializer<Work> {
+
+        @Override
+        public Work deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            Work accountState = new Gson().fromJson(json, Work.class);
+            JsonObject jsonObject = json.getAsJsonObject();
+
+            if (jsonObject.has("snippet")) {
+                JsonElement elem = jsonObject.get("snippet");
+                if (elem != null && !elem.isJsonNull()) {
+                    if(elem.isJsonArray()){
+                        Iterator<JsonElement> it = elem.getAsJsonArray().iterator();
+                        StringBuilder tmp = new StringBuilder();
+                        while(it.hasNext()){
+                            tmp.append(it.next().getAsString()).append("\n");
+                        }
+                        accountState.setSnippet(tmp.toString());
+                    }else{
+                        accountState.setSnippet(elem.getAsString());
+                    }
+                }
+            }
+            return accountState ;
+        }
     }
 
 }
