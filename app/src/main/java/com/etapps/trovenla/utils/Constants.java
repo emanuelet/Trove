@@ -5,7 +5,7 @@ package com.etapps.trovenla.utils;
  */
 public class Constants {
 
-    public static final String API_ENDPOINT = "http://api.trove.nla.gov.au";
+    public static final String API_ENDPOINT = "https://api.trove.nla.gov.au/v2/";
     public static final String OPEN_LIBRARY_API = "https://openlibrary.org/api";
     public static final String OPEN_LIBRARY_COVERS_API = "http://covers.openlibrary.org";
     public static final String FORMAT = "json";
