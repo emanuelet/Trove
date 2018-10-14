@@ -18,12 +18,12 @@ public interface TroveApi {
 
 //    QUERIES
 
-    @GET("/contributor")
+    @GET("contributor")
     Call<Libraries> getLibraries(@Query("key") String key,
                                  @Query("encoding") String format,
                                  @Query("reclevel") String reclevel);
 
-    @GET("/result")
+    @GET("result")
     Call<Books> getContent(@Query("key") String key,
                            @Query("encoding") String format,
                            @Query("n") String results,
@@ -31,7 +31,7 @@ public interface TroveApi {
                            @Query("zone") String zone,
                            @Query("include") String include);
 
-    @GET("/result")
+    @GET("result")
     Call<Newspaper> getNewspapers(@Query("key") String key,
                                   @Query("encoding") String format,
                                   @Query("n") String results,
@@ -39,7 +39,7 @@ public interface TroveApi {
                                   @Query("zone") String zone,
                                   @Query("l-category") String category);
 
-    @GET("/result")
+    @GET("result")
     Call<Books> getPictures(@Query("key") String key,
                             @Query("encoding") String format,
                             @Query("n") String results,
@@ -49,13 +49,13 @@ public interface TroveApi {
 
 //    SINGLE RECORDS
 
-    @GET("/contributor/{nuc}")
+    @GET("contributor/{nuc}")
     Call<Library> getLibrary(@Path("nuc") String nuc,
                              @Query("key") String key,
                              @Query("encoding") String format,
                              @Query("reclevel") String reclevel);
 
-    @GET("/newspaper/{id}")
+    @GET("newspaper/{id}")
     Call<FullArticle> getArticle(@Path("id") String id,
                                  @Query("key") String key,
                                  @Query("encoding") String format,
