@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.etapps.trovenla.R;
@@ -29,12 +30,13 @@ public class BookListFragment extends BaseFragment {
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
-    private static Callbacks sDummyCallbacks = id -> {
-    };
+    private static Callbacks sDummyCallbacks;
     @BindView(R.id.books)
     RecyclerView mBooks;
     @BindView(R.id.empty_view)
     TextView emptyView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
     /**
      * The fragment's current callback object, which is notified of list item
      * clicks.
@@ -43,7 +45,10 @@ public class BookListFragment extends BaseFragment {
     private Activity mContext;
     private Realm realm;
     private BookAdapter adapter;
-    private RealmResults<Book> books;
+    private boolean isLoading = false;
+    private LinearLayoutManager layoutManager;
+    public static final int PAGE_SIZE = 10;
+    private String query;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,6 +56,29 @@ public class BookListFragment extends BaseFragment {
      */
     public BookListFragment() {
     }
+
+    private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+            if (!isLoading) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= PAGE_SIZE) {
+                    loadMoreItems();
+                }
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,10 +99,12 @@ public class BookListFragment extends BaseFragment {
     }
 
     private void initList() {
-        mBooks.setLayoutManager(new LinearLayoutManager(mContext));
-        books = realm.where(Book.class).findAll();
-        books.addChangeListener(books -> checkResults(books));
+        layoutManager = new LinearLayoutManager(mContext);
+        mBooks.setLayoutManager(layoutManager);
+        RealmResults<Book> books = realm.where(Book.class).findAll();
+        books.addChangeListener(this::checkResults);
         checkResults(books);
+        mBooks.addOnScrollListener(recyclerViewOnScrollListener);
     }
 
     private void checkResults(RealmResults<Book> bookDbs) {
@@ -84,6 +114,7 @@ public class BookListFragment extends BaseFragment {
         } else {
             emptyView.setVisibility(View.GONE);
             mBooks.setVisibility(View.VISIBLE);
+          query=  bookDbs.first().getQuery();
             adapter = new BookAdapter(mContext, bookDbs);
             mBooks.setAdapter(adapter);
             mBooks.setHasFixedSize(true);
@@ -92,6 +123,15 @@ public class BookListFragment extends BaseFragment {
                 mCallbacks.onItemSelected(item.getId());
             });
         }
+        isLoading = false;
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void loadMoreItems() {
+        isLoading = true;
+
+        progressBar.setVisibility(View.VISIBLE);
+        mCallbacks.loadMoreBooks(query);
     }
 
     @Override
@@ -124,5 +164,7 @@ public class BookListFragment extends BaseFragment {
          * Callback for when an item has been selected.
          */
         void onItemSelected(String id);
+
+        void loadMoreBooks(String query);
     }
 }

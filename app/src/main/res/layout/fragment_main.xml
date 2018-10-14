@@ -5,6 +5,15 @@
     android:orientation="vertical"
     tools:context="com.etapps.trovenla.fragments.ResultsFragment">
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:indeterminate="true" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/books"
         android:layout_width="match_parent"

@@ -21,6 +21,7 @@ public class Book extends RealmObject {
     private String score;
     private String value;
     private String snippet;
+    private String query;
     private RealmList<Library> libraries;
 
 
@@ -164,5 +165,13 @@ public class Book extends RealmObject {
 
     public void setLibraries(RealmList<Library> libraries) {
         this.libraries = libraries;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 }

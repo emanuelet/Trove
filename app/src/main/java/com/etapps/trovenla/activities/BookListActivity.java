@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +19,7 @@ import com.etapps.trovenla.R;
 import com.etapps.trovenla.adapters.ViewPagerAdapter;
 import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;
+import com.etapps.trovenla.db.Query;
 import com.etapps.trovenla.fragments.BookDetailFragment;
 import com.etapps.trovenla.fragments.BookListFragment;
 import com.etapps.trovenla.fragments.NewspapersListFragment;
@@ -206,16 +206,18 @@ public class BookListActivity extends AppCompatActivity
 
 
     public boolean handleIntent(Intent intent) {
+        String query;
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            query = intent.getStringExtra(SearchManager.QUERY);
             searchView.setQuery(query, false);
             startSearch(query);
         }
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            final String query = intent.getStringExtra(SearchManager.QUERY);
+            query = intent.getStringExtra(SearchManager.QUERY);
+            String finalQuery = query;
             realm.executeTransaction(realm -> {
                 Suggestion s = new Suggestion();
-                s.setQuery(query);
+                s.setQuery(finalQuery);
             });
             startSearch(query);
         }
@@ -230,14 +232,14 @@ public class BookListActivity extends AppCompatActivity
             viewPager.setVisibility(View.GONE);
             switch (searchType) {
                 case Constants.BOOKS:
-                    Call<Books> call = api.getContent(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, Constants.BOOK, Constants.HOLDINGS);
+                    Call<Books> call = api.getBooks(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), query, "*", Constants.BOOK, Constants.HOLDINGS);
                     call.enqueue(new retrofit2.Callback<Books>() {
                         @Override
                         public void onResponse(Call<Books> call, retrofit2.Response<Books> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
                                     Timber.d(response.raw().request().url().toString());
-                                    dbTranslator.addBooks(response.body());
+                                    dbTranslator.addBooks(response.body(), true);
                                 } else {
                                     Toast.makeText(BookListActivity.this, "The query returned no results.", Toast.LENGTH_LONG).show();
                                 }
@@ -354,6 +356,32 @@ public class BookListActivity extends AppCompatActivity
     }
 
     @Override
+    public void loadMoreBooks(String query) {
+        Query qs = realm.where(Query.class).equalTo("type", "books").equalTo("query", query).findFirst();
+        Call<Books> call = api.getBooks(Constants.KEY, Constants.FORMAT, Utility.getResultsNr(mContext), qs.getQuery(), qs.getNextPage(), Constants.BOOK, Constants.HOLDINGS);
+        call.enqueue(new Callback<Books>() {
+            @Override
+            public void onResponse(Call<Books> call, Response<Books> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getResponse().getZone().get(0).getRecords().getWork() != null) {
+                        Timber.d(response.raw().request().url().toString());
+                        dbTranslator.addBooks(response.body(), false);
+                    }
+                } else {
+                    Timber.e(response.message());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Books> call, Throwable t) {
+                Timber.e(t);
+
+            }
+        });
+    }
+
+    @Override
     public void onArticleSelected(String id) {
         Intent detailIntent = new Intent(this, NewspapersArticleActivity.class);
         detailIntent.putExtra(Constants.TROVE_KEY, id);
@@ -364,4 +392,6 @@ public class BookListActivity extends AppCompatActivity
     public void onPictureSelected(String id) {
 
     }
+
+
 }

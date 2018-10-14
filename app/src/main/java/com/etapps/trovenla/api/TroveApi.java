@@ -24,10 +24,11 @@ public interface TroveApi {
                                  @Query("reclevel") String reclevel);
 
     @GET("result")
-    Call<Books> getContent(@Query("key") String key,
+    Call<Books> getBooks(@Query("key") String key,
                            @Query("encoding") String format,
                            @Query("n") String results,
                            @Query("q") String query,
+                           @Query("s") String page,
                            @Query("zone") String zone,
                            @Query("include") String include);
 

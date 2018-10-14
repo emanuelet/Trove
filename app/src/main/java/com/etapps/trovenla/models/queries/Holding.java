@@ -16,9 +16,9 @@ public class Holding {
     @SerializedName("url")
     @Expose
     private Url url;
-    @SerializedName("callNumber")
-    @Expose
-    private List<CallNumber> callNumber = null;
+//    @SerializedName("callNumber")
+//    @Expose
+//    private List<CallNumber> callNumber = null;
 
     public String getNuc() {
         return nuc;
@@ -58,18 +58,18 @@ public class Holding {
         this.url = url;
         return this;
     }
-
-    public List<CallNumber> getCallNumber() {
-        return callNumber;
-    }
-
-    public void setCallNumber(List<CallNumber> callNumber) {
-        this.callNumber = callNumber;
-    }
-
-    public Holding withCallNumber(List<CallNumber> callNumber) {
-        this.callNumber = callNumber;
-        return this;
-    }
+//
+//    public List<CallNumber> getCallNumber() {
+//        return callNumber;
+//    }
+//
+//    public void setCallNumber(List<CallNumber> callNumber) {
+//        this.callNumber = callNumber;
+//    }
+//
+//    public Holding withCallNumber(List<CallNumber> callNumber) {
+//        this.callNumber = callNumber;
+//        return this;
+//    }
 
 }

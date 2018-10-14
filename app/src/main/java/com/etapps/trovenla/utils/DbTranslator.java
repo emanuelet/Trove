@@ -7,6 +7,7 @@ import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.db.FullArticle;
 import com.etapps.trovenla.db.Library;
 import com.etapps.trovenla.db.Picture;
+import com.etapps.trovenla.db.Query;
 import com.etapps.trovenla.jobs.FetchLibraryJob;
 import com.etapps.trovenla.models.libraries.Contributor;
 import com.etapps.trovenla.models.libraries.Libraries;
@@ -32,16 +33,25 @@ public class DbTranslator {
         realm = mrealm;
     }
 
-    public void addBooks(Books books) {
-        realm.beginTransaction();
-        realm.delete(Book.class);
-        realm.commitTransaction();
+    public void addBooks(Books books, boolean reset) {
+        if (reset) {
+            realm.beginTransaction();
+            realm.delete(Book.class);
+            realm.commitTransaction();
+        }
+        String query = books.getResponse().getQuery();
+        String nextPage = books.getResponse().getZone().get(0).getRecords().getNextStart();
+        Query q = new Query();
+        q.setQuery(query);
+        q.setNextPage(nextPage);
+        q.setType("books");
         RealmList<Book> bkList = new RealmList<>();
         for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
-            bkList.add(addBook(i));
+            bkList.add(addBook(i, query));
         }
         Timber.d("loaded %s", bkList.size());
         realm.beginTransaction();
+        realm.copyToRealmOrUpdate(q);
         realm.copyToRealmOrUpdate(bkList);
         realm.commitTransaction();
     }
@@ -64,21 +74,28 @@ public class DbTranslator {
         realm.beginTransaction();
         realm.delete(Picture.class);
         realm.commitTransaction();
+        String query = books.getResponse().getQuery();
+        String nextPage = books.getResponse().getZone().get(0).getRecords().getNextStart();
+        Query q = new Query();
+        q.setQuery(query);
+        q.setNextPage(nextPage);
+        q.setType("books");
         RealmList<Picture> bkList = new RealmList<>();
         for (Work i : books.getResponse().getZone().get(0).getRecords().getWork()) {
             bkList.add(addPicture(i));
         }
         Timber.d("loaded %s", bkList.size());
         realm.beginTransaction();
+        realm.copyToRealmOrUpdate(q);
         realm.copyToRealmOrUpdate(bkList);
         realm.commitTransaction();
     }
 
-    private static Book addBook(Work i) {
+    private static Book addBook(Work i, String query) {
         Book bk = new Book();
         bk.setId(i.getId());
         bk.setTitle(i.getTitle());
-        if (i.getContributor().size() != 0) {
+        if (i.getContributor() != null && i.getContributor().size() != 0) {
             bk.setContributor(i.getContributor().get(0));
         }
         bk.setHoldingsCount(i.getHoldingsCount());
@@ -91,26 +108,29 @@ public class DbTranslator {
         if (i.getSnippet() != null) {
             bk.setSnippet(i.getSnippet());
         }
+        bk.setQuery(query);
         RealmList<Library> llist = new RealmList<>();
         realm.beginTransaction();
-        for (Holding s : i.getHolding()) {
-            String nuc = s.getNuc();
-            if (!TextUtils.isEmpty(nuc)) {
-                Library stored = realm.where(Library.class)
-                        .equalTo("nuc", nuc)
-                        .findFirst();
-                Library l = new Library();
-                if (stored != null) {
-                    l = stored;
-                } else {
-                    l.setNuc(nuc);
-                    Timber.d("to download " + nuc);
-                    FetchLibraryJob.scheduleJob(nuc);
+        if (i.getHolding() != null) {
+            for (Holding s : i.getHolding()) {
+                String nuc = s.getNuc();
+                if (!TextUtils.isEmpty(nuc)) {
+                    Library stored = realm.where(Library.class)
+                            .equalTo("nuc", nuc)
+                            .findFirst();
+                    Library l = new Library();
+                    if (stored != null) {
+                        l = stored;
+                    } else {
+                        l.setNuc(nuc);
+                        Timber.d("to download %s", nuc);
+                        FetchLibraryJob.scheduleJob(nuc);
+                    }
+                    if (s.getUrl() != null) {
+                        l.setUrlHolding(s.getUrl().getValue());
+                    }
+                    llist.add(l);
                 }
-                if (s.getUrl() != null) {
-                    l.setUrlHolding(s.getUrl().getValue());
-                }
-                llist.add(l);
             }
         }
         realm.commitTransaction();
