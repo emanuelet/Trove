@@ -10,6 +10,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,6 +58,8 @@ public class BookDetailFragment extends Fragment {
     TextView mAuthor;
     @BindView(R.id.detail_date)
     TextView mDate;
+    @BindView(R.id.detail_snippet)
+    TextView mSnippet;
 
     private LibrariesAdapter adapter;
     private ShareActionProvider mShareActionProvider;
@@ -112,6 +115,12 @@ public class BookDetailFragment extends Fragment {
         mTitle.setText(book.getTitle());
         mAuthor.setText(book.getContributor());
         mDate.setText(book.getIssued());
+        if (book.getSnippet() != null) {
+            mSnippet.setVisibility(View.VISIBLE);
+            mSnippet.setText(Html.fromHtml(book.getSnippet()));
+        } else {
+            mSnippet.setVisibility(View.GONE);
+        }
     }
 
     private void populateView() {
@@ -130,13 +139,10 @@ public class BookDetailFragment extends Fragment {
         adapter = new LibrariesAdapter(mContext, libraries.where()
                 .isNotNull("name").findAll());
         mLibraries.setAdapter(adapter);
-        adapter.SetOnItemClickListener(new LibrariesAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Library item = adapter.getItematPosition(position);
+        adapter.SetOnItemClickListener((view, position) -> {
+            Library item = adapter.getItematPosition(position);
 
-                goToUrl(item.getUrlHolding());
-            }
+            goToUrl(item.getUrlHolding());
         });
     }
 

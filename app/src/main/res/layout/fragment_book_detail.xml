@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            tools:text="Divine Comedy"/>
+            tools:text="Divine Comedy" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +33,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                tools:text="Dante Alighieri"/>
+                tools:text="Dante Alighieri" />
 
             <TextView
                 android:id="@+id/detail_date"
@@ -42,8 +41,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="end"
-                tools:text="1654"/>
+                tools:text="1654" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/detail_snippet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:maxLines="6"
+            android:textSize="16sp"
+            tools:text="@string/ipsum" />
     </LinearLayout>
 
     <TextView
@@ -51,12 +59,12 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="@string/libraries"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/libraries"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/list_item_libraries"/>
+        tools:listitem="@layout/list_item_libraries" />
 </LinearLayout>

@@ -237,7 +237,7 @@ public class Work {
                         Iterator<JsonElement> it = elem.getAsJsonArray().iterator();
                         StringBuilder tmp = new StringBuilder();
                         while(it.hasNext()){
-                            tmp.append(it.next().getAsString()).append("\n");
+                            tmp.append(it.next().getAsString()).append("<br/>");
                         }
                         accountState.setSnippet(tmp.toString());
                     }else{
