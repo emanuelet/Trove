@@ -1,13 +1,10 @@
 
 package com.etapps.trovenla.models.queries;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Generated("org.jsonschema2pojo")
 public class Work {
 
     @SerializedName("id")
@@ -21,16 +18,16 @@ public class Work {
     private String troveUrl;
     @SerializedName("title")
     @Expose
-    private String title;
+    private long title;
     @SerializedName("contributor")
     @Expose
-    private List<String> contributor = new ArrayList<String>();
+    private List<String> contributor = null;
     @SerializedName("issued")
     @Expose
-    private String issued;
+    private long issued;
     @SerializedName("type")
     @Expose
-    private List<String> type = new ArrayList<String>();
+    private List<String> type = null;
     @SerializedName("holdingsCount")
     @Expose
     private long holdingsCount;
@@ -40,248 +37,183 @@ public class Work {
     @SerializedName("relevance")
     @Expose
     private Relevance relevance;
-    @SerializedName("holding")
-    @Expose
-    private List<Holding> holding = new ArrayList<Holding>();
-    @SerializedName("identifier")
-    @Expose
-    private List<Identifier> identifier = new ArrayList<Identifier>();
     @SerializedName("snippet")
     @Expose
-    private String snippet;
+    private List<String> snippet = null;
+    @SerializedName("holding")
+    @Expose
+    private List<Holding> holding = null;
+    @SerializedName("identifier")
+    @Expose
+    private List<Identifier> identifier = null;
 
-    /**
-     * 
-     * @return
-     *     The id
-     */
     public String getId() {
         return id;
     }
 
-    /**
-     * 
-     * @param id
-     *     The id
-     */
     public void setId(String id) {
         this.id = id;
     }
 
-    /**
-     * 
-     * @return
-     *     The url
-     */
+    public Work withId(String id) {
+        this.id = id;
+        return this;
+    }
+
     public String getUrl() {
         return url;
     }
 
-    /**
-     * 
-     * @param url
-     *     The url
-     */
     public void setUrl(String url) {
         this.url = url;
     }
 
-    /**
-     * 
-     * @return
-     *     The troveUrl
-     */
+    public Work withUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
     public String getTroveUrl() {
         return troveUrl;
     }
 
-    /**
-     * 
-     * @param troveUrl
-     *     The troveUrl
-     */
     public void setTroveUrl(String troveUrl) {
         this.troveUrl = troveUrl;
     }
 
-    /**
-     * 
-     * @return
-     *     The title
-     */
-    public String getTitle() {
+    public Work withTroveUrl(String troveUrl) {
+        this.troveUrl = troveUrl;
+        return this;
+    }
+
+    public long getTitle() {
         return title;
     }
 
-    /**
-     * 
-     * @param title
-     *     The title
-     */
-    public void setTitle(String title) {
+    public void setTitle(long title) {
         this.title = title;
     }
 
-    /**
-     * 
-     * @return
-     *     The contributor
-     */
+    public Work withTitle(long title) {
+        this.title = title;
+        return this;
+    }
+
     public List<String> getContributor() {
         return contributor;
     }
 
-    /**
-     * 
-     * @param contributor
-     *     The contributor
-     */
     public void setContributor(List<String> contributor) {
         this.contributor = contributor;
     }
 
-    /**
-     * 
-     * @return
-     *     The issued
-     */
-    public String getIssued() {
+    public Work withContributor(List<String> contributor) {
+        this.contributor = contributor;
+        return this;
+    }
+
+    public long getIssued() {
         return issued;
     }
 
-    /**
-     * 
-     * @param issued
-     *     The issued
-     */
-    public void setIssued(String issued) {
+    public void setIssued(long issued) {
         this.issued = issued;
     }
 
-    /**
-     * 
-     * @return
-     *     The type
-     */
+    public Work withIssued(long issued) {
+        this.issued = issued;
+        return this;
+    }
+
     public List<String> getType() {
         return type;
     }
 
-    /**
-     * 
-     * @param type
-     *     The type
-     */
     public void setType(List<String> type) {
         this.type = type;
     }
 
-    /**
-     * 
-     * @return
-     *     The holdingsCount
-     */
+    public Work withType(List<String> type) {
+        this.type = type;
+        return this;
+    }
+
     public long getHoldingsCount() {
         return holdingsCount;
     }
 
-    /**
-     * 
-     * @param holdingsCount
-     *     The holdingsCount
-     */
     public void setHoldingsCount(long holdingsCount) {
         this.holdingsCount = holdingsCount;
     }
 
-    /**
-     * 
-     * @return
-     *     The versionCount
-     */
+    public Work withHoldingsCount(long holdingsCount) {
+        this.holdingsCount = holdingsCount;
+        return this;
+    }
+
     public long getVersionCount() {
         return versionCount;
     }
 
-    /**
-     * 
-     * @param versionCount
-     *     The versionCount
-     */
     public void setVersionCount(long versionCount) {
         this.versionCount = versionCount;
     }
 
-    /**
-     * 
-     * @return
-     *     The relevance
-     */
+    public Work withVersionCount(long versionCount) {
+        this.versionCount = versionCount;
+        return this;
+    }
+
     public Relevance getRelevance() {
         return relevance;
     }
 
-    /**
-     * 
-     * @param relevance
-     *     The relevance
-     */
     public void setRelevance(Relevance relevance) {
         this.relevance = relevance;
     }
 
-    /**
-     * 
-     * @return
-     *     The holding
-     */
+    public Work withRelevance(Relevance relevance) {
+        this.relevance = relevance;
+        return this;
+    }
+
+    public List<String> getSnippet() {
+        return snippet;
+    }
+
+    public void setSnippet(List<String> snippet) {
+        this.snippet = snippet;
+    }
+
+    public Work withSnippet(List<String> snippet) {
+        this.snippet = snippet;
+        return this;
+    }
+
     public List<Holding> getHolding() {
         return holding;
     }
 
-    /**
-     * 
-     * @param holding
-     *     The holding
-     */
     public void setHolding(List<Holding> holding) {
         this.holding = holding;
     }
 
-    /**
-     * 
-     * @return
-     *     The identifier
-     */
+    public Work withHolding(List<Holding> holding) {
+        this.holding = holding;
+        return this;
+    }
+
     public List<Identifier> getIdentifier() {
         return identifier;
     }
 
-    /**
-     * 
-     * @param identifier
-     *     The identifier
-     */
     public void setIdentifier(List<Identifier> identifier) {
         this.identifier = identifier;
     }
 
-    /**
-     * 
-     * @return
-     *     The snippet
-     */
-    public String getSnippet() {
-        return snippet;
-    }
-
-    /**
-     * 
-     * @param snippet
-     *     The snippet
-     */
-    public void setSnippet(String snippet) {
-        this.snippet = snippet;
+    public Work withIdentifier(List<Identifier> identifier) {
+        this.identifier = identifier;
+        return this;
     }
 
 }

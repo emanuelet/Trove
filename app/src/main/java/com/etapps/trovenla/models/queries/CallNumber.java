@@ -1,11 +1,9 @@
 
 package com.etapps.trovenla.models.queries;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Generated("org.jsonschema2pojo")
 public class CallNumber {
 
     @SerializedName("localIdentifier")
@@ -15,40 +13,30 @@ public class CallNumber {
     @Expose
     private String value;
 
-    /**
-     * 
-     * @return
-     *     The localIdentifier
-     */
     public String getLocalIdentifier() {
         return localIdentifier;
     }
 
-    /**
-     * 
-     * @param localIdentifier
-     *     The localIdentifier
-     */
     public void setLocalIdentifier(String localIdentifier) {
         this.localIdentifier = localIdentifier;
     }
 
-    /**
-     * 
-     * @return
-     *     The value
-     */
+    public CallNumber withLocalIdentifier(String localIdentifier) {
+        this.localIdentifier = localIdentifier;
+        return this;
+    }
+
     public String getValue() {
         return value;
     }
 
-    /**
-     * 
-     * @param value
-     *     The value
-     */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public CallNumber withValue(String value) {
+        this.value = value;
+        return this;
     }
 
 }
