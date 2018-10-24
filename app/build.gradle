@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        google()
         jcenter()
         maven {
             url 'https://maven.fabric.io/public'
@@ -15,9 +16,9 @@ apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
 
 repositories {
+    google()
     maven { url 'https://jitpack.io' }
     jcenter()
-    google()
 }
 
 android {
