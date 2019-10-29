@@ -1,7 +1,7 @@
 package com.etapps.trovenla.utils;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.etapps.trovenla.jobs.FetchLibraryJob;
 import com.evernote.android.job.Job;

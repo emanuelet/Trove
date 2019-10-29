@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.etapps.trovenla.activities.NewspapersArticleActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/article_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
