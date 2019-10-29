@@ -53,9 +53,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
-        transitive = true;
-    }
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation('com.twitter.sdk.android:twitter:3.3.0@aar') {
         transitive = true;
     }
@@ -72,11 +70,11 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'io.realm:android-adapters:2.1.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'io.realm:android-adapters:3.1.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.6'
-    implementation 'com.evernote:android-job:1.2.6'
+    implementation 'com.evernote:android-job:1.4.2'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
 }
 
