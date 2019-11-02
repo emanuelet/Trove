@@ -1,6 +1,6 @@
 package com.etapps.trovenla.jobs;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.etapps.trovenla.api.TroveApi;
 import com.etapps.trovenla.api.TroveRest;

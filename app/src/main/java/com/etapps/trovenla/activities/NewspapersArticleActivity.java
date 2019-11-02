@@ -2,20 +2,16 @@ package com.etapps.trovenla.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.etapps.trovenla.R;
-import com.etapps.trovenla.db.Book;
 import com.etapps.trovenla.fragments.NewspapersArticleFragment;
 import com.etapps.trovenla.utils.Constants;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.ButterKnife;
-import io.realm.Realm;
-import timber.log.Timber;
 
 /**
  * An activity representing a single Book detail screen. This
