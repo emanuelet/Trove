@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.etapps.trovenla">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -37,13 +38,16 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/SettingsTheme"
-            android:parentActivityName=".activities.BookListActivity">
+            android:parentActivityName=".activities.BookListActivity"
+            android:theme="@style/SettingsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.etapps.trovenla.activities.BookListActivity" />
         </activity>
 
+        <service
+            android:name="com.evernote.android.job.gcm.PlatformGcmService"
+            tools:node="remove"/>
         <provider
             android:name=".data.SuggestionProvider"
             android:authorities=".data.SuggestionProvider" />
